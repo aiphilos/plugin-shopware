@@ -1,0 +1,5 @@
+{
+    "require": {
+        "aiphilos/api-sdk-php": "dev-master"
+    }
+}
