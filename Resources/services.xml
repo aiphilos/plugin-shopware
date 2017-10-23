@@ -11,5 +11,13 @@
         </service>
         <service class="Aiphilos\Api\Semantics\Client" id="aiphilos.api.semantics.client">
         </service>
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\LocaleStringMapper" id="verign_ai_philos_search_bundle_ai_philos_search.locale_string_mapper">
+        </service>
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\BasicArticleRepository" id="verign_ai_philos_search_bundle_ai_philos_search.repositories.article_repository">
+            <argument id="db" type="service"/>
+        </service>
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\BasicArticleScheme" id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme">
+            <argument id="verign_ai_philos_search_bundle_ai_philos_search.repositories.article_repository"/>
+        </service>
     </services>
 </container>

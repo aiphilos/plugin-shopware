@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/aiphilos/api-sdk-php.git",
-                "reference": "2ee62b9d993ad0c60607f2a7c56b1f4194d8f989"
+                "reference": "01947ae50117b46f13d1f010d16b17ebb2b0db3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aiphilos/api-sdk-php/zipball/2ee62b9d993ad0c60607f2a7c56b1f4194d8f989",
-                "reference": "2ee62b9d993ad0c60607f2a7c56b1f4194d8f989",
+                "url": "https://api.github.com/repos/aiphilos/api-sdk-php/zipball/01947ae50117b46f13d1f010d16b17ebb2b0db3e",
+                "reference": "01947ae50117b46f13d1f010d16b17ebb2b0db3e",
                 "shasum": ""
             },
             "require": {
@@ -39,7 +39,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "Apache-2.0"
             ],
             "authors": [
                 {
@@ -55,7 +55,7 @@
                 "ephilos",
                 "sdk"
             ],
-            "time": "2017-09-18 13:31:24"
+            "time": "2017-10-09 10:19:58"
         }
     ],
     "packages-dev": [],
