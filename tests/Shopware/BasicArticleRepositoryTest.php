@@ -6,14 +6,14 @@
  * Time: 15:32
  */
 
-namespace VerignAiPhilosSearch\tests;
+namespace VerignAiPhilosSearch\tests\Shopware;
 
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\BasicArticleRepository;
+use VerignAiPhilosSearch\tests\AbstractTestCase;
 
 /**
  * Class BasicArticleRepositoryTest
  * @package VerignAiPhilosSearch\tests
- * @depends PluginTest
  */
 class BasicArticleRepositoryTest extends AbstractTestCase
 {
@@ -24,6 +24,7 @@ class BasicArticleRepositoryTest extends AbstractTestCase
     public function testCanInstantiate() {
         $repo = null;
         $exception = null;
+
         try {
             $repo = new BasicArticleRepository(
                 Shopware()->Db(),

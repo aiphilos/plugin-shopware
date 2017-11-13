@@ -10,7 +10,7 @@ namespace VerignAiPhilosSearch\tests;
 
 
 use Aiphilos\Api\Items\ClientInterface;
-use Composer\Installers\Test\TestCase;
+use Shopware\Components\Test\Plugin\TestCase;
 use Doctrine\ORM\EntityRepository;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
@@ -20,6 +20,10 @@ use Shopware\Components\Plugin\ConfigReader;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\BasicArticleRepository;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\BasicArticleScheme;
 
 abstract class AbstractTestCase extends TestCase
 {
@@ -142,4 +146,29 @@ abstract class AbstractTestCase extends TestCase
 
         return $modelManagerMock;
     }
+
+    public function getShopwareRepoMock() {
+        $fileContents = file_get_contents(__DIR__ . '/test_data/articles_parsed.json');
+        $array = json_decode($fileContents, true);
+        if (!$array) {
+            throw new \Exception("Couldn't parse 'test_data/articles_parsed.json'");
+        }
+        $repoMock = $this->createMock(ArticleRepositoryInterface::class);
+        $repoMock->method('getArticleData')
+            ->with([], [], 1, 'EK', 12 )
+            ->willReturn($array);
+
+        return $repoMock;
+    }
+
+    public function getSchemeMock() {
+        $repoMock = $this->getShopwareRepoMock();
+        $schemeMock = $this->createMock(BasicArticleScheme::class);
+        $schemeMock->method('getRepository')
+            ->willReturn($repoMock);
+
+        return $schemeMock;
+    }
+
+
 }
