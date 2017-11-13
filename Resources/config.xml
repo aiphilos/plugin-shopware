@@ -3,13 +3,32 @@
         xsi:noNamespaceSchemaLocation="../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
 
     <elements>
-        <element type="text">
-            <name>demoConfig</name>
-            <label lang="de">Demo Konfiguration</label>
-            <label lang="en">Demo configuration</label>
-            <value>Just a demo configuration, without any effects.</value>
-            <description lang="de">Nur ein hoffentlich hilfreicher Text.</description>
-            <description lang="en">Hopefully this text will help you.</description>
+        <element type="boolean" required="true" scope="locale">
+            <name>useAiSearch</name>
+            <label lang="de">KI Suche für diese Sprache verwenden?</label>
+            <label lang="en">Use AI search for this language?</label>
+            <value>false</value>
+        </element>
+        <element type="text" required="true" scope="shop" >
+            <name>apiName</name>
+            <label lang="de">API Benutzername</label>
+            <label lang="en">API Username</label>
+        </element>
+        <element type="password" required="true" scope="shop" >
+            <name>apiPassword</name>
+            <label lang="de">API Passwort</label>
+            <label lang="en">API Password</label>
+        </element>
+        <element type="text" required="true" scope="locale">
+            <name>apiDbName</name>
+            <label lang="de">API Datenbankname</label>
+            <label lang="en">API Database Name</label>
+        </element>
+        <element type="number" required="true" scope="shop">
+            <name>salesMonths</name>
+            <label lang="de">Anzahl der Monate für Bestseller</label>
+            <label lang="en">Number of months for beststellers</label>
+            <description lang="de">Die Verkaufsfrequenz der Artikel wird mit an die Schnittstelle</description>
         </element>
     </elements>
 

@@ -8,9 +8,9 @@
 
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers;
 
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\SchemeInterface;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 
 interface SchemeMapperInterface
 {
-    public function map(SchemeInterface $scheme, array $articles);
+    public function map(ArticleSchemeInterface $scheme, array $articles);
 }

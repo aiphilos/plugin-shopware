@@ -4,7 +4,6 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "35bdee85096bb70eb9c8a96441e3de2d",
     "content-hash": "5e71b6108d0c7d03674a75c73b0a6fab",
     "packages": [
         {
@@ -13,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/aiphilos/api-sdk-php.git",
-                "reference": "01947ae50117b46f13d1f010d16b17ebb2b0db3e"
+                "reference": "e09a223c2a079507a1fd0775e288b7c1729bf965"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aiphilos/api-sdk-php/zipball/01947ae50117b46f13d1f010d16b17ebb2b0db3e",
-                "reference": "01947ae50117b46f13d1f010d16b17ebb2b0db3e",
+                "url": "https://api.github.com/repos/aiphilos/api-sdk-php/zipball/e09a223c2a079507a1fd0775e288b7c1729bf965",
+                "reference": "e09a223c2a079507a1fd0775e288b7c1729bf965",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +54,7 @@
                 "ephilos",
                 "sdk"
             ],
-            "time": "2017-10-09 10:19:58"
+            "time": "2017-11-09T06:38:46+00:00"
         }
     ],
     "packages-dev": [],

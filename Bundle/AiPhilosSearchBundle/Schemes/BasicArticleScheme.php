@@ -8,24 +8,27 @@
 
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes;
 
-use Aiphilos\Api\ContentTypesEnum as Type;
+use Aiphilos\Api\ContentTypesEnum;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
 
 
-class BasicArticleScheme implements SchemeInterface
+class BasicArticleScheme implements ArticleSchemeInterface
 {
     /** @var ArticleRepositoryInterface */
     private $repository;
 
     protected $scheme = [
-        'ordernumber' => Type::PRODUCT_NUMBER,
-        'name' => Type::PRODUCT_NAME,
-        'description_long' => Type::PRODUCT_DESCRIPTION,
-        'price' => Type::PRODUCT_PRICE,
-        'ean' => Type::PRODUCT_GTIN,
-        'supplier' => Type::PRODUCT_MANUFACTURER,
-        'sales' => Type::ORDER_FREQUENCY,
-        'points' => Type::PRODUCT_RATING
+        'ordernumber' => ContentTypesEnum::PRODUCT_NUMBER,
+        'name' => ContentTypesEnum::PRODUCT_NAME,
+        'description_long' => ContentTypesEnum::PRODUCT_DESCRIPTION,
+        'price' => ContentTypesEnum::PRODUCT_PRICE,
+        'ean' => ContentTypesEnum::PRODUCT_GTIN,
+        'supplier' => ContentTypesEnum::PRODUCT_MANUFACTURER,
+        'sales' => ContentTypesEnum::ORDER_FREQUENCY,
+        'points' => ContentTypesEnum::PRODUCT_RATING,
+        'properties' => ContentTypesEnum::GENERAL_AUTO,
+        'options' => ContentTypesEnum::GENERAL_AUTO,
+        'attributes' => ContentTypesEnum::GENERAL_AUTO
     ];
 
     /**

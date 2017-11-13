@@ -9,16 +9,15 @@
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers;
 
 
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\SchemeInterface;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 
 class BasicArticleSchemeMapper implements SchemeMapperInterface
 {
-    public function map(SchemeInterface $scheme, array $articles) {
+    public function map(ArticleSchemeInterface $scheme, array $articles) {
         $schemeArray = $scheme->getScheme();
 
         $mappedResults = [];
 
-        //TODO map extra fields
         foreach ($articles as $article) {
             foreach ($article as $key => $value) {
                 $mappedArticle = [];

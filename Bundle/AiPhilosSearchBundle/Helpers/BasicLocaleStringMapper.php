@@ -6,13 +6,12 @@
  * Time: 17:15
  */
 
-namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle;
+namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers;
 
 
-class LocaleStringMapper implements LocaleStringMapperInterface
+class BasicLocaleStringMapper implements LocaleStringMapperInterface
 {
     public function mapLocaleString($localeString) {
-        //TODO this needs to become smarter eventually
         return str_replace('_','-', strtolower($localeString));
     }
 }

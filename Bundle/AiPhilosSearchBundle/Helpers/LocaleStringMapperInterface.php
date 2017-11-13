@@ -6,7 +6,7 @@
  * Time: 16:17
  */
 
-namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle;
+namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers;
 
 interface LocaleStringMapperInterface
 {

@@ -17,44 +17,47 @@ use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Plugin\ConfigReader;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\LocaleStringMapper;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\BasicArticleScheme;
+use Shopware\Models\Shop\Shop;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapperInterface;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
 class AiSearchTermConditionHandler implements ConditionHandlerInterface
 {
     use ApiUserTrait;
 
-    /** @var array */
-    private $pluginConfig;
-
-    /** @var LocaleStringMapper */
+    /** @var LocaleStringMapperInterface */
     private $localeMapper;
 
-    /** @var ClientInterface */
-    private $itemsService;
-
-    /** @var BasicArticleScheme */
+    /** @var ArticleSchemeInterface */
     private $scheme;
+
+    /** @var ConditionHandlerInterface */
+    private $coreService;
 
     /**
      * AiSearchTermConditionHandler constructor.
+     * @param ConditionHandlerInterface $coreService
      * @param ConfigReader $configReader
-     * @param LocaleStringMapper $localeMapper
+     * @param LocaleStringMapperInterface $localeMapper
      * @param ClientInterface $itemsService
-     * @param BasicArticleScheme $scheme
-     * @internal param array $pluginConfig
+     * @param ArticleSchemeInterface $scheme
+     * @param \Zend_Cache_Core $cache
      */
     public function __construct(
+        ConditionHandlerInterface $coreService,
         ConfigReader $configReader,
-        LocaleStringMapper $localeMapper,
+        LocaleStringMapperInterface $localeMapper,
         ClientInterface $itemsService,
-        BasicArticleScheme $scheme
+        ArticleSchemeInterface $scheme,
+        \Zend_Cache_Core $cache
     ) {
         $this->pluginConfig = $configReader->getByPluginName('VerignAiPhilosSearch');
         $this->localeMapper = $localeMapper;
-        $this->itemsService = $itemsService;
+        $this->itemClient = $itemsService;
         $this->scheme = $scheme;
+        $this->cache = $cache;
+        $this->coreService = $coreService;
     }
 
 
@@ -66,14 +69,11 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
      * @return bool
      */
     public function supportsCondition(ConditionInterface $condition) {
-        if (!$condition instanceof SearchTermCondition || !$this->pluginConfig["useAiSearch"]) {
-            return false;
+        if (!$this->pluginConfig["useAiSearch"]) {
+            return $this->coreService->supportsCondition($condition);
         }
 
-        $locale = Shopware()->Shop()->getLocale()->getLocale();
-        $language = $this->localeMapper->mapLocaleString($locale);
-
-        return $this->validateLanguage($this->itemsService, $language);
+        return $condition instanceof SearchTermCondition;
     }
 
     /**
@@ -91,15 +91,19 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $this->setAuthentication($this->itemsService, $this->pluginConfig);
+        $this->setAuthentication();
 
         /**@var SearchTermCondition $condition */
         $term = $condition->getTerm();
         $swLocaleString = $context->getShop()->getLocale()->getLocale();
         $language = $this->localeMapper->mapLocaleString($swLocaleString);
 
-        $this->setDbName($this->itemsService, $this->pluginConfig, $language);
-        $result = $this->itemsService->searchItems($term, $language);
+        if (!$this->validateLanguage($language)) {
+            return $this->coreService->generateCondition($condition, $query, $context);
+        }
+
+        $this->setDbName();
+        $result = $this->itemClient->searchItems($term, $language);
 
         $fieldKey = $this->scheme->getProductNumberKey();
         $orderNumbers = [];

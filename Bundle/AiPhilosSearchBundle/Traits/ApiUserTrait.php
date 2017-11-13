@@ -9,16 +9,28 @@
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits;
 
 
-use Aiphilos\Api\ClientInterface;
+
+use Aiphilos\Api\Items\ClientInterface;
 
 trait ApiUserTrait
 {
     private static $languages;
 
-    public function setAuthentication(ClientInterface $client, array $pluginConfig) {
+    /** @var \Zend_Cache_Core */
+    protected $cache;
+
+    /** @var ClientInterface */
+    protected $itemClient;
+
+    /** @var array */
+    protected $pluginConfig;
+
+    private $languageCacheId = 'verign_ai_philos_search_languages';
+
+    public function setAuthentication() {
         $verignRefId = null; // TODO hardcode referal ID
-        $apiName = trim($pluginConfig['apiName']);
-        $apiPassword = trim($pluginConfig['apiPassword']);
+        $apiName = trim($this->pluginConfig['apiName']);
+        $apiPassword = trim($this->pluginConfig['apiPassword']);
 
         if ($apiName === '') {
             throw new \InvalidArgumentException('Api username must not be empty.');
@@ -28,46 +40,41 @@ trait ApiUserTrait
             throw new \InvalidArgumentException('api password must not be empty.');
         }
 
-        $client->setAuthCredentials($apiName, $apiPassword, $verignRefId);
+        $this->itemClient->setAuthCredentials($apiName, $apiPassword, $verignRefId);
     }
 
-    /**
-     * @param ClientInterface|\Aiphilos\Api\Items\ClientInterface $itemClient
-     * @param array $pluginConfig
-     * @param string $language
-     */
-    public function setDbName(\Aiphilos\Api\Items\ClientInterface $itemClient, array $pluginConfig, $language) {
-        //TODO evaluate if this is a sensible way to handle DB names
-        $prefix = 'dv_sw_';
-        $dbName = trim($pluginConfig['apiDbName']);
-        $language = trim($language);
 
-        if ($language === '') {
-            throw new \InvalidArgumentException('Language must not be empty');
-        }
+    public function setDbName() {
+        $dbName = trim($this->pluginConfig['apiDbName']);
 
         if ($dbName === '') {
             throw new \InvalidArgumentException('Api DB name must not be empty');
         }
 
+        //TODO sync the actual naming requirements with what the api actually wants
         if (preg_match('/[^a-zA-Z0-9_]/', $dbName)) {
             throw new \InvalidArgumentException('Api DB name must only contain letters from A-Z or a-z, numbers and underscores');
         }
 
-        $realDbName = $prefix . $dbName . '_' . $language;
+        $realDbName = $dbName;
 
-        $itemClient->setName($realDbName);
+        $this->itemClient->setName($realDbName);
     }
 
     /**
-     * @param ClientInterface $client - pre-authenticated client instance
      * @param string $language
      * @return bool
      */
-    public function validateLanguage(ClientInterface $client, $language) {
-        //TODO consider better caching
+    public function validateLanguage($language) {
         if (self::$languages === null) {
-            self::$languages = $client->getLanguages();
+            $hasCached = $this->cache->test($this->languageCacheId);
+            if ($hasCached) {
+                self::$languages = $this->cache->load($this->languageCacheId);
+            } else {
+                self::$languages = $this->itemClient->getLanguages();
+                $this->cache->save(self::$languages, $this->languageCacheId, [], 86400);
+            }
+
         }
 
         return in_array($language, self::$languages, true);

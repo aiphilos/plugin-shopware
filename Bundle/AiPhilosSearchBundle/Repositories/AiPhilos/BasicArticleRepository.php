@@ -12,32 +12,26 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos
 use Aiphilos\Api\Items\ClientInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Locale;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\LocaleStringMapperInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\BasicArticleRepository;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapperInterface;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface as SwArticleRepository;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\SchemeMapperInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\SchemeInterface;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
-class ArticleRepository
+class BasicArticleRepository implements ArticleRepositoryInterface
 {
     use ApiUserTrait;
 
     /** @var LocaleStringMapperInterface */
     private $localeMapper;
 
-    /** @var ClientInterface */
-    private $itemClient;
-
-    /** @var array */
-    private $pluginConfig = [];
-
     /** @var string */
     private $language;
 
-    /** @var BasicArticleRepository */
-    private $repository;
+    /** @var SwArticleRepository */
+    private $swArticleRepository;
 
-    /** @var SchemeInterface */
+    /** @var ArticleSchemeInterface */
     private $scheme;
 
     private $priceGroup = 'EK';
@@ -49,28 +43,33 @@ class ArticleRepository
     private $modelManager;
     /** @var SchemeMapperInterface */
     private $schemeMapper;
+    /** @var int */
+    private $salesMonths = 3;
 
     /**
      * DatabaseCrud constructor.
      * @param LocaleStringMapperInterface $localeMapper
      * @param ClientInterface $itemClient
-     * @param SchemeInterface $scheme
+     * @param ArticleSchemeInterface $scheme
      * @param ModelManager $modelManager
      * @param SchemeMapperInterface $schemeMapper
+     * @param \Zend_Cache_Core $cache
      */
     public function __construct(
         LocaleStringMapperInterface $localeMapper,
         ClientInterface $itemClient,
-        SchemeInterface $scheme,
+        ArticleSchemeInterface $scheme,
         ModelManager $modelManager,
-        SchemeMapperInterface $schemeMapper
+        SchemeMapperInterface $schemeMapper,
+        \Zend_Cache_Core $cache
     ) {
         $this->localeMapper = $localeMapper;
         $this->itemClient = $itemClient;
         $this->scheme = $scheme;
-        $this->repository = $scheme->getRepository();
+        $this->swArticleRepository = $scheme->getRepository();
         $this->modelManager = $modelManager;
         $this->schemeMapper = $schemeMapper;
+        $this->cache = $cache;
     }
 
     /**
@@ -97,13 +96,14 @@ class ArticleRepository
         $this->localeId = $localeModel->getId();
         $this->language = $this->localeMapper->mapLocaleString($locale);
         $this->updateConfigRelatedOps();
+        $this->salesMonths = $this->pluginConfig['salesMonths'];
 
         return $this;
     }
 
     /**
      * @param string $priceGroup
-     * @return ArticleRepository
+     * @return BasicArticleRepository
      */
     public function setPriceGroup($priceGroup) {
         $this->priceGroup = $priceGroup;
@@ -114,12 +114,12 @@ class ArticleRepository
     private function updateConfigRelatedOps() {
         if ($this->pluginConfig) {
             if ($this->language) {
-                $this->setAuthentication($this->itemClient, $this->pluginConfig);
-                $this->validateLanguage($this->itemClient, $this->language);
-                $this->setDbName($this->itemClient, $this->pluginConfig, $this->language);
+                $this->setAuthentication();
+                $this->validateLanguage($this->language);
+                $this->setDbName();
             }
 
-            $this->repository->setSalesMonths($this->pluginConfig['salesMonths']);
+            $this->salesMonths = $this->pluginConfig['salesMonths'];
         }
     }
 
@@ -140,7 +140,7 @@ class ArticleRepository
     }
 
     public function createArticles(array $articleIds) {
-        $articles = $this->repository->getArticleData($articleIds, [], $this->localeId, $this->priceGroup);
+        $articles = $this->swArticleRepository->getArticleData($articleIds, [], $this->localeId, $this->priceGroup, $this->salesMonths);
 
         $mappedArticles = $this->schemeMapper->map($this->scheme, $articles);
 
@@ -152,12 +152,11 @@ class ArticleRepository
     }
 
     public function getArticles() {
-        throw new \Exception(__METHOD__ . ' not yet implemented');
-        //TODO figure out what's missing here
+        return $this->itemClient->getItems();
     }
 
     public function updateArticles(array $articleIds) {
-        $articles = $this->repository->getArticleData($articleIds, [], $this->localeId, $this->priceGroup);
+        $articles = $this->swArticleRepository->getArticleData($articleIds, [], $this->localeId, $this->priceGroup, $this->salesMonths);
 
         $mappedArticles = $this->schemeMapper->map($this->scheme, $articles);
 

@@ -10,7 +10,7 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes;
 
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
 
-interface SchemeInterface
+interface ArticleSchemeInterface
 {
     /**
      * @return array

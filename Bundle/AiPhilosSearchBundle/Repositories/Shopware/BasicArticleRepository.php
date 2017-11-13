@@ -9,17 +9,22 @@
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware;
 
 
+use Shopware\Components\Plugin\ConfigReader;
+
 class BasicArticleRepository implements ArticleRepositoryInterface
 {
     /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
     private $db;
 
+    /** @var array */
+    private $attributeColumns;
+
     protected $articleDataQuery = '
         SELECT DISTINCT
           d.id AS _id,
           d.ordernumber AS ordernumber,
-        -- {{translationTable}}.name AS `name`,
-        -- {{translationTable}}.description_long AS description_long,
+          IFNULL(t.name, a.name) AS `name`,
+          IFNULL(t.description_long, a.description_long) AS description_long,
           p.price AS price,
           d.ean AS ean,
           s.name AS supplier,
@@ -77,7 +82,12 @@ class BasicArticleRepository implements ArticleRepositoryInterface
         ON fila.valueID = filva.id
         LEFT JOIN s_filter_options AS filo
         ON filva.optionID = filo.id
-        -- {{translationTableJoin}}
+        LEFT JOIN s_articles_translations AS t
+        ON a.id = t.articleID
+        AND t.languageID = :localeId
+        LEFT JOIN s_articles_attributes AS attr
+        ON attr.articleID = a.id
+        AND attr.articledetailsID = d.id
         WHERE a.active = TRUE
         AND d.active = TRUE
         AND a.mode = 0
@@ -94,9 +104,19 @@ class BasicArticleRepository implements ArticleRepositoryInterface
     /**
      * BasicArticleRepository constructor.
      * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param ConfigReader $configReader
      */
-    public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db) {
+    public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, ConfigReader $configReader) {
         $this->db = $db;
+        $this->attributeColumns = array_map(function ($columnName) {
+            if (preg_match('/[^a-zA-Z0-9_/', $columnName)) {
+                throw new \InvalidArgumentException("Column name '$columnName' contains invalid characters.");
+            }
+
+            return $columnName;
+        }, explode(
+            ';', $configReader->getByPluginName('VerignAiPhilosSearch')['attributeColumns']
+        ));
     }
 
     /**
@@ -108,15 +128,12 @@ class BasicArticleRepository implements ArticleRepositoryInterface
      * @return array
      */
     public function getArticleData(array $idsToInclude=[], array $idsToExclude=[], $localeId = 0, $priceGroup = 'EK', $salesMonths = 3) {
-        $query = $this->replaceLocaleInQuery($this->articleDataQuery, $localeId);
+        $query = $this->getQuery($this->articleDataQuery);
         $params = [
             ':priceGroup' => $priceGroup,
             ':numMonths' => $salesMonths,
+            ':localeId' => $localeId
         ];
-
-        if (intval($localeId)) {
-            $params[':localeId'] = $localeId;
-        }
 
         if (count($idsToInclude) > 0) {
             $query .= 'AND d.id IN ( ';
@@ -169,6 +186,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
                     'points' => $row['points'],
                     'options' => [],
                     'properties' => [],
+                    'attributes' => [],
                 ];
             }
 
@@ -191,6 +209,13 @@ class BasicArticleRepository implements ArticleRepositoryInterface
                 $retval[$id]['properties'][$propertyId]['values'][$propertyValueId] = $row['propertyValue'];
             }
 
+            foreach ($retval as $key => $value) {
+                $value = trim(strip_tags($value));
+                if (strpos($key, 'attribute_') === 0 && $value !== '') {
+                    $retval[$id]['attributes'][] = $value;
+                }
+            }
+
         }
 
         foreach ($retval as &$item) {
@@ -207,16 +232,25 @@ class BasicArticleRepository implements ArticleRepositoryInterface
             $item['properties'] = $denseProperties;
         }
 
-        //TODO figure out how to make AiPhilos use extra fields
         return $retval;
     }
 
-    private function replaceLocaleInQuery($articleDataQuery, $localeId) {
-        $translationTable = ($localeId = intval($localeId) ? 't' : 'a');
-        $translationTableJoin = ($localeId ? $this->translationTableJoin : '');
+    private function getQuery($query) {
+        $attrSelectColumns = '';
 
-        $query = str_replace('-- {{translationTable}}', $translationTable, $articleDataQuery);
-        $query = str_replace('-- {{translationTableJoin}}', $translationTableJoin, $query);
+        if (count($this->attributeColumns) > 0) {
+            $attrSelects = [];
+            foreach ($this->attributeColumns as $attributeColumn) {
+                $column = trim($attributeColumn);
+                if ($column) {
+                    continue;
+                }
+                $attrSelects[] = 'IFNULL(t.' . $column  . ', attr.' . $column .') AS attribute_' . $column;
+            }
+            $attrSelectColumns = implode(",\n", $attrSelects);
+        }
+
+        $query = str_replace('-- {{attributeSelect}}', $attrSelectColumns, $query);
 
         return $query;
     }
