@@ -10,6 +10,7 @@ namespace VerignAiPhilosSearch\tests;
 
 
 use Aiphilos\Api\Items\ClientInterface;
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Components\Test\Plugin\TestCase;
 use Doctrine\ORM\EntityRepository;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
@@ -21,8 +22,6 @@ use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\BasicArticleRepository;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\BasicArticleScheme;
 
 abstract class AbstractTestCase extends TestCase
@@ -120,18 +119,6 @@ abstract class AbstractTestCase extends TestCase
         return $mock;
     }
 
-    public function getQueryBuilderMock() {
-        $mock = $this->createMock(QueryBuilder::class);
-        return $mock;
-    }
-
-    public function getShopContextMock() {
-        $mock = $this->createMock(ShopContextInterface::class);
-        $mock->method('getShop')
-            ->willReturn($this->getShopMock());
-
-        return $mock;
-    }
 
     public function getModelManagerMock() {
         $localeRepoMock = $this->createMock(EntityRepository::class);
@@ -166,9 +153,48 @@ abstract class AbstractTestCase extends TestCase
         $schemeMock = $this->createMock(BasicArticleScheme::class);
         $schemeMock->method('getRepository')
             ->willReturn($repoMock);
+        $schemeMock->method('getScheme')
+            ->willReturn([]);
 
         return $schemeMock;
     }
 
+    public function getConditionHandlerMock() {
+        $mock = $this->createMock(ConditionHandlerInterface::class);
 
+        return $mock;
+    }
+
+    public function getConditionMock() {
+        $mock = $this->createMock(SearchTermCondition::class);
+
+        $mock->method('getTerm')
+            ->willReturn(self::TEST_SEARCH_TERM);
+
+        return $mock;
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function getQueryBuilderMock() {
+        $mock = $this->createMock(QueryBuilder::class);
+
+        $mock->method('andWhere')
+            ->willReturn($mock);
+
+        $mock->method('setParameter')
+            ->willReturn($mock);
+
+        return $mock;
+    }
+
+    public function getShopContextMock() {
+        $mock = $this->createMock(ShopContextInterface::class);
+
+        $mock->method('getShop')
+            ->willReturn($this->getShopMock());
+
+        return $mock;
+    }
 }
