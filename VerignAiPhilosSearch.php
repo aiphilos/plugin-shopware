@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * TODO Better delta updates by memorizing changed articles since last run
+ */
 namespace VerignAiPhilosSearch;
 
 (function($autoloaderPath) {

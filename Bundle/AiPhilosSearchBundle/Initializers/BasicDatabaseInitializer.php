@@ -18,11 +18,7 @@ class BasicDatabaseInitializer implements DatabaseInitializerInterface
 {
     use ApiUserTrait;
 
-    const CREATE_RESULT_LANGUAGE_NOT_SUPPORTED = 1;
-    const CREATE_RESULT_ALREADY_EXISTS = 2;
-    const CREATE_RESULT_CREATED = 4;
-    const CREATE_RESULT_NAME_ERROR = 8;
-    const CREATE_RESULT_SCHEME_ERROR = 16;
+
 
 
     /** @var ArticleSchemeInterface */
@@ -45,13 +41,13 @@ class BasicDatabaseInitializer implements DatabaseInitializerInterface
         $this->pluginConfig = $pluginConfig;
         $this->setAuthentication();
         if (!$this->validateLanguage($language)) {
-            return self::CREATE_RESULT_LANGUAGE_NOT_SUPPORTED;
+            return CreateResultEnum::LANGUAGE_NOT_SUPPORTED;
         }
 
         try {
             $this->setDbName();
         } catch (\Exception $e) {
-            return self::CREATE_RESULT_NAME_ERROR;
+            return CreateResultEnum::NAME_ERROR;
         }
 
         try {
@@ -61,16 +57,16 @@ class BasicDatabaseInitializer implements DatabaseInitializerInterface
         }
 
         if ($dbExists) {
-            return self::CREATE_RESULT_ALREADY_EXISTS;
+            return CreateResultEnum::ALREADY_EXISTS;
         }
 
         try {
             $this->itemClient->setScheme($this->scheme->getScheme());
         } catch (\Exception $e) {
-            return self::CREATE_RESULT_SCHEME_ERROR;
+            return CreateResultEnum::SCHEME_ERROR;
         }
 
-        return self::CREATE_RESULT_CREATED;
+        return CreateResultEnum::CREATED;
 
     }
 

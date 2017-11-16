@@ -152,7 +152,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
     }
 
     public function getArticles() {
-        return $this->itemClient->getItems();
+        return $this->itemClient->getItems(0, 0);
     }
 
     public function updateArticles(array $articleIds) {

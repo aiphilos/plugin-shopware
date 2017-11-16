@@ -8,7 +8,6 @@
 
 namespace VerignAiPhilosSearch\tests;
 
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler\AiSearchTermConditionHandler;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\BasicLocaleStringMapper;
 

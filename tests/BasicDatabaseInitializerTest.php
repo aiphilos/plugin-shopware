@@ -9,6 +9,7 @@
 namespace VerignAiPhilosSearch\tests;
 
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\BasicDatabaseInitializer;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\CreateResultEnum;
 
 class BasicDatabaseInitializerTest extends AbstractTestCase
 {
@@ -48,6 +49,6 @@ class BasicDatabaseInitializerTest extends AbstractTestCase
         }
 
         $this->assertNull($exception);
-        $this->assertEquals(BasicDatabaseInitializer::CREATE_RESULT_CREATED, $result);
+        $this->assertEquals(CreateResultEnum::CREATED, $result);
     }
 }
