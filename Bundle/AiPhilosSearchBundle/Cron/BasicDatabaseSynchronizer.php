@@ -68,7 +68,12 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
             $results .= 'Now processing "' . $shop->getName() .'"' . PHP_EOL;
             $config = $this->getConfigForShop($shop);
             if (!$config) {
-                $results .= 'Skipped: Could not fetch plugin configuration' . PHP_EOL;
+                $results .= 'Skipped: Could not fetch plugin configuration.' . PHP_EOL;
+                continue;
+            }
+
+            if (!$config['useAiSearch']) {
+                $results .= 'Skipped: Search disabled for this shop.' . PHP_EOL;
                 continue;
             }
 
@@ -118,7 +123,7 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
                 $msg = 'Error: Failed to updated database with exception;' . PHP_EOL . $e->getMessage();
             }
 
-            $results .= $msg . PHP_EOL . PHP_EOL . 'Done';
+            $results .= $msg . PHP_EOL . PHP_EOL . 'Done' . PHP_EOL . PHP_EOL;
         }
 
         return $results;
@@ -141,9 +146,14 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
         $this->aiRepository->setLocale($shop->getLocale()->getLocale());
         $this->aiRepository->setPluginConfig($config);
 
-        $existingIds = [];
-        $existingArticles = $this->aiRepository->getArticles();
 
+        try {
+            $existingArticles = $this->aiRepository->getArticles();
+        } catch (\Exception $e) {
+            $existingArticles = [];
+        }
+
+        $existingIds = [];
         foreach ($existingArticles as $existingArticle) {
             $id = intval($existingArticle['_id']);
             if ($id > 0) {
@@ -155,8 +165,7 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
         }
 
         $newIds = $this->getArticleIds($existingIds);
-        $this->aiRepository->createArticles($newIds);
-
+        $response = $this->aiRepository->createArticles($newIds);
 
     }
 

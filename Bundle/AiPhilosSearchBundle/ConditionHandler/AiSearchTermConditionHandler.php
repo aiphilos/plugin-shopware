@@ -34,6 +34,8 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
     /** @var ConditionHandlerInterface */
     private $coreService;
 
+    private static $instanceCache = [];
+
     /**
      * AiSearchTermConditionHandler constructor.
      * @param ConditionHandlerInterface $coreService
@@ -71,7 +73,6 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         if (!$this->pluginConfig["useAiSearch"]) {
             return $this->coreService->supportsCondition($condition);
         }
-
         return $condition instanceof SearchTermCondition;
     }
 
@@ -90,30 +91,53 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $this->setAuthentication();
-
         /**@var SearchTermCondition $condition */
         $term = $condition->getTerm();
-        $swLocaleString = $context->getShop()->getLocale()->getLocale();
-        $language = $this->localeMapper->mapLocaleString($swLocaleString);
 
-        if (!$this->validateLanguage($language)) {
-            return $this->coreService->generateCondition($condition, $query, $context);
-        }
+        $orderNumbers = $this->getFromInstanceCache($term);
 
-        $this->setDbName();
-        $result = $this->itemClient->searchItems($term, $language);
+        if ($orderNumbers === null) {
+            $this->setAuthentication();
 
-        $fieldKey = $this->scheme->getProductNumberKey();
-        $orderNumbers = [];
-        foreach ($result as $articleData) {
-            if ($orderNumber = $articleData[$fieldKey]) {
-                $orderNumbers[] = $orderNumber;
+            $swLocaleString = $context->getShop()->getLocale()->getLocale();
+            $language = $this->localeMapper->mapLocaleString($swLocaleString);
+
+            if (!$this->validateLanguage($language)) {
+                return $this->coreService->generateCondition($condition, $query, $context);
             }
+
+            $this->setDbName();
+            try {
+                $result = $this->itemClient->searchItems($term, $language, ['size' => 10000]);
+            } catch (\DomainException $e) {
+                $this->saveInInstanceCache($this, false);
+                return $this->coreService->generateCondition($condition, $query, $context);
+
+            }
+
+            $fieldKey = $this->scheme->getProductNumberKey();
+            $orderNumbers = [];
+            foreach ($result['results'] as $articleData) {
+                if ($orderNumber = $articleData[$fieldKey]) {
+                    $orderNumbers[] = $orderNumber;
+                }
+            }
+
+            $this->saveInInstanceCache($term, $orderNumbers);
+        } elseif ($orderNumbers === false) {
+            return $this->coreService->generateCondition($condition, $query, $context);
         }
 
         $query->andWhere('variant.ordernumber IN ( :aiProvidedOrderNumbers )')
             ->setParameter('aiProvidedOrderNumbers', $orderNumbers, Connection::PARAM_STR_ARRAY);
 
+    }
+
+    private function getFromInstanceCache($term) {
+        return isset(self::$instanceCache[$term]) ? self::$instanceCache[$term] : null;
+    }
+
+    private function saveInInstanceCache($term, $value) {
+        self::$instanceCache[$term] = $value;
     }
 }

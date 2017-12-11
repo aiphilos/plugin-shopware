@@ -91,7 +91,6 @@ class BasicArticleRepository implements ArticleRepositoryInterface
         WHERE a.active = TRUE
         AND d.active = TRUE
         AND a.mode = 0
-        ORDER BY d.id ASC
     ';
 
     protected $translationTableJoin = '
@@ -99,6 +98,8 @@ class BasicArticleRepository implements ArticleRepositoryInterface
         ON a.id = t.articleID
         AND t.localeID = :localeId
     ';
+
+    protected $orderByClause = 'ORDER BY d.id ASC';
 
 
     /**
@@ -143,7 +144,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
             foreach ($idsToInclude as $id) {
                 $key = ':_include_id_'.$i;
                 $params[$key] = $id;
-                $keys[] = $keys;
+                $keys[] = $key;
                 $i++;
             }
 
@@ -158,12 +159,14 @@ class BasicArticleRepository implements ArticleRepositoryInterface
             foreach ($idsToExclude as $id) {
                 $key = ':_exclude_id_'.$i;
                 $params[$key] = $id;
-                $keys[] = $keys;
+                $keys[] = $key;
                 $i++;
             }
 
             $query .= implode(', ', $keys) . ' ) ';
         }
+
+        $query .= $this->orderByClause;
 
         $preparedStatement = $this->db->prepare($query);
         $preparedStatement->execute($params);

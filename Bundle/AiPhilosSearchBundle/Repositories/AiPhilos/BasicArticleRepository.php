@@ -113,13 +113,19 @@ class BasicArticleRepository implements ArticleRepositoryInterface
 
     private function updateConfigRelatedOps() {
         if ($this->pluginConfig) {
+            $this->salesMonths = $this->pluginConfig['salesMonths'];
             if ($this->language) {
                 $this->setAuthentication();
-                $this->validateLanguage($this->language);
+                $langValid = $this->validateLanguage($this->language);
+
+                if (!$langValid) {
+                    throw new \InvalidArgumentException('Language "' . $this->language . '" is not valid.');
+                }
+
+                $this->itemClient->setDefaultLanguage($this->language);
+
                 $this->setDbName();
             }
-
-            $this->salesMonths = $this->pluginConfig['salesMonths'];
         }
     }
 
@@ -152,7 +158,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
     }
 
     public function getArticles() {
-        return $this->itemClient->getItems(0, 0);
+        return $this->itemClient->getItems(['size' => 10000]);
     }
 
     public function updateArticles(array $articleIds) {

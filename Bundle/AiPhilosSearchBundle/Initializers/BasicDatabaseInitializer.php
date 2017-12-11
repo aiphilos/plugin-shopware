@@ -44,6 +44,8 @@ class BasicDatabaseInitializer implements DatabaseInitializerInterface
             return CreateResultEnum::LANGUAGE_NOT_SUPPORTED;
         }
 
+        $this->itemClient->setDefaultLanguage($language);
+
         try {
             $this->setDbName();
         } catch (\Exception $e) {

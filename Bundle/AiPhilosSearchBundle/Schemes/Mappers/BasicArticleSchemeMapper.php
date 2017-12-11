@@ -19,17 +19,17 @@ class BasicArticleSchemeMapper implements SchemeMapperInterface
         $mappedResults = [];
 
         foreach ($articles as $article) {
+            $mappedArticle = [];
             foreach ($article as $key => $value) {
-                $mappedArticle = [];
-                if (strpos('_', $key) === 0 || isset($schemeArray[$key])) {
+                if (strpos($key, '_') === 0 || isset($schemeArray[$key])) {
                     $mappedArticle[$key] = $value;
                 }
+            }
 
-                unset($mappedArticle['_action']); //Just in case
+            unset($mappedArticle['_action']); //Just in case
 
-                if ($mappedArticle !== []) {
-                    $mappedResults[] = $mappedArticle;
-                }
+            if ($mappedArticle !== []) {
+                $mappedResults[] = $mappedArticle;
             }
         }
 
