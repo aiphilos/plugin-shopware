@@ -13,17 +13,12 @@ use Aiphilos\Api\Items\ClientInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
-//TODO still need to rethink this
 class BasicDatabaseInitializer implements DatabaseInitializerInterface
 {
     use ApiUserTrait;
 
-
-
-
     /** @var ArticleSchemeInterface */
     private $scheme;
-
 
     /**
      * DatabaseInitializer constructor.
@@ -37,7 +32,7 @@ class BasicDatabaseInitializer implements DatabaseInitializerInterface
         $this->scheme = $scheme;
     }
 
-    public function createSchemeIfNotExist($language, array $pluginConfig) {
+    public function createOrUpdateScheme($language, array $pluginConfig) {
         $this->pluginConfig = $pluginConfig;
         $this->setAuthentication();
         if (!$this->validateLanguage($language)) {
@@ -53,22 +48,19 @@ class BasicDatabaseInitializer implements DatabaseInitializerInterface
         }
 
         try {
-            $dbExists = !!($d = $this->itemClient->getDetails()) ?: !empty($d);
+            $dbExists = $this->itemClient->checkDatabaseExists();
         } catch (\Exception $e) {
             $dbExists = false;
         }
 
-        if ($dbExists) {
-            return CreateResultEnum::ALREADY_EXISTS;
-        }
-
         try {
+            //Scheme should be set in any successful case
             $this->itemClient->setScheme($this->scheme->getScheme());
         } catch (\Exception $e) {
             return CreateResultEnum::SCHEME_ERROR;
         }
 
-        return CreateResultEnum::CREATED;
+        return  $dbExists ? CreateResultEnum::ALREADY_EXISTS : CreateResultEnum::CREATED;
 
     }
 

@@ -108,7 +108,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
 
             $this->setDbName();
             try {
-                $result = $this->itemClient->searchItems($term, $language, ['size' => 10000]);
+                $result = $this->itemClient->searchItems($term, $language, ['size' => 1000]);
             } catch (\DomainException $e) {
                 $this->saveInInstanceCache($this, false);
                 return $this->coreService->generateCondition($condition, $query, $context);

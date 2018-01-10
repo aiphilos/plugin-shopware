@@ -43,7 +43,7 @@ class BasicDatabaseInitializerTest extends AbstractTestCase
         $config = $this->getConfigReaderMock()->getByPluginName('VerignAiPhilosSearch');
 
         try {
-            $result = $init->createSchemeIfNotExist('de-de', $config);
+            $result = $init->createOrUpdateScheme('de-de', $config);
         } catch (\Exception $e) {
             $exception = $e;
         }

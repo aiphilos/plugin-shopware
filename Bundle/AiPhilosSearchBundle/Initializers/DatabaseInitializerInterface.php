@@ -10,5 +10,5 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers;
 
 interface DatabaseInitializerInterface
 {
-    public function createSchemeIfNotExist($language, array $pluginConfig);
+    public function createOrUpdateScheme($language, array $pluginConfig);
 }

@@ -86,7 +86,7 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
             }
 
             try {
-                $createResult = $this->databaseInitializer->createSchemeIfNotExist($language, $config);
+                $createResult = $this->databaseInitializer->createOrUpdateScheme($language, $config);
             } catch (\Exception $e) {
                 $results .= 'Error: An exception occurred; ' . PHP_EOL . $e->getMessage() . PHP_EOL . PHP_EOL;
                 continue;
@@ -120,7 +120,7 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
                 $this->updateDB($shop, $config);
                 $msg = 'Successfully updated database!';
             } catch (\Exception $e) {
-                $msg = 'Error: Failed to updated database with exception;' . PHP_EOL . $e->getMessage();
+                $msg = 'Error: Failed to update database with exception;' . PHP_EOL . $e->getMessage();
             }
 
             $results .= $msg . PHP_EOL . PHP_EOL . 'Done' . PHP_EOL . PHP_EOL;
@@ -153,11 +153,17 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
             $existingArticles = [];
         }
 
+        $allShopwareIds = $this->getArticleIds();
+        $idsToDelete = [];
         $existingIds = [];
         foreach ($existingArticles as $existingArticle) {
             $id = intval($existingArticle['_id']);
             if ($id > 0) {
-                $existingIds[] = $id;
+                if (array_search($id, $allShopwareIds, true) === false) {
+                    $idsToDelete[] = $id;
+                } else {
+                    $existingIds[] = $id;
+                }
             }
         }
         if (count($existingIds) > 0) {
@@ -165,7 +171,15 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
         }
 
         $newIds = $this->getArticleIds($existingIds);
-        $response = $this->aiRepository->createArticles($newIds);
+
+        if (count($newIds) > 0) {
+            $this->aiRepository->createArticles($newIds);
+        }
+
+        if (count($idsToDelete) > 0) {
+            $this->aiRepository->deleteArticles($idsToDelete);
+        }
+
 
     }
 

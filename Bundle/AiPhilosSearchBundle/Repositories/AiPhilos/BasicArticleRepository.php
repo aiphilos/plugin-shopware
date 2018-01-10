@@ -17,7 +17,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\Artic
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\SchemeMapperInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
-
+//TODO make sure all methods return results instead of general api return data
 class BasicArticleRepository implements ArticleRepositoryInterface
 {
     use ApiUserTrait;
@@ -158,7 +158,20 @@ class BasicArticleRepository implements ArticleRepositoryInterface
     }
 
     public function getArticles() {
-        return $this->itemClient->getItems(['size' => 10000]);
+        $size = $count = 1000;
+        $data = $this->itemClient->getItems(['size' => $size]);
+        $total = $data['total'];
+
+        $results = $data['results'];
+
+        while ($total > $count) {
+            $data = $this->itemClient->getItems(['from' => $count,'size' => $size]);
+
+            $count += $data['count'];
+            $results = array_merge($results, $data['results']);
+        }
+
+        return $results;
     }
 
     public function updateArticles(array $articleIds) {

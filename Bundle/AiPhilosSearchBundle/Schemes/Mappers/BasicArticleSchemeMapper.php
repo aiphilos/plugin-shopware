@@ -22,6 +22,12 @@ class BasicArticleSchemeMapper implements SchemeMapperInterface
             $mappedArticle = [];
             foreach ($article as $key => $value) {
                 if (strpos($key, '_') === 0 || isset($schemeArray[$key])) {
+                    if (is_string($value)) {
+                        //TODO figure out actual character/byte limit of a string value - It's now supposed to be 64000 but it's not yet clear whether this is bytes oder multibyte chars
+                        //$value = mb_substr(trim(strip_tags($value)), 0, 64000, 'UTF-8');
+                        //Assume bytes for now until there is a definite answer
+                        $value = mb_strcut(trim(strip_tags($value)), 0, 64000, 'UTF-8');
+                    }
                     $mappedArticle[$key] = $value;
                 }
             }

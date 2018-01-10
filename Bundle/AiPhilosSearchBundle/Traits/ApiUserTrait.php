@@ -37,7 +37,7 @@ trait ApiUserTrait
         }
 
         if ($apiPassword === '') {
-            throw new \InvalidArgumentException('api password must not be empty.');
+            throw new \InvalidArgumentException('Api password must not be empty.');
         }
 
         $this->itemClient->setAuthCredentials($apiName, $apiPassword, $verignRefId);
@@ -51,8 +51,7 @@ trait ApiUserTrait
             throw new \InvalidArgumentException('Api DB name must not be empty');
         }
 
-        //TODO sync the actual naming requirements with what the api actually wants
-        if (preg_match('/[^a-zA-Z0-9_]/', $dbName)) {
+        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $dbName)) {
             throw new \InvalidArgumentException('Api DB name must only contain letters from A-Z or a-z, numbers and underscores');
         }
 
@@ -64,6 +63,7 @@ trait ApiUserTrait
     /**
      * @param string $language
      * @return bool
+     * @throws \Zend_Cache_Exception
      */
     public function validateLanguage($language) {
         if (self::$languages === null) {
