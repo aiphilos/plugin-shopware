@@ -28,7 +28,15 @@
             <name>salesMonths</name>
             <label lang="de">Anzahl der Monate für Bestseller</label>
             <label lang="en">Number of months for beststellers</label>
-            <description lang="de">Die Verkaufsfrequenz der Artikel wird mit an die Schnittstelle</description>
+            <description lang="de">Die Verkaufsfrequenz der Artikel wird mit an die API Datenbank übergeben, hier können sie festlegen, über wie viele Monate diese berechnet werden soll.</description>
+            <description lang="en">The sales frequency of an article will be transmitted to the API database. Here you can select the number of months for which said frequency will be calculated.</description>
+        </element>
+        <element>
+            <name>attributeColumns</name>
+            <label lang="de">Freitextfeld-Spalten</label>
+            <label lang="en">Attribute Columns</label>
+            <description lang="de">Geben Sie hier die Spaltennamen der Freitextfelder als Semikolon-getrennte Liste ein, welche mit den Artikeldaten an die API Datenbank übertragen werden sollen. Dies ist nur für menschenlesbare Texte sinnvoll, wie z.B. zusätzliche Beschreibungen.</description>
+            <description lang="en">Enter a semicolon separated list of column names of the attributes you would like to transmit to the API database here. This only makes sense for human readable texts such as additional descriptions.</description>
         </element>
     </elements>
 

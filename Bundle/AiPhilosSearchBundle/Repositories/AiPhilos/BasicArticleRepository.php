@@ -17,7 +17,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\Artic
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\SchemeMapperInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
-//TODO make sure all methods return results instead of general api return data
+//TODO@later make sure all methods return results instead of general api return data
 class BasicArticleRepository implements ArticleRepositoryInterface
 {
     use ApiUserTrait;

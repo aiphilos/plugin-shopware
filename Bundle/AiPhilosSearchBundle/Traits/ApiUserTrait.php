@@ -28,7 +28,7 @@ trait ApiUserTrait
     private $languageCacheId = 'verign_ai_philos_search_languages';
 
     public function setAuthentication() {
-        $verignRefId = null; // TODO hardcode referal ID
+        $verignRefId = null; // TODO@later hardcode referal ID once we have it
         $apiName = trim($this->pluginConfig['apiName']);
         $apiPassword = trim($this->pluginConfig['apiPassword']);
 

@@ -17,10 +17,10 @@ class BasicArticleRepository implements ArticleRepositoryInterface
     private $db;
 
     /** @var array */
-    private $attributeColumns;
+    private $attributeColumns = [];
 
     protected $articleDataQuery = '
-        SELECT DISTINCT
+        SELECT DISTINCTROW 
           d.id AS _id,
           d.ordernumber AS ordernumber,
           IFNULL(t.name, a.name) AS `name`,
@@ -36,6 +36,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
           filo.name AS propertyName,
           filva.id AS propertyValueId,
           filva.value AS propertyValue
+          -- {{attributeSelect}}
         FROM s_articles AS a
         JOIN s_articles_details AS d
         ON a.id = d.articleID
@@ -109,15 +110,23 @@ class BasicArticleRepository implements ArticleRepositoryInterface
      */
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, ConfigReader $configReader) {
         $this->db = $db;
-        $this->attributeColumns = array_map(function ($columnName) {
-            if (preg_match('/[^a-zA-Z0-9_/', $columnName)) {
-                throw new \InvalidArgumentException("Column name '$columnName' contains invalid characters.");
-            }
 
-            return $columnName;
-        }, explode(
-            ';', $configReader->getByPluginName('VerignAiPhilosSearch')['attributeColumns']
-        ));
+        $conf = $configReader->getByPluginName('VerignAiPhilosSearch');
+
+        $attrCols = isset($conf['attributeColumns']) && ($val = trim($conf['attributeColumns'])) ? $val : false;
+
+        if ($attrCols !== false) {
+            $this->attributeColumns = array_map(function ($columnName) {
+                if (!$columnName || preg_match('/[^a-zA-Z0-9_]/', $columnName)) {
+                    throw new \InvalidArgumentException("Column name '$columnName' contains invalid characters.");
+                }
+
+                return $columnName;
+            }, explode(
+                ';', $attrCols
+            ));
+        }
+
     }
 
     /**
@@ -195,7 +204,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
 
             $optionName = $row['optionName'];
             $optionValue = $row['optionValue'];
-            if ($optionName !== null && !$optionValue === null && !$retval[$id]['options'][$optionName]) {
+            if ($optionName !== null && $optionValue !== null && !$retval[$id]['options'][$optionName]) {
                 $retval[$id]['options'][$optionName] = $optionValue;
             }
 
@@ -212,9 +221,11 @@ class BasicArticleRepository implements ArticleRepositoryInterface
                 $retval[$id]['properties'][$propertyId]['values'][$propertyValueId] = $row['propertyValue'];
             }
 
-            foreach ($retval as $key => $value) {
-                $value = trim(strip_tags($value));
-                if (strpos($key, 'attribute_') === 0 && $value !== '') {
+            foreach ($row as $key => $value) {
+                if (
+                    strpos($key, 'attribute_') === 0 &&
+                    ($value = mb_substr(trim(strip_tags($value)),0 ,63999, 'UTF-8')) !== ''
+                ) {
                     $retval[$id]['attributes'][] = $value;
                 }
             }
@@ -241,16 +252,23 @@ class BasicArticleRepository implements ArticleRepositoryInterface
     private function getQuery($query) {
         $attrSelectColumns = '';
 
+        $statement = $this->db->executeQuery('SHOW COLUMNS FROM s_articles_translations');
+        $fields = $statement->fetchAll(\PDO::FETCH_COLUMN, 0);
+
         if (count($this->attributeColumns) > 0) {
             $attrSelects = [];
             foreach ($this->attributeColumns as $attributeColumn) {
                 $column = trim($attributeColumn);
-                if ($column) {
+                if (!$column) {
                     continue;
                 }
-                $attrSelects[] = 'IFNULL(t.' . $column  . ', attr.' . $column .') AS attribute_' . $column;
+                $attrSelects[] = (
+                    array_search($column, $fields) === false ?
+                        'attr.' . $column .' AS attribute_' . $column :
+                        'IFNULL(t.' . $column  . ', attr.' . $column .') AS attribute_' . $column
+                );
             }
-            $attrSelectColumns = implode(",\n", $attrSelects);
+            $attrSelectColumns = ",\n" . implode(",\n", $attrSelects);
         }
 
         $query = str_replace('-- {{attributeSelect}}', $attrSelectColumns, $query);
