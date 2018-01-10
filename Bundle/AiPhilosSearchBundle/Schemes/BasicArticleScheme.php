@@ -20,7 +20,9 @@ class BasicArticleScheme implements ArticleSchemeInterface
     protected $scheme = [
         'ordernumber' => ContentTypesEnum::PRODUCT_NUMBER,
         'name' => ContentTypesEnum::PRODUCT_NAME,
+        'description' => ContentTypesEnum::PRODUCT_DESCRIPTION,
         'description_long' => ContentTypesEnum::PRODUCT_DESCRIPTION,
+        'keywords' => ContentTypesEnum::GENERAL_AUTO,
         'price' => ContentTypesEnum::PRODUCT_PRICE,
         'ean' => ContentTypesEnum::PRODUCT_GTIN,
         'supplier' => ContentTypesEnum::PRODUCT_MANUFACTURER,
