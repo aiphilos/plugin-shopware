@@ -11,6 +11,19 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware
 
 use Shopware\Components\Plugin\ConfigReader;
 
+/**
+ * Class BasicArticleRepository
+ *
+ * This implementation of the ArticleRepositoryInterface
+ * internally creates and SQL query to retrieve all article data that should be sent to the API
+ * and formats it accordingly into a hierarchical array structure that can be mapped
+ * by the BasicArticleSchemeMapper::map method.
+ *
+ * This implementation is tightly coupled withe the BasicArticleScheme and any change
+ * here should be reflected in that class so the API can make proper sense of the data.
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware
+ */
 class BasicArticleRepository implements ArticleRepositoryInterface
 {
     /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
@@ -124,9 +137,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
                 }
 
                 return $columnName;
-            }, explode(
-                ';', $attrCols
-            ));
+            }, explode(';', $attrCols));
         }
 
     }
@@ -139,7 +150,13 @@ class BasicArticleRepository implements ArticleRepositoryInterface
      * @param int $salesMonths
      * @return array
      */
-    public function getArticleData(array $idsToInclude=[], array $idsToExclude=[], $localeId = 0, $priceGroup = 'EK', $salesMonths = 3) {
+    public function getArticleData(
+        array $idsToInclude = [],
+        array $idsToExclude = [],
+        $localeId = 0,
+        $priceGroup = 'EK',
+        $salesMonths = 3
+    ) {
         $query = $this->getQuery($this->articleDataQuery);
         $params = [
             ':priceGroup' => $priceGroup,
@@ -151,9 +168,9 @@ class BasicArticleRepository implements ArticleRepositoryInterface
             $query .= 'AND d.id IN ( ';
             $i = 0;
 
-            $keys=[];
+            $keys = [];
             foreach ($idsToInclude as $id) {
-                $key = ':_include_id_'.$i;
+                $key = ':_include_id_' . $i;
                 $params[$key] = $id;
                 $keys[] = $key;
                 $i++;
@@ -166,9 +183,9 @@ class BasicArticleRepository implements ArticleRepositoryInterface
             $query .= 'AND d.id NOT IN ( ';
             $i = 0;
 
-            $keys=[];
+            $keys = [];
             foreach ($idsToExclude as $id) {
-                $key = ':_exclude_id_'.$i;
+                $key = ':_exclude_id_' . $i;
                 $params[$key] = $id;
                 $keys[] = $key;
                 $i++;
@@ -228,7 +245,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
             foreach ($row as $key => $value) {
                 if (
                     strpos($key, 'attribute_') === 0 &&
-                    ($value = mb_substr(trim(strip_tags($value)),0 ,63999, 'UTF-8')) !== ''
+                    ($value = mb_substr(trim(strip_tags($value)), 0, 63999, 'UTF-8')) !== ''
                 ) {
                     $retval[$id]['attributes'][] = $value;
                 }
@@ -267,9 +284,9 @@ class BasicArticleRepository implements ArticleRepositoryInterface
                     continue;
                 }
                 $attrSelects[] = (
-                    array_search($column, $fields) === false ?
-                        'attr.' . $column .' AS attribute_' . $column :
-                        'IFNULL(t.' . $column  . ', attr.' . $column .') AS attribute_' . $column
+                array_search($column, $fields) === false ?
+                    'attr.' . $column . ' AS attribute_' . $column :
+                    'IFNULL(t.' . $column . ', attr.' . $column . ') AS attribute_' . $column
                 );
             }
             $attrSelectColumns = ",\n" . implode(",\n", $attrSelects);

@@ -8,6 +8,17 @@
 
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware;
 
+/**
+ * Interface ArticleRepositoryInterface
+ *
+ * This interface provides a way to retrieve article data in the format which should be sent to the API database
+ * without further alterations to content and structure except for being processed by the SchemeMapperInterface::nap method.
+ *
+ * The format of the return data is logically coupled to what corresponding implementation of the ArticleSchemeInterface
+ * provides.
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware
+ */
 interface ArticleRepositoryInterface
 {
     /**

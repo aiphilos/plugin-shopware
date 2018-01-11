@@ -8,6 +8,18 @@
 
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos;
 
+/**
+ * Interface ArticleRepositoryInterface
+ *
+ * This interface is to be implemented by all classes that provided a repository to articles in the
+ * API database.
+ *
+ * It provides full CRUD capability for single and multiple articles.
+ *
+ * All setters should be implemented as fluent setters.
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos
+ */
 interface ArticleRepositoryInterface
 {
     /**
@@ -24,7 +36,7 @@ interface ArticleRepositoryInterface
 
     /**
      * @param string $priceGroup
-     * @return BasicArticleRepository
+     * @return $this
      */
     public function setPriceGroup($priceGroup);
 

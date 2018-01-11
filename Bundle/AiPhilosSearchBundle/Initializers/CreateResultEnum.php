@@ -8,7 +8,14 @@
 
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers;
 
-
+/**
+ * Class CreateResultEnum
+ *
+ * This pseudo enum provides constants representing the result for the DatabaseInitializerInterface::createOrUpdate
+ * interface.
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers
+ */
 abstract class CreateResultEnum
 {
     private final function __construct() {

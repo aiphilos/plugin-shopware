@@ -12,6 +12,14 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits;
 
 use Aiphilos\Api\Items\ClientInterface;
 
+/**
+ * Trait ApiUserTrait
+ *
+ * This trait provides basic functionality that is shared between all API users.
+ * Any class that wishes to use the API should use this trait to make their lives easier.
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits
+ */
 trait ApiUserTrait
 {
     private static $languages;

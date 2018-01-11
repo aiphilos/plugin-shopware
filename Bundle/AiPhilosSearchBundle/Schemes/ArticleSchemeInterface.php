@@ -10,6 +10,14 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes;
 
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
 
+/**
+ * Interface ArticleSchemeInterface
+ *
+ * This interface is to be implemented by all classes that provide a scheme for the data
+ * that is sent to the API database.
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes
+ */
 interface ArticleSchemeInterface
 {
     /**
@@ -18,6 +26,7 @@ interface ArticleSchemeInterface
     public function getScheme();
 
     /**
+     * TODO consider if this is actually needed
      * @return ArticleRepositoryInterface
      */
     public function getRepository();

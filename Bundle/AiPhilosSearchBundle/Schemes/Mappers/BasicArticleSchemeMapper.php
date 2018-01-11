@@ -11,6 +11,21 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers;
 
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 
+/**
+ * Class BasicArticleSchemeMapper
+ *
+ * This implementation of the SchemeMapperInterface maps articles
+ * to the provided scheme in a naive, one-dimensional way.
+ *
+ * It also makes sure that string values are limited 63999 multibyte UTF-8 characters,
+ * as that is a restriction put in place by the API.
+ *
+ * It also leaves all keys starting with an underscore (_) in the data
+ * except for the key '_action' as that is reserved for bulk API calls
+ * and should only be set by the repository methods.
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers
+ */
 class BasicArticleSchemeMapper implements SchemeMapperInterface
 {
     public function map(ArticleSchemeInterface $scheme, array $articles) {

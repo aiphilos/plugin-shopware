@@ -20,6 +20,20 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\CreateResultEn
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\DatabaseInitializerInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ArticleRepositoryInterface;
 
+/**
+ * Class BasicDatabaseSynchronizer
+ *
+ * This implementation of the DatabaseSynchronizerInterface
+ * makes simple full sync for all applicable AI databases.
+ *
+ * Meaning it skips shops that aren't using the AI search
+ * and always updates all existing articles and creates all missing articles anew
+ * without checking if they have changed at all since the last sync.
+ *
+ * It also deletes articles which are present in the api DB but no longer exist in Shopware
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Cron
+ */
 class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
 {
     /** @var DatabaseInitializerInterface */

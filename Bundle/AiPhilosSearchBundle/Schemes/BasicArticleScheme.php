@@ -11,7 +11,15 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes;
 use Aiphilos\Api\ContentTypesEnum;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
 
-
+/**
+ * Class BasicArticleScheme
+ *
+ * This implementation of the ArticleSchemeInterface provides a scheme
+ * that matches the data that can be sensibly extracted from the default Shopware
+ * article structure.
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes
+ */
 class BasicArticleScheme implements ArticleSchemeInterface
 {
     /** @var ArticleRepositoryInterface */

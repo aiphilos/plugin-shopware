@@ -17,7 +17,18 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\Artic
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\SchemeMapperInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
-//TODO@later make sure all methods return results instead of general api return data
+
+/**
+ * Class BasicArticleRepository
+ *
+ * This implementation of the ArticleRepositoryInterface provides a very minimal abstraction over the API SDKs
+ * ItemClientInterface and should eventually hide all non-result data from the consumer/user
+ * which it doesn't yet do, which is why the following exists
+ *
+ * TODO@later make sure all methods return results instead of general api return data
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos
+ */
 class BasicArticleRepository implements ArticleRepositoryInterface
 {
     use ApiUserTrait;

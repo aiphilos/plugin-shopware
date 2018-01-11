@@ -13,6 +13,16 @@ use Aiphilos\Api\Items\ClientInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
+/**
+ * Class BasicDatabaseInitializer
+ *
+ * This implementation of the DatabaseInitializerInterface
+ * creates or updates the Scheme of the API database for the provided shop configuration
+ * it performs no checks on whether this shop should actually use the API,
+ * this check is to be performed by the consumers/users of this class.
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers
+ */
 class BasicDatabaseInitializer implements DatabaseInitializerInterface
 {
     use ApiUserTrait;

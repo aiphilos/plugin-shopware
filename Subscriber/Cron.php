@@ -32,6 +32,7 @@ class Cron implements SubscriberInterface
     }
 
     public function onSyncDatabase(\Enlight_Components_Cron_EventArgs $args) {
+
         try {
             $message = $this->databaseSynchronizer->sync();
         } catch (\Exception $e) {

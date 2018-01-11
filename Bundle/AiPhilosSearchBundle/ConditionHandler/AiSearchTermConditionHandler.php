@@ -21,6 +21,16 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapperI
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
+/**
+ * Class AiSearchTermConditionHandler
+ *
+ * This ConditionHandler checks whether or not the AI search should be used for this shop/language
+ * and if so, sends the search term to the API then evaluates the results.
+ *
+ * Every failure case means a fallback to the default search,
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler
+ */
 class AiSearchTermConditionHandler implements ConditionHandlerInterface
 {
     use ApiUserTrait;
