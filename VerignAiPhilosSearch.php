@@ -1,5 +1,8 @@
 <?php
 /**
+ * TODO Make fallback configurable
+ * TODO Rate 'not found' results as bad when fallback is active and finds a result, include ids
+ * TODO Submit categories in article data as hierarchy of type Array<Array<{id: int, name: string}>>
  * TODO@later Better delta updates by memorizing changed articles since last run
  */
 namespace VerignAiPhilosSearch;
