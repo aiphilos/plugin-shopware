@@ -41,27 +41,12 @@ class BasicArticleScheme implements ArticleSchemeInterface
         'attributes' => ContentTypesEnum::GENERAL_AUTO
     ];
 
-    /**
-     * BasicArticleScheme constructor.
-     * @param ArticleRepositoryInterface $repository
-     */
-    public function __construct(ArticleRepositoryInterface $repository) {
-        $this->repository = $repository;
-    }
-
 
     /**
      * @return array
      */
     public function getScheme() {
         return $this->scheme;
-    }
-
-    /**
-     * @return ArticleRepositoryInterface
-     */
-    public function getRepository() {
-        return $this->repository;
     }
 
     /**

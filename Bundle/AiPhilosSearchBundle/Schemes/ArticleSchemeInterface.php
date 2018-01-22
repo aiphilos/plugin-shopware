@@ -26,12 +26,6 @@ interface ArticleSchemeInterface
     public function getScheme();
 
     /**
-     * TODO consider if this is actually needed
-     * @return ArticleRepositoryInterface
-     */
-    public function getRepository();
-
-    /**
      * @return string
      */
     public function getProductNumberKey();

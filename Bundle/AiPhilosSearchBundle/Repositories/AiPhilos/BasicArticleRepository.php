@@ -62,6 +62,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
      * @param LocaleStringMapperInterface $localeMapper
      * @param ClientInterface $itemClient
      * @param ArticleSchemeInterface $scheme
+     * @param SwArticleRepository $articleRepository
      * @param ModelManager $modelManager
      * @param SchemeMapperInterface $schemeMapper
      * @param \Zend_Cache_Core $cache
@@ -70,6 +71,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
         LocaleStringMapperInterface $localeMapper,
         ClientInterface $itemClient,
         ArticleSchemeInterface $scheme,
+        SwArticleRepository $articleRepository,
         ModelManager $modelManager,
         SchemeMapperInterface $schemeMapper,
         \Zend_Cache_Core $cache
@@ -77,7 +79,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
         $this->localeMapper = $localeMapper;
         $this->itemClient = $itemClient;
         $this->scheme = $scheme;
-        $this->swArticleRepository = $scheme->getRepository();
+        $this->swArticleRepository = $articleRepository;
         $this->modelManager = $modelManager;
         $this->schemeMapper = $schemeMapper;
         $this->cache = $cache;

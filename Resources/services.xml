@@ -16,7 +16,6 @@
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
         </service>
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\BasicArticleScheme" id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme">
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.repositories.shopware.article_repository" type="service"/>
         </service>
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\BasicArticleSchemeMapper" id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper">
         </service>
@@ -24,6 +23,7 @@
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
             <argument id="aiphilos.api.items.client" type="service"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
+            <argument id="verign_ai_philos_search_bundle_ai_philos_search.repositories.shopware.article_repository" type="service"/>
             <argument id="models" type="service"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper" type="service"/>
             <argument id="cache" type="service"/>
