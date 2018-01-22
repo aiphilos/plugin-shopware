@@ -33,7 +33,8 @@ class BasicArticleRepository implements ArticleRepositoryInterface
     private $attributeColumns = [];
 
     protected $articleDataQuery = '
-        SELECT DISTINCTROW 
+        SELECT DISTINCTROW
+          a.id AS articleId,
           d.id AS _id,
           d.ordernumber AS ordernumber,
           IFNULL(t.name, a.name) AS `name`,
@@ -117,6 +118,13 @@ class BasicArticleRepository implements ArticleRepositoryInterface
 
     protected $orderByClause = 'ORDER BY d.id ASC';
 
+    protected $categoryQuery =
+        "SELECT id, parent, path, description FROM s_categories WHERE path LIKE '%|{{shopCatId}}|'
+         AND active = TRUE
+         ORDER BY id DESC";
+
+    protected $articlesCategoriesQuery = 'SELECT articleID, categoryID FROM s_articles_categories';
+
 
     /**
      * BasicArticleRepository constructor.
@@ -148,6 +156,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
      * @param int $localeId
      * @param string $priceGroup
      * @param int $salesMonths
+     * @param int $shopCategoryId
      * @return array
      */
     public function getArticleData(
@@ -155,7 +164,8 @@ class BasicArticleRepository implements ArticleRepositoryInterface
         array $idsToExclude = [],
         $localeId = 0,
         $priceGroup = 'EK',
-        $salesMonths = 3
+        $salesMonths = 3,
+        $shopCategoryId = 3
     ) {
         $query = $this->getQuery($this->articleDataQuery);
         $params = [
@@ -200,9 +210,14 @@ class BasicArticleRepository implements ArticleRepositoryInterface
         $preparedStatement->execute($params);
 
         $result = $preparedStatement->fetchAll(\PDO::FETCH_ASSOC);
+        $mappedCategoryTree = $this->getArticleCategoriesByArticleId($shopCategoryId);
 
         $retval = [];
         foreach ($result as $row) {
+            $articleId = $row['articleId'];
+            if (!isset($mappedCategoryTree[$articleId])) {
+                continue;
+            }
             $id = $row['_id'];
             if (!$retval[$id]) {
                 $retval[$id] = [
@@ -220,6 +235,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
                     'options' => [],
                     'properties' => [],
                     'attributes' => [],
+                    'categories' => $mappedCategoryTree[$articleId],
                 ];
             }
 
@@ -295,5 +311,69 @@ class BasicArticleRepository implements ArticleRepositoryInterface
         $query = str_replace('-- {{attributeSelect}}', $attrSelectColumns, $query);
 
         return $query;
+    }
+
+    private function getArticleCategoriesByArticleId($shopCategoryId) {
+        $articleCategories = $this->getArticleCategories();
+        $categories  = $this->getCategories($shopCategoryId);
+
+        $mappedTree = [];
+        foreach ($articleCategories as $articleCategory) {
+            $articleId = $articleCategory['articleID'];
+            $categoryId = $articleCategory['categoryID'];
+            if ($treeItem = (isset($categories[$categoryId]) ? $categories[$categoryId] : false)) {
+                if (isset($mappedTree[$articleId])) {
+                    $mappedTree[$articleId][] = $treeItem;
+                } else {
+                    $mappedTree[$articleId] = [$treeItem];
+                }
+            }
+        }
+
+        return $mappedTree;
+    }
+
+    private function getArticleCategories() {
+        return $this->db->fetchAll($this->articlesCategoriesQuery, [], \PDO::FETCH_ASSOC);
+    }
+
+    private function getCategories($shopCategoryId) {
+        $query = str_replace('{{shopCatId}}', intval($shopCategoryId), $this->categoryQuery);
+        $cats = $this->db->fetchAll($query, [], \PDO::FETCH_ASSOC);
+
+        $categoryStructureById = [];
+        foreach ($cats as $category) {
+            $id = $category['id'];
+            $name = $category['description'];
+            $pathIds = array_reverse(explode('|', $category['path']));
+            $categoryStructureById[$id] = [
+                'id' => $id,
+                'pathIds' => $pathIds,
+                'name' => $name
+            ];
+        }
+        unset($cats);
+
+        $returnTree = [];
+        foreach ($categoryStructureById as $id => $categoryStructure) {
+            $returnTree[$id] = [];
+            foreach ($categoryStructure['pathIds'] as $pathId) {
+                //Possible because path has trailing delimiters
+                if (!$pathId) {
+                    continue;
+                }
+                $parentStructure = $categoryStructureById[$pathId];
+                //Possible because the root category itself is not included as it generally has no informational value
+                if (!$parentStructure) {
+                    continue;
+                }
+                unset($parentStructure['pathIds']);
+                $returnTree[$id][] = $parentStructure;
+            }
+            unset($categoryStructure['pathIds']);
+            $returnTree[$id][] = $categoryStructure;
+        }
+
+        return $returnTree;
     }
 }

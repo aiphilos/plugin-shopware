@@ -56,6 +56,8 @@ class BasicArticleRepository implements ArticleRepositoryInterface
     private $schemeMapper;
     /** @var int */
     private $salesMonths = 3;
+    /** @var int  */
+    private $shopCategoryId = 3;
 
     /**
      * DatabaseCrud constructor.
@@ -159,7 +161,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
     }
 
     public function createArticles(array $articleIds) {
-        $articles = $this->swArticleRepository->getArticleData($articleIds, [], $this->localeId, $this->priceGroup, $this->salesMonths);
+        $articles = $this->swArticleRepository->getArticleData($articleIds, [], $this->localeId, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
 
         $mappedArticles = $this->schemeMapper->map($this->scheme, $articles);
 
@@ -188,7 +190,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
     }
 
     public function updateArticles(array $articleIds) {
-        $articles = $this->swArticleRepository->getArticleData($articleIds, [], $this->localeId, $this->priceGroup, $this->salesMonths);
+        $articles = $this->swArticleRepository->getArticleData($articleIds, [], $this->localeId, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
 
         $mappedArticles = $this->schemeMapper->map($this->scheme, $articles);
 
@@ -207,4 +209,10 @@ class BasicArticleRepository implements ArticleRepositoryInterface
         return $this->itemClient->batchItems($data);
     }
 
+    /**
+     * @param int $shopCategoryId
+     */
+    public function setShopCategoryId($shopCategoryId) {
+        $this->shopCategoryId = $shopCategoryId;
+    }
 }

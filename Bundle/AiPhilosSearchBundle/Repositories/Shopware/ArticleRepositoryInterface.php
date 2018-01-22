@@ -27,6 +27,7 @@ interface ArticleRepositoryInterface
      * @param int $localeId
      * @param string $priceGroup
      * @param int $salesMonths
+     * @param int $shopCategoryId
      * @return array
      */
     public function getArticleData(
@@ -34,6 +35,7 @@ interface ArticleRepositoryInterface
         array $idsToExclude = [],
         $localeId = 0,
         $priceGroup = 'EK',
-        $salesMonths = 3
+        $salesMonths = 3,
+        $shopCategoryId = 3
     );
 }

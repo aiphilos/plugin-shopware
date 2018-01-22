@@ -40,6 +40,11 @@ interface ArticleRepositoryInterface
      */
     public function setPriceGroup($priceGroup);
 
+    /**
+     * @param int $shopCategoryId
+     */
+    public function setShopCategoryId($shopCategoryId);
+
     public function createArticle($articleId);
 
     public function getArticle($articleId);

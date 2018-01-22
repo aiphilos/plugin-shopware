@@ -156,9 +156,11 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
     }
 
     private function updateDB(Shop $shop, array $config) {
+        $shopCategoryId = $shop->getCategory()->getId();
         $this->aiRepository->setPriceGroup($shop->getCustomerGroup()->getKey());
         $this->aiRepository->setLocale($shop->getLocale()->getLocale());
         $this->aiRepository->setPluginConfig($config);
+        $this->aiRepository->setShopCategoryId($shopCategoryId);
 
 
         try {
@@ -167,13 +169,13 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
             $existingArticles = [];
         }
 
-        $allShopwareIds = $this->getArticleIds();
+        $allShopwareIdsForShop = $this->getArticleIds([], $shopCategoryId);
         $idsToDelete = [];
         $existingIds = [];
         foreach ($existingArticles as $existingArticle) {
             $id = intval($existingArticle['_id']);
             if ($id > 0) {
-                if (array_search($id, $allShopwareIds, true) === false) {
+                if (array_search($id, $allShopwareIdsForShop, true) === false) {
                     $idsToDelete[] = $id;
                 } else {
                     $existingIds[] = $id;
@@ -184,7 +186,7 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
             $this->aiRepository->updateArticles($existingIds);
         }
 
-        $newIds = $this->getArticleIds($existingIds);
+        $newIds = $this->getArticleIds($existingIds, $shopCategoryId);
 
         if (count($newIds) > 0) {
             $this->aiRepository->createArticles($newIds);
@@ -197,13 +199,19 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
 
     }
 
-    private function getArticleIds(array $excludedIds = []) {
+    private function getArticleIds(array $excludedIds = [], $shopCategoryId) {
         $qb = $this->modelManager->getRepository(Detail::class)
             ->createQueryBuilder('d')
-            ->select('d.id');
+            ->select('d.id')
+            ->distinct(true)
+            ->join('d.article', 'a')
+            ->join('a.categories', 'c')
+            ->where('a.active = true')
+            ->andWhere('d.active = true')
+            ->andWhere("c.path LIKE '%|".intval($shopCategoryId)."|'");
 
         if (count($excludedIds) > 0) {
-            $qb->where('d.id NOT IN ( :excludedIds )')
+            $qb->andWhere('d.id NOT IN ( :excludedIds )')
                 ->setParameter('excludedIds', $excludedIds, Connection::PARAM_INT_ARRAY);
         }
 

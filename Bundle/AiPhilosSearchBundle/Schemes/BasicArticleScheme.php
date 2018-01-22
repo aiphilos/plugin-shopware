@@ -35,7 +35,8 @@ class BasicArticleScheme implements ArticleSchemeInterface
         'points' => ContentTypesEnum::PRODUCT_RATING,
         'properties' => ContentTypesEnum::GENERAL_AUTO,
         'options' => ContentTypesEnum::GENERAL_AUTO,
-        'attributes' => ContentTypesEnum::GENERAL_AUTO
+        'attributes' => ContentTypesEnum::GENERAL_AUTO,
+        'categories' => ContentTypesEnum::GENERAL_AUTO,
     ];
 
 
