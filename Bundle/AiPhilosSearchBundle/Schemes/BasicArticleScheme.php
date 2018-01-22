@@ -22,9 +22,6 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\Artic
  */
 class BasicArticleScheme implements ArticleSchemeInterface
 {
-    /** @var ArticleRepositoryInterface */
-    private $repository;
-
     protected $scheme = [
         'ordernumber' => ContentTypesEnum::PRODUCT_NUMBER,
         'name' => ContentTypesEnum::PRODUCT_NAME,
