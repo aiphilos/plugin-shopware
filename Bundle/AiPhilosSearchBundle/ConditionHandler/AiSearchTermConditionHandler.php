@@ -17,6 +17,7 @@ use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Plugin\ConfigReader;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\FallbackModeEnum;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapperInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
@@ -95,6 +96,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
      * @param QueryBuilder $query
      * @param ShopContextInterface $context
      * @throws \Exception
+     * @return mixed
      */
     public function generateCondition(
         ConditionInterface $condition,
@@ -113,15 +115,16 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             $language = $this->localeMapper->mapLocaleString($swLocaleString);
 
             if (!$this->validateLanguage($language)) {
-                return $this->coreService->generateCondition($condition, $query, $context);
+                return $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
             }
 
             $this->setDbName();
             try {
                 $result = $this->itemClient->searchItems($term, $language, ['size' => 1000]);
             } catch (\DomainException $e) {
-                $this->saveInInstanceCache($this, false);
-                return $this->coreService->generateCondition($condition, $query, $context);
+                $notFoundErr = $e->getCode() === 404;
+                $this->saveInInstanceCache($this, $notFoundErr ? 0 : false);
+                return $this->fallback($condition, $query, $context, $notFoundErr ? FallbackModeEnum::NO_RESULTS : FallbackModeEnum::ERROR);
 
             }
 
@@ -134,8 +137,10 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             }
 
             $this->saveInInstanceCache($term, $orderNumbers);
+        } elseif ($orderNumbers === 0) {
+            return $this->fallback($condition, $query, $context, FallbackModeEnum::NO_RESULTS);
         } elseif ($orderNumbers === false) {
-            return $this->coreService->generateCondition($condition, $query, $context);
+            return $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
         }
 
         $query->andWhere('variant.ordernumber IN ( :aiProvidedOrderNumbers )')
@@ -149,5 +154,19 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
 
     private function saveInInstanceCache($term, $value) {
         self::$instanceCache[$term] = $value;
+    }
+
+    private function fallback(ConditionInterface $condition, QueryBuilder $query, ShopContextInterface $context, $reason) {
+        $fallbackMode = $this->pluginConfig['fallbackMode'];
+
+        if (
+            ($fallbackMode === FallbackModeEnum::ALWAYS) ||
+            ($fallbackMode === FallbackModeEnum::NO_RESULTS && $reason === FallbackModeEnum::NO_RESULTS) ||
+            ($fallbackMode === FallbackModeEnum::ERROR && $reason === FallbackModeEnum::ERROR)
+        ) {
+            return $this->coreService->generateCondition($condition, $query, $context);
+        }
+
+        $query->andWhere('true = false');
     }
 }
