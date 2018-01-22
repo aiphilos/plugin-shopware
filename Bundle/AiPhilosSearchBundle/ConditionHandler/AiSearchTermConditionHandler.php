@@ -18,6 +18,7 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Plugin\ConfigReader;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\FallbackModeEnum;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\PrimedSearchEventEnum;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapperInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
@@ -45,6 +46,9 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
     /** @var ConditionHandlerInterface */
     private $coreService;
 
+    /** @var \Enlight_Event_EventManager */
+    private $eventManager;
+
     private static $instanceCache = [];
 
     /**
@@ -55,6 +59,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
      * @param ClientInterface $itemsService
      * @param ArticleSchemeInterface $scheme
      * @param \Zend_Cache_Core $cache
+     * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(
         ConditionHandlerInterface $coreService,
@@ -62,7 +67,8 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         LocaleStringMapperInterface $localeMapper,
         ClientInterface $itemsService,
         ArticleSchemeInterface $scheme,
-        \Zend_Cache_Core $cache
+        \Zend_Cache_Core $cache,
+        \Enlight_Event_EventManager $eventManager
     ) {
         $this->pluginConfig = $configReader->getByPluginName('VerignAiPhilosSearch');
         $this->localeMapper = $localeMapper;
@@ -70,6 +76,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         $this->scheme = $scheme;
         $this->cache = $cache;
         $this->coreService = $coreService;
+        $this->eventManager = $eventManager;
     }
 
 
@@ -122,7 +129,9 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             try {
                 $result = $this->itemClient->searchItems($term, $language, ['size' => 1000]);
             } catch (\DomainException $e) {
-                $notFoundErr = $e->getCode() === 404;
+                //TODO check fi error codes actually have meaning
+                //TODO check if UUID can be propagated in later updates of SDK
+                $notFoundErr = $e->getCode() === 1;
                 $this->saveInInstanceCache($this, $notFoundErr ? 0 : false);
                 return $this->fallback($condition, $query, $context, $notFoundErr ? FallbackModeEnum::NO_RESULTS : FallbackModeEnum::ERROR);
 
@@ -156,7 +165,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         self::$instanceCache[$term] = $value;
     }
 
-    private function fallback(ConditionInterface $condition, QueryBuilder $query, ShopContextInterface $context, $reason) {
+    private function fallback(ConditionInterface $condition, QueryBuilder $query, ShopContextInterface $context, $reason, $uuid = '') {
         $fallbackMode = $this->pluginConfig['fallbackMode'];
 
         if (
@@ -164,6 +173,11 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             ($fallbackMode === FallbackModeEnum::NO_RESULTS && $reason === FallbackModeEnum::NO_RESULTS) ||
             ($fallbackMode === FallbackModeEnum::ERROR && $reason === FallbackModeEnum::ERROR)
         ) {
+
+            if ($reason === FallbackModeEnum::NO_RESULTS) {
+                $this->eventManager->notify(PrimedSearchEventEnum::PRIME);
+            }
+
             return $this->coreService->generateCondition($condition, $query, $context);
         }
 
