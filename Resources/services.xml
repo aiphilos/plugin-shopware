@@ -16,7 +16,7 @@
         <service id="verign_ai_philos_search.logger" class="Shopware\Components\Logger">
             <argument>plugin</argument>
             <call method="pushHandler">
-                <argument type="service" id="monolog.handler.rotating_file.plugin" />
+                <argument type="service" id="monolog.handler.rotating_file.verign_ai_philos_search" />
             </call>
         </service>
 
