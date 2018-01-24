@@ -103,7 +103,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
      * @param QueryBuilder $query
      * @param ShopContextInterface $context
      * @throws \Exception
-     * @return mixed
+     * @return void
      */
     public function generateCondition(
         ConditionInterface $condition,
@@ -122,18 +122,17 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             $language = $this->localeMapper->mapLocaleString($swLocaleString);
 
             if (!$this->validateLanguage($language)) {
-                return $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
+                $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
+                return;
             }
 
             $this->setDbName();
             try {
                 $result = $this->itemClient->searchItems($term, $language, ['size' => 1000]);
             } catch (\DomainException $e) {
-                //TODO check fi error codes actually have meaning
-                //TODO check if UUID can be propagated in later updates of SDK
-                $notFoundErr = $e->getCode() === 1;
-                $this->saveInInstanceCache($this, $notFoundErr ? 0 : false);
-                return $this->fallback($condition, $query, $context, $notFoundErr ? FallbackModeEnum::NO_RESULTS : FallbackModeEnum::ERROR);
+                $this->saveInInstanceCache($this, false);
+                $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
+                return;
 
             }
 
@@ -146,15 +145,24 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             }
 
             $this->saveInInstanceCache($term, $orderNumbers);
-        } elseif ($orderNumbers === 0) {
-            return $this->fallback($condition, $query, $context, FallbackModeEnum::NO_RESULTS);
+
+            if ($orderNumbers === []) {
+                $this->fallback($condition, $query, $context, FallbackModeEnum::NO_RESULTS, $result['uuid']);
+                return;
+            }
+
+        } elseif ($orderNumbers === []) {
+            $this->fallback($condition, $query, $context, FallbackModeEnum::NO_RESULTS);
+            return;
         } elseif ($orderNumbers === false) {
-            return $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
+            $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
+            return;
         }
 
         $query->andWhere('variant.ordernumber IN ( :aiProvidedOrderNumbers )')
             ->setParameter('aiProvidedOrderNumbers', $orderNumbers, Connection::PARAM_STR_ARRAY);
 
+        return;
     }
 
     private function getFromInstanceCache($term) {
@@ -174,13 +182,15 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             ($fallbackMode === FallbackModeEnum::ERROR && $reason === FallbackModeEnum::ERROR)
         ) {
 
-            if ($reason === FallbackModeEnum::NO_RESULTS) {
-                $this->eventManager->notify(PrimedSearchEventEnum::PRIME);
+            if ($reason === FallbackModeEnum::NO_RESULTS && $uuid !== '') {
+                $this->eventManager->notify(PrimedSearchEventEnum::PRIME, ['uuid' => $uuid]);
             }
 
-            return $this->coreService->generateCondition($condition, $query, $context);
+            $this->coreService->generateCondition($condition, $query, $context);
+            return;
         }
 
         $query->andWhere('true = false');
+        return;
     }
 }

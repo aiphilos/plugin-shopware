@@ -1,6 +1,6 @@
 <?php
 /**
- * TODO Rate 'not found' results as bad when fallback is active and finds a result, include ids
+ * TODO log all the things
  * TODO@later Better delta updates by memorizing changed articles since last run
  * TODO@later consider renaming the classes from Basic* to something less stupid and resolve ambiguity for repo classes and interfaces
  */

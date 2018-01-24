@@ -23,6 +23,17 @@ class RatedProductNumberSearch implements ProductNumberSearchInterface
     /** @var \Enlight_Event_EventManager */
     private $eventManager;
 
+    /**
+     * RatedProductNumberSearch constructor.
+     * @param ProductNumberSearchInterface $coreService
+     * @param \Enlight_Event_EventManager $eventManager
+     */
+    public function __construct(ProductNumberSearchInterface $coreService, \Enlight_Event_EventManager $eventManager) {
+        $this->coreService = $coreService;
+        $this->eventManager = $eventManager;
+    }
+
+
     public function search(Criteria $criteria, Struct\ShopContextInterface $context) {
         $result = $this->coreService->search($criteria, $context);
 
@@ -31,7 +42,7 @@ class RatedProductNumberSearch implements ProductNumberSearchInterface
             $ids = [];
 
             foreach ($products as $product) {
-                $ids = $product->getVariantId();
+                $ids[] = $product->getVariantId();
             }
 
             $this->eventManager->notify(PrimedSearchEventEnum::EXECUTE, ['ids' => $ids]);
