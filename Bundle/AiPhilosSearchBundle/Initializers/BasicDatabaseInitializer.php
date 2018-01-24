@@ -10,6 +10,7 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers;
 
 
 use Aiphilos\Api\Items\ClientInterface;
+use Shopware\Components\Logger;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
@@ -30,16 +31,21 @@ class BasicDatabaseInitializer implements DatabaseInitializerInterface
     /** @var ArticleSchemeInterface */
     private $scheme;
 
+    /** @var Logger */
+    private $logger;
+
     /**
      * DatabaseInitializer constructor.
      * @param ClientInterface $itemClient
      * @param ArticleSchemeInterface $scheme
      * @param \Zend_Cache_Core $cache
+     * @param Logger $logger
      */
-    public function __construct(ClientInterface $itemClient, ArticleSchemeInterface $scheme, \Zend_Cache_Core $cache) {
+    public function __construct(ClientInterface $itemClient, ArticleSchemeInterface $scheme, \Zend_Cache_Core $cache, Logger $logger) {
         $this->itemClient = $itemClient;
         $this->cache = $cache;
         $this->scheme = $scheme;
+        $this->logger = $logger;
     }
 
     public function createOrUpdateScheme($language, array $pluginConfig) {
@@ -67,6 +73,14 @@ class BasicDatabaseInitializer implements DatabaseInitializerInterface
             //Scheme should be set in any successful case
             $this->itemClient->setScheme($this->scheme->getScheme());
         } catch (\Exception $e) {
+            $this->logger->error( 'Failed to set scheme on database', [
+                'language' => $language,
+                'database_name' => $this->itemClient->getName(),
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
             return CreateResultEnum::SCHEME_ERROR;
         }
 

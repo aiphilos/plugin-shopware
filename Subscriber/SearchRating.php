@@ -11,6 +11,7 @@ namespace VerignAiPhilosSearch\Subscriber;
 
 use Aiphilos\Api\Items\ClientInterface;
 use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Logger;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\PrimedSearchEventEnum;
 
 class SearchRating implements SubscriberInterface
@@ -19,14 +20,20 @@ class SearchRating implements SubscriberInterface
     private static $executed = false;
     private static $uuid = '';
 
+    /** @var ClientInterface  */
     private $itemClient;
+
+    /** @var Logger  */
+    private $logger;
 
     /**
      * SearchRating constructor.
-     * @param $itemClient
+     * @param ClientInterface $itemClient
+     * @param Logger $logger
      */
-    public function __construct(ClientInterface $itemClient) {
+    public function __construct(ClientInterface $itemClient, Logger $logger) {
         $this->itemClient = $itemClient;
+        $this->logger = $logger;
     }
 
 
@@ -57,7 +64,13 @@ class SearchRating implements SubscriberInterface
                 'foundIds' => $args['ids']
             ]));
         } catch (\Exception $e) {
-            //Ignore now TODO logging
+            $this->logger->error('Failed to rate search result. An exception occurred', [
+                'uuid' => self::$uuid,
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
         }
 
         self::$executed = true;

@@ -4,21 +4,44 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <!--Logger-->
+        <service id="monolog.handler.rotating_file.verign_ai_philos_search" class="Monolog\Handler\RotatingFileHandler" public="false">
+            <argument>%kernel.logs_dir%/verign_ai_philos_search_%kernel.environment%.log</argument>
+            <argument>14</argument>
+            <call method="pushProcessor">
+                <argument type="service" id="monolog.processor.uid" />
+            </call>
+        </service>
+
+        <service id="verign_ai_philos_search.logger" class="Shopware\Components\Logger">
+            <argument>plugin</argument>
+            <call method="pushHandler">
+                <argument type="service" id="monolog.handler.rotating_file.plugin" />
+            </call>
+        </service>
+
+
         <!--Services-->
         <service class="Aiphilos\Api\Items\Client" id="aiphilos.api.items.client">
         </service>
+
         <service class="Aiphilos\Api\Semantics\Client" id="aiphilos.api.semantics.client">
         </service>
+
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\BasicLocaleStringMapper" id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper">
         </service>
+
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\BasicArticleRepository" id="verign_ai_philos_search_bundle_ai_philos_search.repositories.shopware.article_repository">
             <argument id="db" type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
         </service>
+
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\BasicArticleScheme" id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme">
         </service>
+
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\BasicArticleSchemeMapper" id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper">
         </service>
+
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\BasicArticleRepository" id="verign_ai_philos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository">
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
             <argument id="aiphilos.api.items.client" type="service"/>
@@ -28,11 +51,14 @@
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper" type="service"/>
             <argument id="cache" type="service"/>
         </service>
+
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\BasicDatabaseInitializer" id="verign_ai_philos_search_bundle_ai_philos_search.initializers.database_initializer">
             <argument id="aiphilos.api.items.client" type="service" />
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
             <argument id="cache" type="service"/>
+            <argument id="verign_ai_philos_search.logger" type="service"/>
         </service>
+
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler\AiSearchTermConditionHandler" id="verign_ai_philos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler" decorates="shopware_searchdbal.search_condition_handler_dbal">
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler.inner" type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
@@ -41,6 +67,7 @@
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
             <argument id="cache" type="service"/>
             <argument id="events" type="service" />
+            <argument id="verign_ai_philos_search.logger" type="service"/>
         </service>
 
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ProductNumberSearch\RatedProductNumberSearch"
@@ -59,6 +86,7 @@
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository" type="service"/>
+            <argument id="verign_ai_philos_search.logger" type="service"/>
         </service>
 
         <!--Subscribers-->
@@ -66,9 +94,11 @@
             <tag name="shopware.event_subscriber"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.cron.database_synchronizer" type="service"/>
         </service>
+
         <service class="VerignAiPhilosSearch\Subscriber\SearchRating" id="verign_ai_philos_search.subscriber.search_rating">
             <tag name="shopware.event_subscriber"/>
             <argument id="aiphilos.api.items.client" type="service"/>
+            <argument id="verign_ai_philos_search.logger" type="service"/>
         </service>
     </services>
 </container>

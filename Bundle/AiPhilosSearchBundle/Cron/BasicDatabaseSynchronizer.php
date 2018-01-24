@@ -10,6 +10,7 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Cron;
 
 
 use Doctrine\DBAL\Connection;
+use Shopware\Components\Logger;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\ConfigReader;
 use Shopware\Models\Article\Detail;
@@ -50,6 +51,8 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
 
     /** @var ArticleRepositoryInterface */
     private $aiRepository;
+    /** @var Logger  */
+    private $logger;
 
     /**
      * BasicDatabaseSynchronizer constructor.
@@ -58,19 +61,22 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
      * @param ConfigReader $configReader
      * @param LocaleStringMapperInterface $localeMapper
      * @param ArticleRepositoryInterface $aiRepository
+     * @param Logger $logger
      */
     public function __construct(
         DatabaseInitializerInterface $databaseInitializer,
         ModelManager $modelManager,
         ConfigReader $configReader,
         LocaleStringMapperInterface $localeMapper,
-        ArticleRepositoryInterface $aiRepository
+        ArticleRepositoryInterface $aiRepository,
+        Logger $logger
     ) {
         $this->databaseInitializer = $databaseInitializer;
         $this->modelManager = $modelManager;
         $this->configReader = $configReader;
         $this->localeMapper = $localeMapper;
         $this->aiRepository = $aiRepository;
+        $this->logger = $logger;
     }
 
 
@@ -102,6 +108,15 @@ class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
             try {
                 $createResult = $this->databaseInitializer->createOrUpdateScheme($language, $config);
             } catch (\Exception $e) {
+                $this->logger->error('Failed to create and/or update Schema for a shop.', [
+                    'language' => $language,
+                    'shopId' => $shop->getId(),
+                    'shopName' => $shop->getName(),
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]);
                 $results .= 'Error: An exception occurred; ' . PHP_EOL . $e->getMessage() . PHP_EOL . PHP_EOL;
                 continue;
             }

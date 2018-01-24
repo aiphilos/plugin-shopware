@@ -16,6 +16,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Logger;
 use Shopware\Components\Plugin\ConfigReader;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\FallbackModeEnum;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\PrimedSearchEventEnum;
@@ -49,6 +50,9 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
     /** @var \Enlight_Event_EventManager */
     private $eventManager;
 
+    /** @var Logger  */
+    private $logger;
+
     private static $instanceCache = [];
 
     /**
@@ -60,6 +64,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
      * @param ArticleSchemeInterface $scheme
      * @param \Zend_Cache_Core $cache
      * @param \Enlight_Event_EventManager $eventManager
+     * @param Logger $logger
      */
     public function __construct(
         ConditionHandlerInterface $coreService,
@@ -68,7 +73,8 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         ClientInterface $itemsService,
         ArticleSchemeInterface $scheme,
         \Zend_Cache_Core $cache,
-        \Enlight_Event_EventManager $eventManager
+        \Enlight_Event_EventManager $eventManager,
+        Logger $logger
     ) {
         $this->pluginConfig = $configReader->getByPluginName('VerignAiPhilosSearch');
         $this->localeMapper = $localeMapper;
@@ -77,6 +83,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         $this->cache = $cache;
         $this->coreService = $coreService;
         $this->eventManager = $eventManager;
+        $this->logger = $logger;
     }
 
 
@@ -130,6 +137,13 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             try {
                 $result = $this->itemClient->searchItems($term, $language, ['size' => 1000]);
             } catch (\DomainException $e) {
+                $this->logger->error('API search returned an error', [
+                    'search_term' => $term,
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]);
                 $this->saveInInstanceCache($this, false);
                 $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
                 return;
