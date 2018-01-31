@@ -26,7 +26,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterf
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers
  */
-class BasicArticleSchemeMapper implements SchemeMapperInterface
+class ArticleSchemeMapper implements SchemeMapperInterface
 {
     public function map(ArticleSchemeInterface $scheme, array $articles) {
         $schemeArray = $scheme->getScheme();

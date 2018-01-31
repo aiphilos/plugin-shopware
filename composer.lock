@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/aiphilos/api-sdk-php.git",
-                "reference": "60d321168e8a9af81b6d7562e05f0ae821828d46"
+                "reference": "a50f31f51b3037840d6732309b81bdbbdf973b42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aiphilos/api-sdk-php/zipball/60d321168e8a9af81b6d7562e05f0ae821828d46",
-                "reference": "60d321168e8a9af81b6d7562e05f0ae821828d46",
+                "url": "https://api.github.com/repos/aiphilos/api-sdk-php/zipball/a50f31f51b3037840d6732309b81bdbbdf973b42",
+                "reference": "a50f31f51b3037840d6732309b81bdbbdf973b42",
                 "shasum": ""
             },
             "require": {
@@ -54,7 +54,7 @@
                 "ephilos",
                 "sdk"
             ],
-            "time": "2018-01-12T08:05:25+00:00"
+            "time": "2018-01-31T09:30:15+00:00"
         }
     ],
     "packages-dev": [],

@@ -8,7 +8,7 @@
 
 namespace VerignAiPhilosSearch\tests\Shopware;
 
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\BasicArticleRepository;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepository;
 use VerignAiPhilosSearch\tests\AbstractTestCase;
 
 /**
@@ -19,14 +19,14 @@ class BasicArticleRepositoryTest extends AbstractTestCase
 {
 
     /**
-     * @return null|BasicArticleRepository
+     * @return null|ArticleRepository
      */
     public function testCanInstantiate() {
         $repo = null;
         $exception = null;
 
         try {
-            $repo = new BasicArticleRepository(
+            $repo = new ArticleRepository(
                 Shopware()->Db(),
                 $this->getConfigReaderMock()
             );
@@ -35,17 +35,17 @@ class BasicArticleRepositoryTest extends AbstractTestCase
         }
 
         $this->assertNull($exception);
-        $this->assertInstanceOf(BasicArticleRepository::class, $repo);
+        $this->assertInstanceOf(ArticleRepository::class, $repo);
 
         return $repo;
     }
 
     /**
      * @depends testCanInstantiate
-     * @param BasicArticleRepository $repo
+     * @param ArticleRepository $repo
      * @return array|null
      */
-    public function testGetArticleData(BasicArticleRepository $repo) {
+    public function testGetArticleData(ArticleRepository $repo) {
         $exception = null;
         $articleData = null;
 

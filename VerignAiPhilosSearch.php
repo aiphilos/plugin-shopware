@@ -2,7 +2,6 @@
 /**
  * TODO log all the things
  * TODO@later Better delta updates by memorizing changed articles since last run
- * TODO@later consider renaming the classes from Basic* to something less stupid and resolve ambiguity for repo classes and interfaces
  */
 namespace VerignAiPhilosSearch;
 

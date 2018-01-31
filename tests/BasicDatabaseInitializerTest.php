@@ -8,7 +8,7 @@
 
 namespace VerignAiPhilosSearch\tests;
 
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\BasicDatabaseInitializer;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\DatabaseInitializer;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\CreateResultEnum;
 
 class BasicDatabaseInitializerTest extends AbstractTestCase
@@ -18,7 +18,7 @@ class BasicDatabaseInitializerTest extends AbstractTestCase
         $exception = null;
         $scheme = $this->getSchemeMock();
         try {
-            $init = new BasicDatabaseInitializer(
+            $init = new DatabaseInitializer(
                 $this->getItemClientMock($scheme->getProductNumberKey()),
                 $scheme,
                 $this->getCacheMock()
@@ -28,16 +28,16 @@ class BasicDatabaseInitializerTest extends AbstractTestCase
         }
 
         $this->assertNull($exception);
-        $this->assertInstanceOf(BasicDatabaseInitializer::class, $init);
+        $this->assertInstanceOf(DatabaseInitializer::class, $init);
 
         return $init;
     }
 
     /**
-     * @param BasicDatabaseInitializer $init
+     * @param DatabaseInitializer $init
      * @depends testCanInstantiate
      */
-    public function testCreateSchemeIfNotExist(BasicDatabaseInitializer $init) {
+    public function testCreateSchemeIfNotExist(DatabaseInitializer $init) {
         $result = null;
         $exception = null;
         $config = $this->getConfigReaderMock()->getByPluginName('VerignAiPhilosSearch');

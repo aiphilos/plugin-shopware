@@ -28,21 +28,21 @@
         <service class="Aiphilos\Api\Semantics\Client" id="aiphilos.api.semantics.client">
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\BasicLocaleStringMapper" id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper">
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapper" id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper">
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\BasicArticleRepository" id="verign_ai_philos_search_bundle_ai_philos_search.repositories.shopware.article_repository">
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepository" id="verign_ai_philos_search_bundle_ai_philos_search.repositories.shopware.article_repository">
             <argument id="db" type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\BasicArticleScheme" id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme">
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleScheme" id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme">
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\BasicArticleSchemeMapper" id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper">
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\ArticleSchemeMapper" id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper">
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\BasicArticleRepository" id="verign_ai_philos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository">
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ArticleRepository" id="verign_ai_philos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository">
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
             <argument id="aiphilos.api.items.client" type="service"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
@@ -52,7 +52,7 @@
             <argument id="cache" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\BasicDatabaseInitializer" id="verign_ai_philos_search_bundle_ai_philos_search.initializers.database_initializer">
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\DatabaseInitializer" id="verign_ai_philos_search_bundle_ai_philos_search.initializers.database_initializer">
             <argument id="aiphilos.api.items.client" type="service" />
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
             <argument id="cache" type="service"/>
@@ -80,7 +80,7 @@
             <argument id="events" type="service" />
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Cron\BasicDatabaseSynchronizer" id="verign_ai_philos_search_bundle_ai_philos_search.cron.database_synchronizer">
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Cron\DatabaseSynchronizer" id="verign_ai_philos_search_bundle_ai_philos_search.cron.database_synchronizer">
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.initializers.database_initializer" type="service"/>
             <argument id="models" type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>

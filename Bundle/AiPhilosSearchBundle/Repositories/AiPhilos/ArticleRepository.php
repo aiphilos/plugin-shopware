@@ -29,7 +29,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos
  */
-class BasicArticleRepository implements ArticleRepositoryInterface
+class ArticleRepository implements ArticleRepositoryInterface
 {
     use ApiUserTrait;
 
@@ -118,7 +118,7 @@ class BasicArticleRepository implements ArticleRepositoryInterface
 
     /**
      * @param string $priceGroup
-     * @return BasicArticleRepository
+     * @return ArticleRepository
      */
     public function setPriceGroup($priceGroup) {
         $this->priceGroup = $priceGroup;

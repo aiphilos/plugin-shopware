@@ -35,7 +35,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\Artic
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Cron
  */
-class BasicDatabaseSynchronizer implements DatabaseSynchronizerInterface
+class DatabaseSynchronizer implements DatabaseSynchronizerInterface
 {
     /** @var DatabaseInitializerInterface */
     private $databaseInitializer;

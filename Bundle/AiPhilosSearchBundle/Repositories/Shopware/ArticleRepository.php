@@ -24,7 +24,7 @@ use Shopware\Components\Plugin\ConfigReader;
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware
  */
-class BasicArticleRepository implements ArticleRepositoryInterface
+class ArticleRepository implements ArticleRepositoryInterface
 {
     /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
     private $db;

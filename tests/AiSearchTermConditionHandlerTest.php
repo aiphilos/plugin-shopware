@@ -9,7 +9,7 @@
 namespace VerignAiPhilosSearch\tests;
 
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler\AiSearchTermConditionHandler;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\BasicLocaleStringMapper;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapper;
 
 class AiSearchTermConditionHandlerTest extends AbstractTestCase
 {
@@ -22,7 +22,7 @@ class AiSearchTermConditionHandlerTest extends AbstractTestCase
             $handler = new AiSearchTermConditionHandler(
                 $this->getConditionHandlerMock(),
                 $this->getConfigReaderMock(),
-                new BasicLocaleStringMapper(),
+                new LocaleStringMapper(),
                 $this->getItemClientMock($scheme->getProductNumberKey()),
                 $scheme,
                 $this->getCacheMock()

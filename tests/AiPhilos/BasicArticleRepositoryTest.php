@@ -7,26 +7,26 @@
  */
 namespace VerignAiPhilosSearch\tests\AiPhilos;
 
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\BasicLocaleStringMapper;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapper;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\BasicArticleRepository;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\BasicArticleSchemeMapper;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ArticleRepository;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\ArticleSchemeMapper;
 use VerignAiPhilosSearch\tests\AbstractTestCase;
 
 class BasicArticleRepositoryTest extends AbstractTestCase
 {
     /**
-     * @return null|BasicArticleRepository
+     * @return null|ArticleRepository
      */
     public function testCanInstantiate() {
-        $localeMapper = new BasicLocaleStringMapper();
-        $schemeMapper = new BasicArticleSchemeMapper();
+        $localeMapper = new LocaleStringMapper();
+        $schemeMapper = new ArticleSchemeMapper();
         $scheme = $this->getSchemeMock();
         $repository = null;
         $exception = null;
 
         try {
-            $repository = new BasicArticleRepository(
+            $repository = new ArticleRepository(
                 $localeMapper,
                 $this->getItemClientMock($scheme->getProductNumberKey()),
                 $scheme,
@@ -39,17 +39,17 @@ class BasicArticleRepositoryTest extends AbstractTestCase
         }
 
         $this->assertNull($exception);
-        $this->assertInstanceOf(BasicArticleRepository::class, $repository);
+        $this->assertInstanceOf(ArticleRepository::class, $repository);
 
         return $repository;
     }
 
     /**
-     * @param BasicArticleRepository $repository
+     * @param ArticleRepository $repository
      * @return ArticleRepositoryInterface
      * @depends testCanInstantiate
      */
-    public function testSetPluginConfig(BasicArticleRepository $repository) {
+    public function testSetPluginConfig(ArticleRepository $repository) {
         $pluginConfig = $this->getConfigReaderMock()->getByPluginName('VerignAiPhilosSearch');
         $exception = null;
 
@@ -65,11 +65,11 @@ class BasicArticleRepositoryTest extends AbstractTestCase
     }
 
     /**
-     * @param BasicArticleRepository $repository
+     * @param ArticleRepository $repository
      * @return ArticleRepositoryInterface
      * @depends testSetPluginConfig
      */
-    public function testSetLocale(BasicArticleRepository $repository) {
+    public function testSetLocale(ArticleRepository $repository) {
         $locale = 'de_DE';
         $exception = null;
 
@@ -85,11 +85,11 @@ class BasicArticleRepositoryTest extends AbstractTestCase
     }
 
     /**
-     * @param BasicArticleRepository $repository
+     * @param ArticleRepository $repository
      * @return ArticleRepositoryInterface
      * @depends testSetLocale
      */
-    public function testSetPriceGroup(BasicArticleRepository $repository) {
+    public function testSetPriceGroup(ArticleRepository $repository) {
         $priceGroup = 'EK';
         $exception = null;
 
@@ -105,11 +105,11 @@ class BasicArticleRepositoryTest extends AbstractTestCase
     }
 
     /**
-     * @param BasicArticleRepository $repository
+     * @param ArticleRepository $repository
      * @return ArticleRepositoryInterface
      * @depends testSetPriceGroup
      */
-    public function testCreateArticles(BasicArticleRepository $repository) {
+    public function testCreateArticles(ArticleRepository $repository) {
         $exception = null;
 
         try {
@@ -124,11 +124,11 @@ class BasicArticleRepositoryTest extends AbstractTestCase
     }
 
     /**
-     * @param BasicArticleRepository $repository
-     * @return BasicArticleRepository
+     * @param ArticleRepository $repository
+     * @return ArticleRepository
      * @depends testCreateArticles
      */
-    public function testUpdateArticles(BasicArticleRepository $repository) {
+    public function testUpdateArticles(ArticleRepository $repository) {
         $exception = null;
 
         try {

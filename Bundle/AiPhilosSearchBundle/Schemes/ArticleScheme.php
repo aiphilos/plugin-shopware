@@ -20,7 +20,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\Artic
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes
  */
-class BasicArticleScheme implements ArticleSchemeInterface
+class ArticleScheme implements ArticleSchemeInterface
 {
     protected $scheme = [
         'ordernumber' => ContentTypesEnum::PRODUCT_NUMBER,

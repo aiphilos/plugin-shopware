@@ -22,7 +22,7 @@ use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\BasicArticleScheme;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleScheme;
 
 abstract class AbstractTestCase extends TestCase
 {
@@ -150,7 +150,7 @@ abstract class AbstractTestCase extends TestCase
 
     public function getSchemeMock() {
         $repoMock = $this->getShopwareRepoMock();
-        $schemeMock = $this->createMock(BasicArticleScheme::class);
+        $schemeMock = $this->createMock(ArticleScheme::class);
         $schemeMock->method('getRepository')
             ->willReturn($repoMock);
         $schemeMock->method('getScheme')

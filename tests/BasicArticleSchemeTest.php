@@ -12,7 +12,7 @@ namespace VerignAiPhilosSearch\tests;
 use Aiphilos\Api\ContentTypesEnum;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\BasicArticleScheme;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleScheme;
 
 /**
  * Class BasicArticleSchemeTest
@@ -25,20 +25,20 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\BasicArticleScheme;
 class BasicArticleSchemeTest extends AbstractTestCase
 {
     /**
-     * @return BasicArticleScheme
+     * @return ArticleScheme
      */
     public function testCanInstantiate() {
        $scheme = null;
        $exception = null;
 
        try {
-           $scheme = new BasicArticleScheme($this->getShopwareRepoMock());
+           $scheme = new ArticleScheme($this->getShopwareRepoMock());
        } catch (\Exception $e) {
            $exception = $e;
        }
 
        $this->assertNull($exception);
-       $this->assertInstanceOf(BasicArticleScheme::class, $scheme);
+       $this->assertInstanceOf(ArticleScheme::class, $scheme);
 
        return $scheme;
     }

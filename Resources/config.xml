@@ -3,6 +3,7 @@
         xsi:noNamespaceSchemaLocation="../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
 
     <elements>
+        <!--TODO consider changing the way this is activated-->
         <element type="boolean" required="true" scope="locale">
             <name>useAiSearch</name>
             <label lang="de">KI Suche für diese Sprache verwenden?</label>

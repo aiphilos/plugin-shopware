@@ -24,7 +24,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers
  */
-class BasicDatabaseInitializer implements DatabaseInitializerInterface
+class DatabaseInitializer implements DatabaseInitializerInterface
 {
     use ApiUserTrait;
 
