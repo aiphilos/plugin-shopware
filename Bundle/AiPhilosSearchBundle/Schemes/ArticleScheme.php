@@ -22,6 +22,8 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\Artic
  */
 class ArticleScheme implements ArticleSchemeInterface
 {
+    //TODO figure out which new Content Types to use
+    //TODO maybe rename schema keys to shed Shopwares confusing names and use something consistent, eg. supplier => manufacturer
     protected $scheme = [
         'ordernumber' => ContentTypesEnum::PRODUCT_NUMBER,
         'name' => ContentTypesEnum::PRODUCT_NAME,
@@ -31,12 +33,13 @@ class ArticleScheme implements ArticleSchemeInterface
         'price' => ContentTypesEnum::PRODUCT_PRICE,
         'ean' => ContentTypesEnum::PRODUCT_GTIN,
         'supplier' => ContentTypesEnum::PRODUCT_MANUFACTURER,
+        'manufacturer_number' => ContentTypesEnum::PRODUCT_MANUFACTURER_NUMBER, //<-- TODO implement in actual exported data
         'sales' => ContentTypesEnum::ORDER_FREQUENCY,
         'points' => ContentTypesEnum::PRODUCT_RATING,
         'properties' => ContentTypesEnum::GENERAL_AUTO,
         'options' => ContentTypesEnum::GENERAL_AUTO,
         'attributes' => ContentTypesEnum::GENERAL_AUTO,
-        'categories' => ContentTypesEnum::GENERAL_AUTO,
+        'categories' => ContentTypesEnum::PRODUCT_CATEGORY,
     ];
 
 
