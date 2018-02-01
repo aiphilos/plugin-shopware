@@ -4,10 +4,10 @@
 
     <elements>
         <!--TODO consider changing the way this is activated-->
-        <element type="boolean" required="true" scope="locale">
+        <element type="boolean" required="true" scope="shop">
             <name>useAiSearch</name>
-            <label lang="de">KI Suche für diese Sprache verwenden?</label>
-            <label lang="en">Use AI search for this language?</label>
+            <label lang="de">KI Suche für diesen Shop verwenden?</label>
+            <label lang="en">Use AI search for this shop?</label>
             <value>false</value>
         </element>
         <element type="text" required="true" scope="shop" >
@@ -20,7 +20,7 @@
             <label lang="de">API Passwort</label>
             <label lang="en">API Password</label>
         </element>
-        <element type="text" required="true" scope="locale">
+        <element type="text" required="true" scope="shop">
             <name>apiDbName</name>
             <label lang="de">API Datenbankname</label>
             <label lang="en">API Database Name</label>
@@ -32,14 +32,14 @@
             <description lang="de">Die Verkaufsfrequenz der Artikel wird mit an die API Datenbank übergeben, hier können sie festlegen, über wie viele Monate diese berechnet werden soll.</description>
             <description lang="en">The sales frequency of an article will be transmitted to the API database. Here you can select the number of months for which said frequency will be calculated.</description>
         </element>
-        <element>
+        <element type="text" required="false" scope="shop">
             <name>attributeColumns</name>
             <label lang="de">Freitextfeld-Spalten</label>
             <label lang="en">Attribute Columns</label>
             <description lang="de">Geben Sie hier die Spaltennamen der Freitextfelder als Semikolon-getrennte Liste ein, welche mit den Artikeldaten an die API Datenbank übertragen werden sollen. Dies ist nur für menschenlesbare Texte sinnvoll, wie z.B. zusätzliche Beschreibungen.</description>
             <description lang="en">Enter a semicolon separated list of column names of the attributes you would like to transmit to the API database here. This only makes sense for human readable texts such as additional descriptions.</description>
         </element>
-        <element type="select" required="true">
+        <element type="select" required="true" scope="shop">
             <name>fallbackMode</name>
             <label lang="de">Fallback Modus</label>
             <label lang="en">Fallback mode</label>
