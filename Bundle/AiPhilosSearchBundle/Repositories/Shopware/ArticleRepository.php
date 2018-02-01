@@ -215,11 +215,11 @@ class ArticleRepository implements ArticleRepositoryInterface
 
         $retval = [];
         foreach ($result as $row) {
-            $articleId = $row['articleId'];
+            $articleId = intval($row['articleId']);
             if (!isset($mappedCategoryTree[$articleId])) {
                 continue;
             }
-            $id = $row['_id'];
+            $id = intval($row['_id']);
             if (!$retval[$id]) {
                 $retval[$id] = [
                     '_id' => $id,
@@ -228,12 +228,12 @@ class ArticleRepository implements ArticleRepositoryInterface
                     'description' => $row['description'],
                     'description_long' => $row['description_long'],
                     'keywords' => ($row['keywords'] ? explode(',', $row['keywords']) : []),
-                    'price' => $row['price'],
+                    'price' => floatval($row['price']),
                     'ean' => $row['ean'],
                     'manufacturer' => $row['manufacturer'],
                     'manufacturer_number' => $row['manufacturer_number'],
-                    'sales' => $row['sales'],
-                    'points' => $row['points'],
+                    'sales' => $row['sales'] === null ? null : intval($row['sales']),
+                    'points' => $row['points'] === null ? null : floatval($row['points']),
                     'options' => [],
                     'properties' => [],
                     'attributes' => [],
@@ -321,8 +321,8 @@ class ArticleRepository implements ArticleRepositoryInterface
 
         $mappedTree = [];
         foreach ($articleCategories as $articleCategory) {
-            $articleId = $articleCategory['articleID'];
-            $categoryId = $articleCategory['categoryID'];
+            $articleId = intval($articleCategory['articleID']);
+            $categoryId = intval($articleCategory['categoryID']);
             if ($treeItem = (isset($categories[$categoryId]) ? $categories[$categoryId] : false)) {
                 if (isset($mappedTree[$articleId])) {
                     $mappedTree[$articleId][] = $treeItem;
@@ -345,7 +345,7 @@ class ArticleRepository implements ArticleRepositoryInterface
 
         $categoryStructureById = [];
         foreach ($cats as $category) {
-            $id = $category['id'];
+            $id = Intval($category['id']);
             $name = $category['description'];
             $pathIds = array_reverse(explode('|', $category['path']));
             $categoryStructureById[$id] = [
@@ -364,6 +364,9 @@ class ArticleRepository implements ArticleRepositoryInterface
                 if (!$pathId) {
                     continue;
                 }
+
+                $pathId = intval($pathId);
+
                 $parentStructure = $categoryStructureById[$pathId];
                 //Possible because the root category itself is not included as it generally has no informational value
                 if (!$parentStructure) {
