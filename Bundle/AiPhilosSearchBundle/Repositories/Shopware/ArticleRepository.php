@@ -12,14 +12,14 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware
 use Shopware\Components\Plugin\ConfigReader;
 
 /**
- * Class BasicArticleRepository
+ * Class ArticleRepository
  *
  * This implementation of the ArticleRepositoryInterface
- * internally creates and SQL query to retrieve all article data that should be sent to the API
+ * internally creates an SQL query to retrieve all article data that should be sent to the API
  * and formats it accordingly into a hierarchical array structure that can be mapped
- * by the BasicArticleSchemeMapper::map method.
+ * by the ArticleSchemeMapper::map method.
  *
- * This implementation is tightly coupled withe the BasicArticleScheme and any change
+ * This implementation is implicitly coupled withe the BasicArticleScheme and any change
  * here should be reflected in that class so the API can make proper sense of the data.
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware
@@ -128,7 +128,7 @@ class ArticleRepository implements ArticleRepositoryInterface
 
 
     /**
-     * BasicArticleRepository constructor.
+     * ArticleRepository constructor.
      * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
      * @param ConfigReader $configReader
      */

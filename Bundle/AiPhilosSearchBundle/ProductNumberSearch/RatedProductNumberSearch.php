@@ -14,6 +14,15 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\PrimedSearchEventEnum;
 
+/**
+ * Class RatedProductNumberSearch
+ *
+ * This decoration of the core ProductNumberSearch Service
+ * is used to notify - via an event - of any search that yielded more
+ * than 0 results, the event contains an array of the products variant/detail IDs
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ProductNumberSearch
+ */
 class RatedProductNumberSearch implements ProductNumberSearchInterface
 {
 

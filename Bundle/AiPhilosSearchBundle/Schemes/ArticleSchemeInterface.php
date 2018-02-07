@@ -8,7 +8,7 @@
 
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes;
 
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
+
 
 /**
  * Interface ArticleSchemeInterface

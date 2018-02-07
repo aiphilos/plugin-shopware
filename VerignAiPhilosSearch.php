@@ -5,15 +5,7 @@
  */
 namespace VerignAiPhilosSearch;
 
-(function($autoloaderPath) {
-    if (file_exists($autoloaderPath) && is_readable($autoloaderPath)) {
-        require_once $autoloaderPath;
-    } else {
-        throw new \Exception(
-            "Could not load autoloader file '$autoloaderPath'. Check file for presence and permissions."
-        );
-    }
-})(__DIR__ . '/vendor/autoload.php');
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Shopware\Components\Plugin;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

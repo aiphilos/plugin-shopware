@@ -12,7 +12,7 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 
 /**
- * Class BasicArticleSchemeMapper
+ * Class ArticleSchemeMapper
  *
  * This implementation of the SchemeMapperInterface maps articles
  * to the provided scheme in a naive, one-dimensional way.

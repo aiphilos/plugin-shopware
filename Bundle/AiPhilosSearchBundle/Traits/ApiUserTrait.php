@@ -9,7 +9,6 @@
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits;
 
 
-
 use Aiphilos\Api\Items\ClientInterface;
 
 /**

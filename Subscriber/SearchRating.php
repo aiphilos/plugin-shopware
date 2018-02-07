@@ -14,6 +14,15 @@ use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Logger;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\PrimedSearchEventEnum;
 
+/**
+ * Class SearchRating
+ *
+ * Listens to all events involved in the rating of API provided search results.
+ * Makes sure the initial and final state is correct and only rate actually send the
+ * rating in applicable cases
+ *
+ * @package VerignAiPhilosSearch\Subscriber
+ */
 class SearchRating implements SubscriberInterface
 {
     private static $primed = false;

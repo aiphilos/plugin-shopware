@@ -22,7 +22,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\DatabaseInitia
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ArticleRepositoryInterface;
 
 /**
- * Class BasicDatabaseSynchronizer
+ * Class DatabaseSynchronizer
  *
  * This implementation of the DatabaseSynchronizerInterface
  * makes simple full sync for all applicable AI databases.
@@ -55,7 +55,7 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
     private $logger;
 
     /**
-     * BasicDatabaseSynchronizer constructor.
+     * DatabaseSynchronizer constructor.
      * @param DatabaseInitializerInterface $databaseInitializer
      * @param ModelManager $modelManager
      * @param ConfigReader $configReader
@@ -138,6 +138,10 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
                     $msg = 'Failed to set database name';
                     $err = true;
                     break;
+                case CreateResultEnum::SCHEME_ERROR:
+                    $msg = 'Failed to set scheme on database';
+                    $err = true;
+                    break;
             }
             $results .= ($err ? 'Error: ' : 'Info: ') . $msg . PHP_EOL;
             if ($err) {
@@ -154,7 +158,9 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
 
             $results .= $msg . PHP_EOL . PHP_EOL . 'Done' . PHP_EOL . PHP_EOL;
         }
-
+        $this->logger->info('Finished database synchronization, check context for individual results', [
+            'results' => $results
+        ]);
         return $results;
     }
 

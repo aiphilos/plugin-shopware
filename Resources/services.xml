@@ -93,6 +93,7 @@
         <service class="VerignAiPhilosSearch\Subscriber\Cron" id="verign_ai_philos_search.subscriber.cron">
             <tag name="shopware.event_subscriber"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.cron.database_synchronizer" type="service"/>
+            <argument id="verign_ai_philos_search.logger" />
         </service>
 
         <service class="VerignAiPhilosSearch\Subscriber\SearchRating" id="verign_ai_philos_search.subscriber.search_rating">

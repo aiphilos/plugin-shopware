@@ -19,7 +19,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterf
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
 /**
- * Class BasicArticleRepository
+ * Class ArticleRepository
  *
  * This implementation of the ArticleRepositoryInterface provides a very minimal abstraction over the API SDKs
  * ItemClientInterface and should eventually hide all non-result data from the consumer/user
@@ -60,7 +60,7 @@ class ArticleRepository implements ArticleRepositoryInterface
     private $shopCategoryId = 3;
 
     /**
-     * DatabaseCrud constructor.
+     * ArticleRepository constructor.
      * @param LocaleStringMapperInterface $localeMapper
      * @param ClientInterface $itemClient
      * @param ArticleSchemeInterface $scheme

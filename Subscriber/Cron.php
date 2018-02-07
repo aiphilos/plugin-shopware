@@ -10,18 +10,30 @@ namespace VerignAiPhilosSearch\Subscriber;
 
 
 use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Logger;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Cron\DatabaseSynchronizerInterface;
 
+/**
+ * Class Cron
+ *
+ * Listens to the event for the only cronjob of this plugin
+ * and calls the appopriate service for database synchronization
+ *
+ * @package VerignAiPhilosSearch\Subscriber
+ */
 class Cron implements SubscriberInterface
 {
     private $databaseSynchronizer;
+    private $logger;
 
     /**
      * Cron constructor.
-     * @param $databaseSynchronizer
+     * @param DatabaseSynchronizerInterface $databaseSynchronizer
+     * @param Logger $logger
      */
-    public function __construct(DatabaseSynchronizerInterface $databaseSynchronizer) {
+    public function __construct(DatabaseSynchronizerInterface $databaseSynchronizer, Logger $logger) {
         $this->databaseSynchronizer = $databaseSynchronizer;
+        $this->logger = $logger;
     }
 
 
@@ -37,6 +49,11 @@ class Cron implements SubscriberInterface
             $message = $this->databaseSynchronizer->sync();
         } catch (\Exception $e) {
             $message = 'ERROR: ' . $e->getMessage();
+            $this->logger->err('Error when running Db synchronizations cron', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
         }
 
         return $message;

@@ -15,7 +15,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterf
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
 /**
- * Class BasicDatabaseInitializer
+ * Class DatabaseInitializer
  *
  * This implementation of the DatabaseInitializerInterface
  * creates or updates the Scheme of the API database for the provided shop configuration
