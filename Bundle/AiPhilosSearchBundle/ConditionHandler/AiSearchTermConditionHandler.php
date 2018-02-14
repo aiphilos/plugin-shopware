@@ -166,14 +166,11 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         }
 
         $query->andWhere('variant.id IN ( :aiProvidedVariantIds )')
-            ->addOrderBy('FIELD( variant.id, ' . implode(', ', $variantIds) . ')', 'ASC')
             ->setParameter('aiProvidedVariantIds', $variantIds, Connection::PARAM_INT_ARRAY);
 
         $query->addState('verignAiPhilosOriginalResultAdded');
         // Warning, horrible hack!
-        $query->getVerignAiPhilosOriginalResult = function() use ($variantIds) {
-            return $variantIds;
-        };
+        $query->verignAiPhilosOriginalResult = $variantIds;
 
 
         return;
