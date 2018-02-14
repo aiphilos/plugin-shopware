@@ -21,7 +21,6 @@ use Shopware\Components\Plugin\ConfigReader;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\FallbackModeEnum;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\PrimedSearchEventEnum;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapperInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
 /**
@@ -41,9 +40,6 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
     /** @var LocaleStringMapperInterface */
     private $localeMapper;
 
-    /** @var ArticleSchemeInterface */
-    private $scheme;
-
     /** @var ConditionHandlerInterface */
     private $coreService;
 
@@ -61,7 +57,6 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
      * @param ConfigReader $configReader
      * @param LocaleStringMapperInterface $localeMapper
      * @param ClientInterface $itemsService
-     * @param ArticleSchemeInterface $scheme
      * @param \Zend_Cache_Core $cache
      * @param \Enlight_Event_EventManager $eventManager
      * @param Logger $logger
@@ -71,7 +66,6 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         ConfigReader $configReader,
         LocaleStringMapperInterface $localeMapper,
         ClientInterface $itemsService,
-        ArticleSchemeInterface $scheme,
         \Zend_Cache_Core $cache,
         \Enlight_Event_EventManager $eventManager,
         Logger $logger
@@ -79,7 +73,6 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         $this->pluginConfig = $configReader->getByPluginName('VerignAiPhilosSearch');
         $this->localeMapper = $localeMapper;
         $this->itemClient = $itemsService;
-        $this->scheme = $scheme;
         $this->cache = $cache;
         $this->coreService = $coreService;
         $this->eventManager = $eventManager;
@@ -120,9 +113,9 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         /**@var SearchTermCondition $condition */
         $term = $condition->getTerm();
 
-        $orderNumbers = $this->getFromInstanceCache($term);
+        $variantIds = $this->getFromInstanceCache($term);
 
-        if ($orderNumbers === null) {
+        if ($variantIds === null) {
             $this->setAuthentication();
 
             $swLocaleString = $context->getShop()->getLocale()->getLocale();
@@ -150,31 +143,38 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
 
             }
 
-            $fieldKey = $this->scheme->getProductNumberKey();
-            $orderNumbers = [];
+            $variantIds = [];
             foreach ($result['results'] as $articleData) {
-                if ($orderNumber = $articleData[$fieldKey]) {
-                    $orderNumbers[] = $orderNumber;
+                if ($id = intval($articleData['_id'])) {
+                    $variantIds[] = $id;
                 }
             }
 
-            $this->saveInInstanceCache($term, $orderNumbers);
+            $this->saveInInstanceCache($term, $variantIds);
 
-            if ($orderNumbers === []) {
+            if ($variantIds === []) {
                 $this->fallback($condition, $query, $context, FallbackModeEnum::NO_RESULTS, $result['uuid']);
                 return;
             }
 
-        } elseif ($orderNumbers === []) {
+        } elseif ($variantIds === []) {
             $this->fallback($condition, $query, $context, FallbackModeEnum::NO_RESULTS);
             return;
-        } elseif ($orderNumbers === false) {
+        } elseif ($variantIds === false) {
             $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
             return;
         }
 
-        $query->andWhere('variant.ordernumber IN ( :aiProvidedOrderNumbers )')
-            ->setParameter('aiProvidedOrderNumbers', $orderNumbers, Connection::PARAM_STR_ARRAY);
+        $query->andWhere('variant.id IN ( :aiProvidedVariantIds )')
+            ->addOrderBy('FIELD( variant.id, ' . implode(', ', $variantIds) . ')', 'ASC')
+            ->setParameter('aiProvidedVariantIds', $variantIds, Connection::PARAM_INT_ARRAY);
+
+        $query->addState('verignAiPhilosOriginalResultAdded');
+        // Warning, horrible hack!
+        $query->getVerignAiPhilosOriginalResult = function() use ($variantIds) {
+            return $variantIds;
+        };
+
 
         return;
     }
@@ -207,4 +207,6 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         $query->andWhere('true = false');
         return;
     }
+
+
 }

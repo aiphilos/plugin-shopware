@@ -17,8 +17,10 @@ class VerignAiPhilosSearch extends Plugin
 {
 
     /**
-    * @param ContainerBuilder $container
-    */
+     * @param ContainerBuilder $container
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Exception
+     */
     public function build(ContainerBuilder $container)
     {
         $container->setParameter('verign_ai_philos_search.plugin_dir', $this->getPath());

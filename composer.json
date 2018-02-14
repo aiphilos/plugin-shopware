@@ -1,5 +1,6 @@
 {
     "require": {
-        "aiphilos/api-sdk-php": "dev-master"
+        "aiphilos/api-sdk-php": "dev-master",
+        "beberlei/DoctrineExtensions": "^1.0"
     }
 }

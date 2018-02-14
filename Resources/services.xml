@@ -59,17 +59,6 @@
             <argument id="verign_ai_philos_search.logger" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler\AiSearchTermConditionHandler" id="verign_ai_philos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler" decorates="shopware_searchdbal.search_condition_handler_dbal">
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler.inner" type="service"/>
-            <argument id="shopware.plugin.cached_config_reader" type="service"/>
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service" />
-            <argument id="aiphilos.api.items.client" type="service" />
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
-            <argument id="cache" type="service"/>
-            <argument id="events" type="service" />
-            <argument id="verign_ai_philos_search.logger" type="service"/>
-        </service>
-
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ProductNumberSearch\RatedProductNumberSearch"
                  id="verign_ai_philos_search_bundle_ai_philos_search.product_number_search.rated_product_number_search"
                  decorates="shopware_search.product_number_search"
@@ -100,6 +89,24 @@
             <tag name="shopware.event_subscriber"/>
             <argument id="aiphilos.api.items.client" type="service"/>
             <argument id="verign_ai_philos_search.logger" type="service"/>
+        </service>
+
+        <!--Search related handlers-->
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler\AiSearchTermConditionHandler" id="verign_ai_philos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler" decorates="shopware_searchdbal.search_condition_handler_dbal">
+            <argument id="verign_ai_philos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler.inner" type="service"/>
+            <argument id="shopware.plugin.cached_config_reader" type="service"/>
+            <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service" />
+            <argument id="aiphilos.api.items.client" type="service" />
+            <argument id="cache" type="service"/>
+            <argument id="events" type="service" />
+            <argument id="verign_ai_philos_search.logger" type="service"/>
+        </service>
+
+        <!-- Configurations -->
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ModelConfiguration\Configuration" id="verign_ai_philos_search_bundle_ai_philos_search.model_configuration.configuration" decorates="shopware.model_config">
+            <argument>%shopware.Model%</argument>
+            <argument type="service" id="cache" />
+            <argument type="service" id="model_repository_factory" />
         </service>
     </services>
 </container>
