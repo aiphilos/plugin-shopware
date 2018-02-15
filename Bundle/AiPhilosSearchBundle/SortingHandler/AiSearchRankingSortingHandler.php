@@ -9,10 +9,8 @@
 namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\SortingHandler;
 
 
-use Shopware\Bundle\SearchBundle\Sorting\SearchRankingSorting;
 use Shopware\Bundle\SearchBundle\Sorting\Sorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SearchTermConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -62,7 +60,7 @@ class AiSearchRankingSortingHandler implements SortingHandlerInterface
             $this->originalSortingHandler->generateSorting($sorting, $query, $context);
             return;
         }
-        /** @var int[] $orderedIds */
+
         $orderedIds = $query->verignAiPhilosOriginalResult;
 
         $parts = ['FIELD( variant.id'];
@@ -72,7 +70,9 @@ class AiSearchRankingSortingHandler implements SortingHandlerInterface
 
         $statement = implode(', ', $parts) . ' )';
 
+        //Sorting needs to be reversed here as Shopware's ranking means higher is better and
+        //we mean the sooner in the results the better
         /**@var $sorting Sorting */
-        $query->addOrderBy($statement, $sorting->getDirection());
+        $query->addOrderBy($statement, $sorting->getDirection() === Sorting::SORT_DESC ? Sorting::SORT_ASC : Sorting::SORT_DESC);
     }
 }

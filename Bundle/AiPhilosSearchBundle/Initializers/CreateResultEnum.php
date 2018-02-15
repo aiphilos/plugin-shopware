@@ -16,7 +16,7 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers;
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers
  */
-abstract class CreateResultEnum
+final class CreateResultEnum
 {
     private final function __construct() {
     }

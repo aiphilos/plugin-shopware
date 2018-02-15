@@ -169,11 +169,11 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             ->setParameter('aiProvidedVariantIds', $variantIds, Connection::PARAM_INT_ARRAY);
 
         $query->addState('verignAiPhilosOriginalResultAdded');
-        // Warning, horrible hack!
+        //We use a dynamically declared field to transfer the data down the query builder
+        //as extending the type has proven to be less clean and more of a hassle
+        //Remember kids: Implementation inheritance is almost never what you want!
         $query->verignAiPhilosOriginalResult = $variantIds;
 
-
-        return;
     }
 
     private function getFromInstanceCache($term) {
@@ -202,7 +202,6 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         }
 
         $query->andWhere('true = false');
-        return;
     }
 
 
