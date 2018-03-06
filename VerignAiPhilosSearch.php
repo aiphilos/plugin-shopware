@@ -18,7 +18,6 @@ class VerignAiPhilosSearch extends Plugin
 
     /**
      * @param ContainerBuilder $container
-     * @throws \Doctrine\ORM\ORMException
      * @throws \Exception
      */
     public function build(ContainerBuilder $container)

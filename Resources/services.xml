@@ -136,6 +136,7 @@
             <argument>%shopware.Model%</argument>
             <argument type="service" id="cache"/>
             <argument type="service" id="model_repository_factory"/>
+            <argument type="service" id="shopware.release" on-invalid="null" />
         </service>
     </services>
 </container>

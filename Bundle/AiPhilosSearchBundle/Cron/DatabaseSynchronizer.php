@@ -148,7 +148,6 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
                 continue;
             }
 
-            $msg = "";
             try {
                 $this->updateDB($shop, $config);
                 $msg = 'Successfully updated database!';
