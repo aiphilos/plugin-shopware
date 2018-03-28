@@ -390,7 +390,7 @@ class ArticleRepository implements ArticleRepositoryInterface
      * @return int
      */
     private function getLocaleId($locale) {
-        $prep = $this->db->prepare('SELECT id FROM s_core_translations WHERE locale = :locale');
+        $prep = $this->db->prepare('SELECT id FROM s_core_locales WHERE locale = :locale');
         $prep->execute(['locale' => $locale]);
         $id = $prep->fetchColumn(0);
 

@@ -47,14 +47,13 @@
                  id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper">
         </service>
 
-        <service class="ItemRepository"
+        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ItemRepository"
                  id="verign_ai_philos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository">
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
             <argument id="aiphilos.api.items.client" type="service"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.repositories.shopware.article_repository"
                       type="service"/>
-            <argument id="models" type="service"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper"
                       type="service"/>
             <argument id="cache" type="service"/>

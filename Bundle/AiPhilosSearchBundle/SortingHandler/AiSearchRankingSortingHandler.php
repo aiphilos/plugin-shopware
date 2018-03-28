@@ -54,25 +54,10 @@ class AiSearchRankingSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        if (
-            !$query->hasState('verignAiPhilosOriginalResultAdded')
-        ) {
-            $this->originalSortingHandler->generateSorting($sorting, $query, $context);
-            return;
-        }
-
-        $orderedIds = $query->verignAiPhilosOriginalResult;
-
-        $parts = ['FIELD( variant.id'];
-        foreach ($orderedIds as $id) {
-            $parts[] = intval($id);
-        }
-
-        $statement = implode(', ', $parts) . ' )';
-
-        //Sorting needs to be reversed here as Shopware's ranking means higher is better and
-        //we mean the sooner in the results the better
-        /**@var $sorting Sorting */
-        $query->addOrderBy($statement, $sorting->getDirection() === Sorting::SORT_DESC ? Sorting::SORT_ASC : Sorting::SORT_DESC);
+        /**@var Sorting $sorting */
+        $query->addOrderBy(
+            'FIELD( variant.id, :aiProvidedVariantIds )',
+            $sorting->getDirection() === Sorting::SORT_DESC ? Sorting::SORT_ASC : Sorting::SORT_DESC
+        );
     }
 }

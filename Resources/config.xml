@@ -9,12 +9,12 @@
             <label lang="en">Use AI search for this shop?</label>
             <value>false</value>
         </element>
-        <element type="text" required="true" scope="shop" >
+        <element type="text" required="true" scope="locale" >
             <name>apiName</name>
             <label lang="de">API Benutzername</label>
             <label lang="en">API Username</label>
         </element>
-        <element type="password" required="true" scope="shop" >
+        <element type="password" required="true" scope="locale" >
             <name>apiPassword</name>
             <label lang="de">API Passwort</label>
             <label lang="en">API Password</label>
