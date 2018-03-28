@@ -32,7 +32,7 @@ class BasicArticleSchemeTest extends AbstractTestCase
        $exception = null;
 
        try {
-           $scheme = new ArticleScheme($this->getShopwareRepoMock());
+           $scheme = new ArticleScheme();
        } catch (\Exception $e) {
            $exception = $e;
        }
@@ -41,24 +41,6 @@ class BasicArticleSchemeTest extends AbstractTestCase
        $this->assertInstanceOf(ArticleScheme::class, $scheme);
 
        return $scheme;
-    }
-
-    /**
-     * @param ArticleSchemeInterface $scheme
-     * @depends testCanInstantiate
-     */
-    public function testGetRepository(ArticleSchemeInterface $scheme) {
-        $returnedRepo = null;
-        $exception = null;
-
-        try {
-            $returnedRepo = $scheme->getRepository();
-        } catch (\Exception $e) {
-            $exception = $e;
-        }
-
-        $this->assertNull($exception);
-        $this->assertInstanceOf(ArticleRepositoryInterface::class, $returnedRepo);
     }
 
     /**

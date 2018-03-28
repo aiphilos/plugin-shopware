@@ -8,6 +8,7 @@
 
 namespace VerignAiPhilosSearch\tests;
 
+use Shopware\Components\Logger;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\DatabaseInitializer;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\CreateResultEnum;
 
@@ -17,11 +18,13 @@ class BasicDatabaseInitializerTest extends AbstractTestCase
         $init = null;
         $exception = null;
         $scheme = $this->getSchemeMock();
+        $logger = $this->createMock(Logger::class);
         try {
             $init = new DatabaseInitializer(
                 $this->getItemClientMock($scheme->getProductNumberKey()),
                 $scheme,
-                $this->getCacheMock()
+                $this->getCacheMock(),
+                $logger
             );
         } catch (\Exception $e) {
             $exception = $e;

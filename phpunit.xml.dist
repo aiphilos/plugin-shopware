@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--TODO symlinks fuck up the bootstrap-->
+<!--TODO Include new components in tests-->
+<!--TODO improve test to also include failure conditions -->
 <phpunit bootstrap="../../../tests/Functional/bootstrap.php" strict="false">
 <testsuite name="VerignAiPhilosSearch Test Suite">
     <directory>tests/Shopware</directory>

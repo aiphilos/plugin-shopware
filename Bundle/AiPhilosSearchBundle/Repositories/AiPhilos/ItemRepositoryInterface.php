@@ -20,7 +20,7 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos
  */
-interface ArticleRepositoryInterface
+interface ItemRepositoryInterface
 {
     /**
      * @param array $pluginConfig

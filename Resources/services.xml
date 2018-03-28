@@ -47,7 +47,7 @@
                  id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper">
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ArticleRepository"
+        <service class="ItemRepository"
                  id="verign_ai_philos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository">
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
             <argument id="aiphilos.api.items.client" type="service"/>

@@ -8,29 +8,33 @@
 namespace VerignAiPhilosSearch\tests\AiPhilos;
 
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapper;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ArticleRepository;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ItemRepositoryInterface;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ItemRepository;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\ArticleSchemeMapper;
 use VerignAiPhilosSearch\tests\AbstractTestCase;
 
 class BasicArticleRepositoryTest extends AbstractTestCase
 {
     /**
-     * @return null|ArticleRepository
+     * @return null|ItemRepository
      */
     public function testCanInstantiate() {
         $localeMapper = new LocaleStringMapper();
         $schemeMapper = new ArticleSchemeMapper();
         $scheme = $this->getSchemeMock();
+        $articleRepository = $this->createMock(ArticleRepositoryInterface::class);
+        $articleRepository->method('getArticleData')
+            ->willReturn([]);
         $repository = null;
         $exception = null;
 
         try {
-            $repository = new ArticleRepository(
+            $repository = new ItemRepository(
                 $localeMapper,
                 $this->getItemClientMock($scheme->getProductNumberKey()),
                 $scheme,
-                $this->getModelManagerMock(),
+                $articleRepository,
                 $schemeMapper,
                 $this->getCacheMock()
             );
@@ -39,17 +43,17 @@ class BasicArticleRepositoryTest extends AbstractTestCase
         }
 
         $this->assertNull($exception);
-        $this->assertInstanceOf(ArticleRepository::class, $repository);
+        $this->assertInstanceOf(ItemRepository::class, $repository);
 
         return $repository;
     }
 
     /**
-     * @param ArticleRepository $repository
-     * @return ArticleRepositoryInterface
+     * @param ItemRepository $repository
+     * @return ItemRepositoryInterface
      * @depends testCanInstantiate
      */
-    public function testSetPluginConfig(ArticleRepository $repository) {
+    public function testSetPluginConfig(ItemRepository $repository) {
         $pluginConfig = $this->getConfigReaderMock()->getByPluginName('VerignAiPhilosSearch');
         $exception = null;
 
@@ -65,11 +69,11 @@ class BasicArticleRepositoryTest extends AbstractTestCase
     }
 
     /**
-     * @param ArticleRepository $repository
-     * @return ArticleRepositoryInterface
+     * @param ItemRepository $repository
+     * @return ItemRepositoryInterface
      * @depends testSetPluginConfig
      */
-    public function testSetLocale(ArticleRepository $repository) {
+    public function testSetLocale(ItemRepository $repository) {
         $locale = 'de_DE';
         $exception = null;
 
@@ -85,11 +89,11 @@ class BasicArticleRepositoryTest extends AbstractTestCase
     }
 
     /**
-     * @param ArticleRepository $repository
-     * @return ArticleRepositoryInterface
+     * @param ItemRepository $repository
+     * @return ItemRepositoryInterface
      * @depends testSetLocale
      */
-    public function testSetPriceGroup(ArticleRepository $repository) {
+    public function testSetPriceGroup(ItemRepository $repository) {
         $priceGroup = 'EK';
         $exception = null;
 
@@ -105,11 +109,11 @@ class BasicArticleRepositoryTest extends AbstractTestCase
     }
 
     /**
-     * @param ArticleRepository $repository
-     * @return ArticleRepositoryInterface
+     * @param ItemRepository $repository
+     * @return ItemRepositoryInterface
      * @depends testSetPriceGroup
      */
-    public function testCreateArticles(ArticleRepository $repository) {
+    public function testCreateArticles(ItemRepository $repository) {
         $exception = null;
 
         try {
@@ -124,11 +128,11 @@ class BasicArticleRepositoryTest extends AbstractTestCase
     }
 
     /**
-     * @param ArticleRepository $repository
-     * @return ArticleRepository
+     * @param ItemRepository $repository
+     * @return ItemRepository
      * @depends testCreateArticles
      */
-    public function testUpdateArticles(ArticleRepository $repository) {
+    public function testUpdateArticles(ItemRepository $repository) {
         $exception = null;
 
         try {

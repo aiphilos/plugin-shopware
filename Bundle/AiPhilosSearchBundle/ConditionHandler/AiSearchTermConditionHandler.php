@@ -24,12 +24,13 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapperI
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
 /**
+ * TODO: Real caching
  * Class AiSearchTermConditionHandler
  *
- * This ConditionHandler checks whether or not the AI search should be used for this shop/language
+ * This ConditionHandler checks whether or not the AI search should be used for this shop and language
  * and if so, sends the search term to the API then evaluates the results.
  *
- * Every failure case means a fallback to the default search,
+ * Can fallback to the default search if configured by the user to do so.
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler
  */

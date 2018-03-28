@@ -12,12 +12,14 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware
 use Shopware\Components\Plugin\ConfigReader;
 
 /**
+ * TODO: move fetching of locale ID into this class so external users do not need to use the DB/ORM directly
+ *
  * Class ArticleRepository
  *
  * This implementation of the ArticleRepositoryInterface
  * internally creates an SQL query to retrieve all article data that should be sent to the API
  * and formats it accordingly into a hierarchical array structure that can be mapped
- * by the ArticleSchemeMapper::map method.
+ * by the ArticleSchemeMapper::map() method.
  *
  * This implementation is implicitly coupled withe the BasicArticleScheme and any change
  * here should be reflected in that class so the API can make proper sense of the data.
@@ -154,7 +156,7 @@ class ArticleRepository implements ArticleRepositoryInterface
     /**
      * @param array $idsToInclude
      * @param array $idsToExclude
-     * @param int $localeId
+     * @param int|string $locale
      * @param string $priceGroup
      * @param int $salesMonths
      * @param int $shopCategoryId
@@ -163,12 +165,13 @@ class ArticleRepository implements ArticleRepositoryInterface
     public function getArticleData(
         array $idsToInclude = [],
         array $idsToExclude = [],
-        $localeId = 0,
+        $locale = 0,
         $priceGroup = 'EK',
         $salesMonths = 3,
         $shopCategoryId = 3
     ) {
         $query = $this->getQuery($this->articleDataQuery);
+        $localeId = is_int($locale) ? $locale : $this->getLocaleId($locale);
         $params = [
             ':priceGroup' => $priceGroup,
             ':numMonths' => $salesMonths,
@@ -380,5 +383,17 @@ class ArticleRepository implements ArticleRepositoryInterface
         }
 
         return $returnTree;
+    }
+
+    /**
+     * @param string $locale
+     * @return int
+     */
+    private function getLocaleId($locale) {
+        $prep = $this->db->prepare('SELECT id FROM s_core_translations WHERE locale = :locale');
+        $prep->execute(['locale' => $locale]);
+        $id = $prep->fetchColumn(0);
+
+        return intval($id);
     }
 }

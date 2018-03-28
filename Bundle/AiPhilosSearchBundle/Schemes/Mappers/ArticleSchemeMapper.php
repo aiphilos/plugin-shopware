@@ -28,6 +28,11 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterf
  */
 class ArticleSchemeMapper implements SchemeMapperInterface
 {
+    /**
+     * @param ArticleSchemeInterface $scheme
+     * @param array $articles
+     * @return array|mixed
+     */
     public function map(ArticleSchemeInterface $scheme, array $articles) {
         $schemeArray = $scheme->getScheme();
 

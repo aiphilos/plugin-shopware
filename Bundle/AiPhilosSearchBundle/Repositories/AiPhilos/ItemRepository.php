@@ -13,7 +13,7 @@ use Aiphilos\Api\Items\ClientInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Locale;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapperInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface as SwArticleRepository;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\SchemeMapperInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
@@ -29,7 +29,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos
  */
-class ArticleRepository implements ArticleRepositoryInterface
+class ItemRepository implements ItemRepositoryInterface
 {
     use ApiUserTrait;
 
@@ -39,19 +39,17 @@ class ArticleRepository implements ArticleRepositoryInterface
     /** @var string */
     private $language;
 
-    /** @var SwArticleRepository */
-    private $swArticleRepository;
+    /** @var ArticleRepositoryInterface */
+    private $articleRepository;
 
     /** @var ArticleSchemeInterface */
     private $scheme;
 
     private $priceGroup = 'EK';
 
-    private $localeId = 0;
 
-    private $originalLocale = '';
-    /** @var ModelManager */
-    private $modelManager;
+    private $locale = '';
+
     /** @var SchemeMapperInterface */
     private $schemeMapper;
     /** @var int */
@@ -64,8 +62,7 @@ class ArticleRepository implements ArticleRepositoryInterface
      * @param LocaleStringMapperInterface $localeMapper
      * @param ClientInterface $itemClient
      * @param ArticleSchemeInterface $scheme
-     * @param SwArticleRepository $articleRepository
-     * @param ModelManager $modelManager
+     * @param ArticleRepositoryInterface $articleRepository
      * @param SchemeMapperInterface $schemeMapper
      * @param \Zend_Cache_Core $cache
      */
@@ -73,16 +70,14 @@ class ArticleRepository implements ArticleRepositoryInterface
         LocaleStringMapperInterface $localeMapper,
         ClientInterface $itemClient,
         ArticleSchemeInterface $scheme,
-        SwArticleRepository $articleRepository,
-        ModelManager $modelManager,
+        ArticleRepositoryInterface $articleRepository,
         SchemeMapperInterface $schemeMapper,
         \Zend_Cache_Core $cache
     ) {
         $this->localeMapper = $localeMapper;
         $this->itemClient = $itemClient;
         $this->scheme = $scheme;
-        $this->swArticleRepository = $articleRepository;
-        $this->modelManager = $modelManager;
+        $this->articleRepository = $articleRepository;
         $this->schemeMapper = $schemeMapper;
         $this->cache = $cache;
     }
@@ -103,12 +98,7 @@ class ArticleRepository implements ArticleRepositoryInterface
      * @return $this
      */
     public function setLocale($locale) {
-        $this->originalLocale = $locale;
-        $localeModel = $this->modelManager->getRepository(Locale::class)->findOneBy(['locale' => $locale]);
-        if (!$localeModel) {
-            throw new \InvalidArgumentException('No matching locale model for locale "' . $locale . '"');
-        }
-        $this->localeId = $localeModel->getId();
+        $this->locale = $locale;
         $this->language = $this->localeMapper->mapLocaleString($locale);
         $this->updateConfigRelatedOps();
         $this->salesMonths = $this->pluginConfig['salesMonths'];
@@ -118,7 +108,7 @@ class ArticleRepository implements ArticleRepositoryInterface
 
     /**
      * @param string $priceGroup
-     * @return ArticleRepository
+     * @return ItemRepository
      */
     public function setPriceGroup($priceGroup) {
         $this->priceGroup = $priceGroup;
@@ -161,7 +151,7 @@ class ArticleRepository implements ArticleRepositoryInterface
     }
 
     public function createArticles(array $articleIds) {
-        $articles = $this->swArticleRepository->getArticleData($articleIds, [], $this->localeId, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
+        $articles = $this->articleRepository->getArticleData($articleIds, [], $this->locale, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
 
         $mappedArticles = $this->schemeMapper->map($this->scheme, $articles);
 
@@ -190,7 +180,7 @@ class ArticleRepository implements ArticleRepositoryInterface
     }
 
     public function updateArticles(array $articleIds) {
-        $articles = $this->swArticleRepository->getArticleData($articleIds, [], $this->localeId, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
+        $articles = $this->articleRepository->getArticleData($articleIds, [], $this->locale, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
 
         $mappedArticles = $this->schemeMapper->map($this->scheme, $articles);
 

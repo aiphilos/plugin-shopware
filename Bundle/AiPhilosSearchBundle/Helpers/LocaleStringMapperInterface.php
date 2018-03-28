@@ -15,7 +15,7 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers;
  * Shopware formatted locale strings to the format used by the API
  * eg. de_DE -> de-de
  *
- * It is that simple...
+ * It is that simple... for now
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers
  */

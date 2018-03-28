@@ -12,6 +12,17 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ModelConfiguration;
 use Doctrine\ORM\Repository\RepositoryFactory;
 use DoctrineExtensions\Query\Mysql\Field;
 
+/**
+ * Class Configuration
+ *
+ * This class only serves the purpose of adding the custom MySQL function 'FIELD()'
+ * to Doctrine, as it is required by this plugin to easily apply default sorting to results.
+ * If FIELD is already defined this class will not add its own implementation.
+ * This of course means that whatever implementation already exists must function properly for
+ * this plugin to work.
+ *
+ * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ModelConfiguration
+ */
 class Configuration extends \Shopware\Components\Model\Configuration
 {
     /**
@@ -33,7 +44,9 @@ class Configuration extends \Shopware\Components\Model\Configuration
             parent::__construct($options, $cache, $repositoryFactory);
         }
 
-        $this->addCustomStringFunction('FIELD', Field::class);
+        if ($this->getCustomStringFunction('FIELD') === null) {
+            $this->addCustomStringFunction('FIELD', Field::class);
+        }
     }
 
 }

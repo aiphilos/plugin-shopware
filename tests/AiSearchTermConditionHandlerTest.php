@@ -8,6 +8,7 @@
 
 namespace VerignAiPhilosSearch\tests;
 
+use Shopware\Components\Logger;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler\AiSearchTermConditionHandler;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapper;
 
@@ -17,6 +18,8 @@ class AiSearchTermConditionHandlerTest extends AbstractTestCase
         $scheme = $this->getSchemeMock();
         $exception = null;
         $handler = null;
+        $eventManager = $this->createMock(\Enlight_Event_EventManager::class);
+        $logger = $this->createMock(Logger::class);
 
         try {
             $handler = new AiSearchTermConditionHandler(
@@ -24,8 +27,9 @@ class AiSearchTermConditionHandlerTest extends AbstractTestCase
                 $this->getConfigReaderMock(),
                 new LocaleStringMapper(),
                 $this->getItemClientMock($scheme->getProductNumberKey()),
-                $scheme,
-                $this->getCacheMock()
+                $this->getCacheMock(),
+                $eventManager,
+                $logger
             );
         } catch (\Exception $e) {
             $exception = $e;

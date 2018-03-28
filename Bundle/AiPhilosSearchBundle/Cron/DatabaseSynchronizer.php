@@ -19,7 +19,7 @@ use Shopware\Models\Shop\Shop;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapperInterface;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\CreateResultEnum;
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\DatabaseInitializerInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ArticleRepositoryInterface;
+use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ItemRepositoryInterface;
 
 /**
  * Class DatabaseSynchronizer
@@ -49,7 +49,7 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
     /** @var LocaleStringMapperInterface */
     private $localeMapper;
 
-    /** @var ArticleRepositoryInterface */
+    /** @var ItemRepositoryInterface */
     private $aiRepository;
     /** @var Logger  */
     private $logger;
@@ -60,7 +60,7 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
      * @param ModelManager $modelManager
      * @param ConfigReader $configReader
      * @param LocaleStringMapperInterface $localeMapper
-     * @param ArticleRepositoryInterface $aiRepository
+     * @param ItemRepositoryInterface $aiRepository
      * @param Logger $logger
      */
     public function __construct(
@@ -68,7 +68,7 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
         ModelManager $modelManager,
         ConfigReader $configReader,
         LocaleStringMapperInterface $localeMapper,
-        ArticleRepositoryInterface $aiRepository,
+        ItemRepositoryInterface $aiRepository,
         Logger $logger
     ) {
         $this->databaseInitializer = $databaseInitializer;

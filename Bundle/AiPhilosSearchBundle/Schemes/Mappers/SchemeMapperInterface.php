@@ -18,11 +18,17 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterf
  * to make sure no undesired and schema-less data is transmitted.
  *
  * It should make an exception for all keys that start with an underscore, as those have special meaning for the API
- * and can often be interpreted without a schema.
+ * and can often be interpreted without a schema with the exception of the '_action' key, as that is used to determine
+ * what to do on bulk actions and musn#t exist in this context.
  *
  * @package VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers
  */
 interface SchemeMapperInterface
 {
+    /**
+     * @param ArticleSchemeInterface $scheme
+     * @param array $articles
+     * @return mixed
+     */
     public function map(ArticleSchemeInterface $scheme, array $articles);
 }

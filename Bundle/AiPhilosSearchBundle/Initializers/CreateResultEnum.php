@@ -18,12 +18,12 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers;
  */
 final class CreateResultEnum
 {
-    private final function __construct() {
-    }
-
     const LANGUAGE_NOT_SUPPORTED = 1;
     const ALREADY_EXISTS = 2;
     const CREATED = 4;
     const NAME_ERROR = 8;
     const SCHEME_ERROR = 16;
+
+    private final function __construct() {
+    }
 }

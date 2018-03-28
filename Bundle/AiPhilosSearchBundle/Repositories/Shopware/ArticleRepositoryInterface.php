@@ -24,7 +24,7 @@ interface ArticleRepositoryInterface
     /**
      * @param array $idsToInclude
      * @param array $idsToExclude
-     * @param int $localeId
+     * @param int $locale
      * @param string $priceGroup
      * @param int $salesMonths
      * @param int $shopCategoryId
@@ -33,7 +33,7 @@ interface ArticleRepositoryInterface
     public function getArticleData(
         array $idsToInclude = [],
         array $idsToExclude = [],
-        $localeId = 0,
+        $locale = 0,
         $priceGroup = 'EK',
         $salesMonths = 3,
         $shopCategoryId = 3

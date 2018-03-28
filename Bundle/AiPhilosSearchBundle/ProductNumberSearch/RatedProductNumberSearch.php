@@ -48,8 +48,8 @@ class RatedProductNumberSearch implements ProductNumberSearchInterface
 
         if ($result->getTotalCount() > 0) {
             $products = $result->getProducts();
-            $ids = [];
 
+            $ids = [];
             foreach ($products as $product) {
                 $ids[] = $product->getVariantId();
             }

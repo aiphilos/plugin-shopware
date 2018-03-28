@@ -149,10 +149,7 @@ abstract class AbstractTestCase extends TestCase
     }
 
     public function getSchemeMock() {
-        $repoMock = $this->getShopwareRepoMock();
         $schemeMock = $this->createMock(ArticleScheme::class);
-        $schemeMock->method('getRepository')
-            ->willReturn($repoMock);
         $schemeMock->method('getScheme')
             ->willReturn([]);
 
