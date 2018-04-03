@@ -24,7 +24,7 @@ interface ArticleRepositoryInterface
     /**
      * @param array $idsToInclude
      * @param array $idsToExclude
-     * @param int $locale
+     * @param int|string $locale
      * @param string $priceGroup
      * @param int $salesMonths
      * @param int $shopCategoryId

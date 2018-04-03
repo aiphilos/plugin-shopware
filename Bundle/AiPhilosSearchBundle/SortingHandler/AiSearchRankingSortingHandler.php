@@ -54,6 +54,11 @@ class AiSearchRankingSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        if (!$query->hasState('VerignAiPhilosSearchVariantIdsAdded')) {
+            $this->originalSortingHandler->generateSorting($sorting, $query, $context);
+            return;
+        }
+
         /**@var Sorting $sorting */
         $query->addOrderBy(
             'FIELD( variant.id, :aiProvidedVariantIds )',

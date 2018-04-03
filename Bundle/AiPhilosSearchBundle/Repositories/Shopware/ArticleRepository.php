@@ -12,8 +12,6 @@ namespace VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware
 use Shopware\Components\Plugin\ConfigReader;
 
 /**
- * TODO: move fetching of locale ID into this class so external users do not need to use the DB/ORM directly
- *
  * Class ArticleRepository
  *
  * This implementation of the ArticleRepositoryInterface

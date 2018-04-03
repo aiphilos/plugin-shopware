@@ -24,7 +24,7 @@ use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapperI
 use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Traits\ApiUserTrait;
 
 /**
- * TODO: Real caching
+ * TODO: Test caching with multiple shops and customer groups
  * Class AiSearchTermConditionHandler
  *
  * This ConditionHandler checks whether or not the AI search should be used for this shop and language
@@ -114,7 +114,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         /**@var SearchTermCondition $condition */
         $term = $condition->getTerm();
 
-        $variantIds = $this->getFromInstanceCache($term);
+        $variantIds = $this->getFromCache($term, $context);
 
         if ($variantIds === null) {
             $this->setAuthentication();
@@ -138,7 +138,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
                     'file' => $e->getFile(),
                     'line' => $e->getLine()
                 ]);
-                $this->saveInInstanceCache($this, false);
+                $this->saveInCache($this, false, $context);
                 $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
                 return;
 
@@ -151,7 +151,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
                 }
             }
 
-            $this->saveInInstanceCache($term, $variantIds);
+            $this->saveInCache($term, $variantIds, $context);
 
             if ($variantIds === []) {
                 $this->fallback($condition, $query, $context, FallbackModeEnum::NO_RESULTS, $result['uuid']);
@@ -166,16 +166,47 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             return;
         }
 
+        $query->addState('VerignAiPhilosSearchVariantIdsAdded');
         $query->andWhere('variant.id IN ( :aiProvidedVariantIds )')
             ->setParameter('aiProvidedVariantIds', $variantIds, Connection::PARAM_INT_ARRAY);
     }
 
-    private function getFromInstanceCache($term) {
-        return isset(self::$instanceCache[$term]) ? self::$instanceCache[$term] : null;
+    private function getFromCache($term, ShopContextInterface $context) {
+        $cachedItem = isset(self::$instanceCache[$term]) ? self::$instanceCache[$term] : null;
+        if ($cachedItem === null) {
+            $cacheId = $this->getCacheIdentifier($term, $context);
+            if ($this->cache->test($cacheId)) {
+                $cachedItem = $this->cache->load($cacheId);
+                self::$instanceCache[$term] = $cachedItem;
+            }
+        }
+        return $cachedItem;
     }
 
-    private function saveInInstanceCache($term, $value) {
+    private function getCacheIdentifier($term, ShopContextInterface $context) {
+        $shopId = $context->getShop()->getId();
+        $groupId = $context->getCurrentCustomerGroup()->getId();
+        $hash = hash('sha256', mb_strtolower($term) . '/shop_id:' . $shopId . '/group_id:' . $groupId);
+
+        return 'verign_ai_philos_search_search_term_' . $hash;
+    }
+
+    private function saveInCache($term, $value, ShopContextInterface $context) {
         self::$instanceCache[$term] = $value;
+
+        $cacheId = $this->getCacheIdentifier($term, $context);
+        try {
+            $this->cache->save($value, $cacheId, [], 300);
+        } catch (\Zend_Cache_Exception $e) {
+            $this->logger->err('Failed to save search result in cache.',[
+                'message' => $e->getMessage(),
+                'term' => $term,
+                'shopId' => $context->getShop()->getId(),
+                'customerGroupId' => $context->getCurrentCustomerGroup()->getId(),
+                'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
+            ]);
+        }
+
     }
 
     private function fallback(ConditionInterface $condition, QueryBuilder $query, ShopContextInterface $context, $reason, $uuid = '') {
