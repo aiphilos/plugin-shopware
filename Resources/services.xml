@@ -104,6 +104,10 @@
             <argument id="verign_ai_philos_search.logger" type="service"/>
         </service>
 
+        <service class="VerignAiPhilosSearch\Subscriber\TemplateRegistration" id="verign_ai_philos_search.subscriber.template_registration">
+            <tag name="shopware.event_subscriber"/>
+            <argument id="template" type="service"/>
+        </service>
 
         <!--Search related handlers-->
         <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler\AiSearchTermConditionHandler"
