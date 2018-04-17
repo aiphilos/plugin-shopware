@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--TODO Include new components in tests-->
+<!--TODO improve test to also include failure conditions -->
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        bootstrap="../../../tests/Functional/bootstrap.php"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.1/phpunit.xsd"
+        convertErrorsToExceptions="true"
+        convertWarningsToExceptions="true"
+>
+<testsuite name="VerignAiPhilosSearch Test Suite">
+    <directory>./tests/*</directory>
+</testsuite>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./Components</directory>
+            <exclude>
+                <directory>./vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

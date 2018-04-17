@@ -15,14 +15,14 @@ use VerignAiPhilosSearch\Components\Schemes\ArticleSchemeInterface;
 use VerignAiPhilosSearch\Components\Schemes\ArticleScheme;
 
 /**
- * Class BasicArticleSchemeTest
+ * Class ArticleSchemeTest
  *
  * These tests are entirely trivial now but it's good to already have the
  * test class around for future changes
  *
  * @package VerignAiPhilosSearch\tests
  */
-class BasicArticleSchemeTest extends AbstractTestCase
+class ArticleSchemeTest extends AbstractTestCase
 {
     /**
      * @return ArticleScheme

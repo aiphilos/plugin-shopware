@@ -12,10 +12,10 @@ use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepository;
 use VerignAiPhilosSearch\tests\AbstractTestCase;
 
 /**
- * Class BasicArticleRepositoryTest
+ * Class ArticleRepositoryTest
  * @package VerignAiPhilosSearch\tests
  */
-class BasicArticleRepositoryTest extends AbstractTestCase
+class ArticleRepositoryTest extends AbstractTestCase
 {
 
     /**

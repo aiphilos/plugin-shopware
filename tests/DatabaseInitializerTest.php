@@ -12,7 +12,7 @@ use Shopware\Components\Logger;
 use VerignAiPhilosSearch\Components\Initializers\DatabaseInitializer;
 use VerignAiPhilosSearch\Components\Initializers\CreateResultEnum;
 
-class BasicDatabaseInitializerTest extends AbstractTestCase
+class DatabaseInitializerTest extends AbstractTestCase
 {
     public function testCanInstantiate() {
         $init = null;

@@ -14,7 +14,7 @@ use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepositoryInter
 use VerignAiPhilosSearch\Components\Schemes\Mappers\ArticleSchemeMapper;
 use VerignAiPhilosSearch\tests\AbstractTestCase;
 
-class BasicArticleRepositoryTest extends AbstractTestCase
+class ItemRepositoryTest extends AbstractTestCase
 {
     /**
      * @return null|ItemRepository
