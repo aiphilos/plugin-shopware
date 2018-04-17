@@ -191,6 +191,12 @@ abstract class AbstractTestCase extends TestCase
 
         $mock->method('getShop')
             ->willReturn($this->getShopMock());
+        $mock->method('getCurrentCustomerGroup')
+            ->willReturn(new class {
+                function getId() {
+                    return 1;
+                }
+            });
 
         return $mock;
     }

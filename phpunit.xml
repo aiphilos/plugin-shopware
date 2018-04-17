@@ -9,7 +9,7 @@
         convertWarningsToExceptions="true"
 >
 <testsuite name="VerignAiPhilosSearch Test Suite">
-    <directory>./tests/*</directory>
+    <directory>tests</directory>
 </testsuite>
     <filter>
         <whitelist>
