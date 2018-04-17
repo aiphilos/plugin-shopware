@@ -12,7 +12,7 @@ namespace VerignAiPhilosSearch\Subscriber;
 use Aiphilos\Api\Items\ClientInterface;
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Logger;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\Enums\PrimedSearchEventEnum;
+use VerignAiPhilosSearch\Components\Helpers\Enums\PrimedSearchEventEnum;
 
 /**
  * Class SearchRating

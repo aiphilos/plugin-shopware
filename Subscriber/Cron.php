@@ -11,7 +11,7 @@ namespace VerignAiPhilosSearch\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Logger;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Cron\DatabaseSynchronizerInterface;
+use VerignAiPhilosSearch\Components\Cron\DatabaseSynchronizerInterface;
 
 /**
  * Class Cron

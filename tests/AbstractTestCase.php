@@ -21,8 +21,8 @@ use Shopware\Components\Plugin\ConfigReader;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleScheme;
+use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
+use VerignAiPhilosSearch\Components\Schemes\ArticleScheme;
 
 abstract class AbstractTestCase extends TestCase
 {

@@ -9,8 +9,8 @@
 namespace VerignAiPhilosSearch\tests;
 
 use Shopware\Components\Logger;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler\AiSearchTermConditionHandler;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapper;
+use VerignAiPhilosSearch\Components\ConditionHandler\AiSearchTermConditionHandler;
+use VerignAiPhilosSearch\Components\Helpers\LocaleStringMapper;
 
 class AiSearchTermConditionHandlerTest extends AbstractTestCase
 {

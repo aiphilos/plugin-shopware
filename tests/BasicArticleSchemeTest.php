@@ -10,9 +10,9 @@ namespace VerignAiPhilosSearch\tests;
 
 
 use Aiphilos\Api\ContentTypesEnum;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleSchemeInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleScheme;
+use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
+use VerignAiPhilosSearch\Components\Schemes\ArticleSchemeInterface;
+use VerignAiPhilosSearch\Components\Schemes\ArticleScheme;
 
 /**
  * Class BasicArticleSchemeTest

@@ -7,11 +7,11 @@
  */
 namespace VerignAiPhilosSearch\tests\AiPhilos;
 
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapper;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ItemRepositoryInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ItemRepository;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\ArticleSchemeMapper;
+use VerignAiPhilosSearch\Components\Helpers\LocaleStringMapper;
+use VerignAiPhilosSearch\Components\Repositories\AiPhilos\ItemRepositoryInterface;
+use VerignAiPhilosSearch\Components\Repositories\AiPhilos\ItemRepository;
+use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
+use VerignAiPhilosSearch\Components\Schemes\Mappers\ArticleSchemeMapper;
 use VerignAiPhilosSearch\tests\AbstractTestCase;
 
 class BasicArticleRepositoryTest extends AbstractTestCase

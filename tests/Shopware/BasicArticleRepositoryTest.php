@@ -8,7 +8,7 @@
 
 namespace VerignAiPhilosSearch\tests\Shopware;
 
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepository;
+use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepository;
 use VerignAiPhilosSearch\tests\AbstractTestCase;
 
 /**

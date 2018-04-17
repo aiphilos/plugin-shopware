@@ -9,8 +9,8 @@
 namespace VerignAiPhilosSearch\tests;
 
 use Shopware\Components\Logger;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\DatabaseInitializer;
-use VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\CreateResultEnum;
+use VerignAiPhilosSearch\Components\Initializers\DatabaseInitializer;
+use VerignAiPhilosSearch\Components\Initializers\CreateResultEnum;
 
 class BasicDatabaseInitializerTest extends AbstractTestCase
 {

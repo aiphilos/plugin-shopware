@@ -29,25 +29,25 @@
         <service class="Aiphilos\Api\Semantics\Client" id="aiphilos.api.semantics.client">
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Helpers\LocaleStringMapper"
+        <service class="VerignAiPhilosSearch\Components\Helpers\LocaleStringMapper"
                  id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper">
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\Shopware\ArticleRepository"
+        <service class="VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepository"
                  id="verign_ai_philos_search_bundle_ai_philos_search.repositories.shopware.article_repository">
             <argument id="db" type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\ArticleScheme"
+        <service class="VerignAiPhilosSearch\Components\Schemes\ArticleScheme"
                  id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme">
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Schemes\Mappers\ArticleSchemeMapper"
+        <service class="VerignAiPhilosSearch\Components\Schemes\Mappers\ArticleSchemeMapper"
                  id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper">
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Repositories\AiPhilos\ItemRepository"
+        <service class="VerignAiPhilosSearch\Components\Repositories\AiPhilos\ItemRepository"
                  id="verign_ai_philos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository">
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
             <argument id="aiphilos.api.items.client" type="service"/>
@@ -59,7 +59,7 @@
             <argument id="cache" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Initializers\DatabaseInitializer"
+        <service class="VerignAiPhilosSearch\Components\Initializers\DatabaseInitializer"
                  id="verign_ai_philos_search_bundle_ai_philos_search.initializers.database_initializer">
             <argument id="aiphilos.api.items.client" type="service"/>
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
@@ -67,7 +67,7 @@
             <argument id="verign_ai_philos_search.logger" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ProductNumberSearch\RatedProductNumberSearch"
+        <service class="VerignAiPhilosSearch\Components\ProductNumberSearch\RatedProductNumberSearch"
                  id="verign_ai_philos_search_bundle_ai_philos_search.product_number_search.rated_product_number_search"
                  decorates="shopware_search.product_number_search"
         >
@@ -78,7 +78,7 @@
             <argument id="events" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\Cron\DatabaseSynchronizer"
+        <service class="VerignAiPhilosSearch\Components\Cron\DatabaseSynchronizer"
                  id="verign_ai_philos_search_bundle_ai_philos_search.cron.database_synchronizer">
             <argument id="verign_ai_philos_search_bundle_ai_philos_search.initializers.database_initializer"
                       type="service"/>
@@ -110,7 +110,7 @@
         </service>
 
         <!--Search related handlers-->
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ConditionHandler\AiSearchTermConditionHandler"
+        <service class="VerignAiPhilosSearch\Components\ConditionHandler\AiSearchTermConditionHandler"
                  id="verign_ai_philos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler"
                  decorates="shopware_searchdbal.search_condition_handler_dbal">
             <argument
@@ -124,7 +124,7 @@
             <argument id="verign_ai_philos_search.logger" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\SortingHandler\AiSearchRankingSortingHandler"
+        <service class="VerignAiPhilosSearch\Components\SortingHandler\AiSearchRankingSortingHandler"
                  id="verign_ai_philos_search_bundle_ai_philos_search.sorting_handler.ai_search_ranking_sorting_handler"
                  decorates="shopware_searchdbal.search_ranking_sorting_handler_dbal">
             <argument
@@ -133,7 +133,7 @@
         </service>
 
         <!-- Configurations -->
-        <service class="VerignAiPhilosSearch\Bundle\AiPhilosSearchBundle\ModelConfiguration\Configuration"
+        <service class="VerignAiPhilosSearch\Components\ModelConfiguration\Configuration"
                  id="verign_ai_philos_search_bundle_ai_philos_search.model_configuration.configuration"
                  decorates="shopware.model_config">
             <argument>%shopware.Model%</argument>
