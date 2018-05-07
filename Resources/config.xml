@@ -66,6 +66,13 @@
                 </option>
             </store>
         </element>
+        <element type="boolean" scope="shop">
+            <name>learnMode</name>
+            <label lang="en">Learning Mode</label>
+            <label lang="de">Lernmodus</label>
+            <description lang="en">The learning mode prevents the AI search from actually being used while the AI is still learning about your products. You can still force the AI Search by appending "&amp;forceAi" to the search query to compare results with the default search.</description>
+            <description lang="de">Der Lernmodus verhindert, dass Suchanfragen tatsächlich an die KI Suche gehen, während diese über Ihren Produkstamm noch analysiert. Sie können die KI Suche trotzdem erzwingen, indem Sie "&amp;forceAi" an den Suchquery anhängen um die Ergebnisse mit der Standardsuche zu vergleichen.</description>
+        </element>
     </elements>
 
 </config>

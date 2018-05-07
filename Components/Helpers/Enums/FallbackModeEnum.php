@@ -15,6 +15,7 @@ final class FallbackModeEnum
     const ALWAYS = 'always';
     const ERROR = 'on_error';
     const NO_RESULTS = 'on_no_results';
+    const LEARN_MODE = 'learn_mode';
 
     final private function __construct() {
     }

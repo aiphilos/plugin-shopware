@@ -52,6 +52,9 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
 
     private static $instanceCache = [];
 
+    /** @var bool  */
+    private $userForcedAi;
+
     /**
      * AiSearchTermConditionHandler constructor.
      * @param ConditionHandlerInterface $coreService
@@ -61,6 +64,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
      * @param \Zend_Cache_Core $cache
      * @param \Enlight_Event_EventManager $eventManager
      * @param Logger $logger
+     * @param \Enlight_Controller_Front $front
      */
     public function __construct(
         ConditionHandlerInterface $coreService,
@@ -69,7 +73,8 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         ClientInterface $itemsService,
         \Zend_Cache_Core $cache,
         \Enlight_Event_EventManager $eventManager,
-        Logger $logger
+        Logger $logger,
+        \Enlight_Controller_Front $front
     ) {
         $this->pluginConfig = $configReader->getByPluginName('VerignAiPhilosSearch');
         $this->localeMapper = $localeMapper;
@@ -78,6 +83,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         $this->coreService = $coreService;
         $this->eventManager = $eventManager;
         $this->logger = $logger;
+        $this->userForcedAi = $front->Request()->has('forceAi');
     }
 
 
@@ -113,6 +119,11 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
     ) {
         /**@var SearchTermCondition $condition */
         $term = $condition->getTerm();
+
+        if ($this->pluginConfig['learnMode'] && !$this->userForcedAi) {
+            $this->fallback($condition, $query, $context, FallbackModeEnum::LEARN_MODE);
+            return;
+        }
 
         $variantIds = $this->getFromCache($term, $context);
 
@@ -213,6 +224,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         $fallbackMode = $this->pluginConfig['fallbackMode'];
 
         if (
+            ($reason === FallbackModeEnum::LEARN_MODE) ||
             ($fallbackMode === FallbackModeEnum::ALWAYS) ||
             ($fallbackMode === FallbackModeEnum::NO_RESULTS && $reason === FallbackModeEnum::NO_RESULTS) ||
             ($fallbackMode === FallbackModeEnum::ERROR && $reason === FallbackModeEnum::ERROR)
@@ -228,6 +240,5 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
 
         $query->andWhere('true = false');
     }
-
 
 }
