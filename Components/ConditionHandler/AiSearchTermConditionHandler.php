@@ -117,18 +117,18 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         $variantIds = $this->getFromCache($term, $context);
 
         if ($variantIds === null) {
-            $this->setAuthentication();
-
-            $swLocaleString = $context->getShop()->getLocale()->getLocale();
-            $language = $this->localeMapper->mapLocaleString($swLocaleString);
-
-            if (!$this->validateLanguage($language)) {
-                $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
-                return;
-            }
-
-            $this->setDbName();
             try {
+                $this->setAuthentication();
+
+                $swLocaleString = $context->getShop()->getLocale()->getLocale();
+                $language = $this->localeMapper->mapLocaleString($swLocaleString);
+
+                if (!$this->validateLanguage($language)) {
+                    $this->fallback($condition, $query, $context, FallbackModeEnum::ERROR);
+                    return;
+                }
+
+                $this->setDbName();
                 $result = $this->itemClient->searchItems($term, $language, ['size' => 1000]);
             } catch (\DomainException $e) {
                 $this->logger->error('API search returned an error', [
