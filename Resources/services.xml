@@ -122,6 +122,7 @@
             <argument id="cache" type="service"/>
             <argument id="events" type="service"/>
             <argument id="verign_ai_philos_search.logger" type="service"/>
+            <argument id="front" type="service"/>
         </service>
 
         <service class="VerignAiPhilosSearch\Components\SortingHandler\AiSearchRankingSortingHandler"
