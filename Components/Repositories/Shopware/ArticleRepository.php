@@ -32,6 +32,9 @@ class ArticleRepository implements ArticleRepositoryInterface
     /** @var array */
     private $attributeColumns = [];
 
+    /** @var int[] */
+    private $excludedCategoryIds = [];
+
     protected $articleDataQuery = '
         SELECT DISTINCTROW
           a.id AS articleId,
@@ -138,6 +141,7 @@ class ArticleRepository implements ArticleRepositoryInterface
         $conf = $configReader->getByPluginName('VerignAiPhilosSearch');
 
         $attrCols = isset($conf['attributeColumns']) && ($val = trim($conf['attributeColumns'])) ? $val : false;
+        $excludedCategoryIds = isset($conf['excludedCategoryIds']) ? $conf['excludedCategoryIds'] : false;
 
         if ($attrCols !== false) {
             $this->attributeColumns = array_map(function ($columnName) {
@@ -147,6 +151,15 @@ class ArticleRepository implements ArticleRepositoryInterface
 
                 return $columnName;
             }, explode(';', $attrCols));
+        }
+
+        if ($excludedCategoryIds !== false) {
+            array_map(function ($value) {
+                $value = (int) $value;
+                if ($value > 0) {
+                    $this->excludedCategoryIds[$value] = true;
+                }
+            }, explode(';', $excludedCategoryIds));
         }
 
     }
@@ -324,6 +337,12 @@ class ArticleRepository implements ArticleRepositoryInterface
         foreach ($articleCategories as $articleCategory) {
             $articleId = intval($articleCategory['articleID']);
             $categoryId = intval($articleCategory['categoryID']);
+
+            //Remove excluded categories, this pretends they don't exist!
+            if (isset($this->excludedCategoryIds[$categoryId]) && $this->excludedCategoryIds[$categoryId] === true) {
+                continue;
+            }
+
             if ($treeItem = (isset($categories[$categoryId]) ? $categories[$categoryId] : false)) {
                 if (isset($mappedTree[$articleId])) {
                     $mappedTree[$articleId][] = $treeItem;
