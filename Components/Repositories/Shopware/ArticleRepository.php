@@ -155,12 +155,7 @@ class ArticleRepository implements ArticleRepositoryInterface
         }
 
         if ($excludedCategoryIds !== false) {
-            array_map(function ($value) {
-                $value = (int) $value;
-                if ($value > 0) {
-                    $this->excludedCategoryIds[$value] = true;
-                }
-            }, explode(';', $excludedCategoryIds));
+            $this->excludedCategoryIds = array_map('intval', explode(';', $excludedCategoryIds));
         }
 
     }
@@ -334,15 +329,15 @@ class ArticleRepository implements ArticleRepositoryInterface
         $articleCategories = $this->getArticleCategories();
         $categories  = $this->getCategories($shopCategoryId);
 
+        //Remove excluded categories, this should have an recursive effect
+        foreach ($this->excludedCategoryIds as $categoryId) {
+            unset($categories[$categoryId]);
+        }
+
         $mappedTree = [];
         foreach ($articleCategories as $articleCategory) {
             $articleId = intval($articleCategory['articleID']);
             $categoryId = intval($articleCategory['categoryID']);
-
-            //Remove excluded categories, this pretends they don't exist!
-            if (isset($this->excludedCategoryIds[$categoryId]) && $this->excludedCategoryIds[$categoryId] === true) {
-                continue;
-            }
 
             if ($treeItem = (isset($categories[$categoryId]) ? $categories[$categoryId] : false)) {
                 if (isset($mappedTree[$articleId])) {
