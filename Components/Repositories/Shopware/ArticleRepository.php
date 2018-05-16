@@ -125,6 +125,7 @@ class ArticleRepository implements ArticleRepositoryInterface
     protected $categoryQuery =
         "SELECT id, parent, path, description FROM s_categories WHERE path LIKE '%|{{shopCatId}}|'
          AND active = TRUE
+         AND blog = FALSE 
          ORDER BY id DESC";
 
     protected $articlesCategoriesQuery = 'SELECT articleID, categoryID FROM s_articles_categories';
