@@ -218,13 +218,14 @@ class ArticleRepository implements ArticleRepositoryInterface
         $query .= $this->orderByClause;
 
         $preparedStatement = $this->db->prepare($query);
+        $preparedStatement->setFetchMode(\PDO::FETCH_ASSOC);
         $preparedStatement->execute($params);
 
-        $result = $preparedStatement->fetchAll(\PDO::FETCH_ASSOC);
+
         $mappedCategoryTree = $this->getArticleCategoriesByArticleId($shopCategoryId);
 
         $retval = [];
-        foreach ($result as $row) {
+        foreach ($preparedStatement as $row) {
             $articleId = intval($row['articleId']);
             if (!isset($mappedCategoryTree[$articleId])) {
                 continue;
