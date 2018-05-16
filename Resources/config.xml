@@ -27,7 +27,7 @@
         <element type="number" required="true" scope="shop">
             <name>salesMonths</name>
             <label lang="de">Anzahl der Monate für Bestseller</label>
-            <label lang="en">Number of months for beststellers</label>
+            <label lang="en">Number of months for bestsellers</label>
             <description lang="de">Die Verkaufsfrequenz der Artikel wird mit an die aiPhilos Datenbank übergeben, hier können sie festlegen, über wie viele Monate diese berechnet werden soll.</description>
             <description lang="en">The sales frequency of an article will be transmitted to the aiPhilos database. Here you can select the number of months for which said frequency will be calculated.</description>
         </element>

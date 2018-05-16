@@ -60,7 +60,7 @@ The name of the aiPhilos database used by the given subshop.
 This must be a unique name comprised of only upper and lower case letters from the English alphabet numbers and underscores. No shops must share the same database. 
 The database does not need to exist before being entered here, non-existent databases will be created.
 
-* Number of months for beststellers
+* Number of months for bestsellers
 
 To accurately judge search queries for popular and bestselling items aiPhilos needs to be provided a measurement for that, this plugin uses sales over a given period of time.
 Enter the number of months that should be considered for this measurement here.
@@ -75,13 +75,15 @@ Only use columns here that contain human readable text in the language that your
 
 * Excluded Category-IDs
 
-With this option you can exclude article within some categories from being sent to the aiPhilos database by entering the category-IDs as a semi-colon separated list.
+With this option you can exclude article within some categories from being sent to the aiPhilos database by entering the category-IDs as a semicolon separated list.
 
 This is useful if some third party plugins use categories to supply their functionality but which don't contain sensible article data.
 
 You can find the category-ID by clicking the desired category in Shopware's category manager and using the number that says "System-ID" next to it.
 
-It is not necessary to exclude categories from different subshops or blog catgeories manually, these are excluded automatically. 
+It is not necessary to exclude categories from different subshops or blog categories manually, as they are excluded automatically.
+
+When excluding a category all it's child-categories will be excluded as well.
 
 * Fallback Mode
 
@@ -109,7 +111,7 @@ This option exists mostly for the sake of completeness.
 
 Learning mode is best used when introducing aiPhilos search to an already existing Shopware shop. If it is activated search queries will not be sent to aiPhilos and instead, the default search is used. The rest of the plugin remains active for that subshop so the aiPhilos article database will be updated with your article data so aiPhilos can start learning your data. You can "peek" into what result aiPhilos would return while in Learning Mode by adding "&forceAi" to your search queries manually.
 
-For example your shop is hosted on "www.myshop.local" and you search want for "apple" then going to the URL "www.myshop.local/search?sSearch=apple&forceAi" would force the aiPhilos search to be used.
+For example your shop is hosted on "www.myshop.local" and you want to search for "apple" then going to the URL "www.myshop.local/search?sSearch=apple&forceAi" would force the aiPhilos search to be used.
 
 ### Cronjob Configuration
 
