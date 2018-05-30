@@ -200,4 +200,19 @@ abstract class AbstractTestCase extends TestCase
 
         return $mock;
     }
+
+    public function getFrontMock() {
+        $frontMock = $this->createMock(\Enlight_Controller_Front::class);
+
+        $requestMock = $this->createMock(\Enlight_Controller_Request_Request::class);
+
+        $requestMock
+            ->method('has')
+            ->willReturn(false);
+
+        $frontMock->method('Request')
+            ->willReturn($requestMock);
+
+        return $frontMock;
+    }
 }

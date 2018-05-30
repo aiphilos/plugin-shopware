@@ -29,7 +29,8 @@ class AiSearchTermConditionHandlerTest extends AbstractTestCase
                 $this->getItemClientMock($scheme->getProductNumberKey()),
                 $this->getCacheMock(),
                 $eventManager,
-                $logger
+                $logger,
+                $this->getFrontMock()
             );
         } catch (\Exception $e) {
             $exception = $e;
