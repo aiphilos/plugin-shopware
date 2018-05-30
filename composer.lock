@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae802f00eccf5d9a86ba4ea61dce339a",
+    "content-hash": "c03e2bd024fd108cfa3eaaed6efb2a86",
     "packages": [
         {
             "name": "aiphilos/api-sdk-php",
-            "version": "1.0.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aiphilos/api-sdk-php.git",
-                "reference": "c8ac24d3b23b0a226dbae91d3c1242cc1d3fa67e"
+                "reference": "01fd78b6279908976360e1de7159c1a11e37a592"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aiphilos/api-sdk-php/zipball/c8ac24d3b23b0a226dbae91d3c1242cc1d3fa67e",
-                "reference": "c8ac24d3b23b0a226dbae91d3c1242cc1d3fa67e",
+                "url": "https://api.github.com/repos/aiphilos/api-sdk-php/zipball/01fd78b6279908976360e1de7159c1a11e37a592",
+                "reference": "01fd78b6279908976360e1de7159c1a11e37a592",
                 "shasum": ""
             },
             "require": {
@@ -54,7 +54,7 @@
                 "ephilos",
                 "sdk"
             ],
-            "time": "2018-04-05T07:11:36+00:00"
+            "time": "2018-05-16T10:39:42+00:00"
         },
         {
             "name": "beberlei/DoctrineExtensions",
