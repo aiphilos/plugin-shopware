@@ -6,7 +6,7 @@
  * Time: 16:17
  */
 
-namespace VerignAiPhilosSearch\Components\Helpers;
+namespace AiphilosSearch\Components\Helpers;
 
 /**
  * Interface LocaleStringMapperInterface
@@ -17,7 +17,7 @@ namespace VerignAiPhilosSearch\Components\Helpers;
  *
  * It is that simple... for now
  *
- * @package VerignAiPhilosSearch\Components\Helpers
+ * @package AiphilosSearch\Components\Helpers
  */
 interface LocaleStringMapperInterface
 {

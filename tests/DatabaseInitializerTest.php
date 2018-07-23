@@ -6,11 +6,11 @@
  * Time: 16:20
  */
 
-namespace VerignAiPhilosSearch\tests;
+namespace AiphilosSearch\tests;
 
 use Shopware\Components\Logger;
-use VerignAiPhilosSearch\Components\Initializers\DatabaseInitializer;
-use VerignAiPhilosSearch\Components\Initializers\CreateResultEnum;
+use AiphilosSearch\Components\Initializers\DatabaseInitializer;
+use AiphilosSearch\Components\Initializers\CreateResultEnum;
 
 class DatabaseInitializerTest extends AbstractTestCase
 {
@@ -43,7 +43,7 @@ class DatabaseInitializerTest extends AbstractTestCase
     public function testCreateSchemeIfNotExist(DatabaseInitializer $init) {
         $result = null;
         $exception = null;
-        $config = $this->getConfigReaderMock()->getByPluginName('VerignAiPhilosSearch');
+        $config = $this->getConfigReaderMock()->getByPluginName('AiphilosSearch');
 
         try {
             $result = $init->createOrUpdateScheme('de-de', $config);

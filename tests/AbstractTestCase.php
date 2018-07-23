@@ -6,7 +6,7 @@
  * Time: 12:24
  */
 
-namespace VerignAiPhilosSearch\tests;
+namespace AiphilosSearch\tests;
 
 
 use Aiphilos\Api\Items\ClientInterface;
@@ -21,8 +21,8 @@ use Shopware\Components\Plugin\ConfigReader;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Components\Schemes\ArticleScheme;
+use AiphilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
+use AiphilosSearch\Components\Schemes\ArticleScheme;
 
 abstract class AbstractTestCase extends TestCase
 {
@@ -37,7 +37,7 @@ abstract class AbstractTestCase extends TestCase
     protected function getConfigReaderMock() {
         $mock = $this->createMock(ConfigReader::class);
         $mock->method('getByPluginName')
-            ->with('VerignAiPhilosSearch')
+            ->with('AiphilosSearch')
             ->willReturn([
                 'apiName' => 'test_name',
                 'apiPassword' => 'test_password',

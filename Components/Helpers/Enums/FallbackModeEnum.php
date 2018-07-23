@@ -6,7 +6,7 @@
  * Time: 12:08
  */
 
-namespace VerignAiPhilosSearch\Components\Helpers\Enums;
+namespace AiphilosSearch\Components\Helpers\Enums;
 
 
 final class FallbackModeEnum

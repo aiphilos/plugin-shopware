@@ -6,12 +6,12 @@
  * Time: 09:14
  */
 
-namespace VerignAiPhilosSearch\Subscriber;
+namespace AiphilosSearch\Subscriber;
 
 
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Logger;
-use VerignAiPhilosSearch\Components\Cron\DatabaseSynchronizerInterface;
+use AiphilosSearch\Components\Cron\DatabaseSynchronizerInterface;
 
 /**
  * Class Cron
@@ -19,7 +19,7 @@ use VerignAiPhilosSearch\Components\Cron\DatabaseSynchronizerInterface;
  * Listens to the event for the only cronjob of this plugin
  * and calls the appopriate service for database synchronization
  *
- * @package VerignAiPhilosSearch\Subscriber
+ * @package AiphilosSearch\Subscriber
  */
 class Cron implements SubscriberInterface
 {

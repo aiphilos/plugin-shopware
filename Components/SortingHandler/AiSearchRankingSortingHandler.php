@@ -6,7 +6,7 @@
  * Time: 11:55
  */
 
-namespace VerignAiPhilosSearch\Components\SortingHandler;
+namespace AiphilosSearch\Components\SortingHandler;
 
 
 use Shopware\Bundle\SearchBundle\Sorting\Sorting;

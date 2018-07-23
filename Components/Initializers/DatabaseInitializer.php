@@ -6,13 +6,13 @@
  * Time: 11:39
  */
 
-namespace VerignAiPhilosSearch\Components\Initializers;
+namespace AiphilosSearch\Components\Initializers;
 
 
 use Aiphilos\Api\Items\ClientInterface;
 use Shopware\Components\Logger;
-use VerignAiPhilosSearch\Components\Schemes\ArticleSchemeInterface;
-use VerignAiPhilosSearch\Components\Traits\ApiUserTrait;
+use AiphilosSearch\Components\Schemes\ArticleSchemeInterface;
+use AiphilosSearch\Components\Traits\ApiUserTrait;
 
 /**
  * Class DatabaseInitializer
@@ -22,7 +22,7 @@ use VerignAiPhilosSearch\Components\Traits\ApiUserTrait;
  * it performs no checks on whether this shop should actually use the API,
  * this check is to be performed by the consumers/users of this class.
  *
- * @package VerignAiPhilosSearch\Components\Initializers
+ * @package AiphilosSearch\Components\Initializers
  */
 class DatabaseInitializer implements DatabaseInitializerInterface
 {

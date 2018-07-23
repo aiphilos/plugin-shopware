@@ -6,7 +6,7 @@
  * Time: 15:47
  */
 
-namespace VerignAiPhilosSearch\Components\Helpers\Enums;
+namespace AiphilosSearch\Components\Helpers\Enums;
 
 
 final class PrimedSearchEventEnum

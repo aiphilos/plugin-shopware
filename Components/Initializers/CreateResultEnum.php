@@ -6,7 +6,7 @@
  * Time: 10:27
  */
 
-namespace VerignAiPhilosSearch\Components\Initializers;
+namespace AiphilosSearch\Components\Initializers;
 
 /**
  * Class CreateResultEnum
@@ -14,7 +14,7 @@ namespace VerignAiPhilosSearch\Components\Initializers;
  * This pseudo enum provides constants representing the result for the DatabaseInitializerInterface::createOrUpdate
  * interface.
  *
- * @package VerignAiPhilosSearch\Components\Initializers
+ * @package AiphilosSearch\Components\Initializers
  */
 final class CreateResultEnum
 {

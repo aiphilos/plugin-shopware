@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Shopware-Plugin AiphilosSearch.
  */
-class VerignAiPhilosSearch extends Plugin
+class AiphilosSearch extends Plugin
 {
 
     /**
@@ -22,7 +22,7 @@ class VerignAiPhilosSearch extends Plugin
      */
     public function build(ContainerBuilder $container)
     {
-        $container->setParameter('verign_ai_philos_search.plugin_dir', $this->getPath());
+        $container->setParameter('aiphilos_search.plugin_dir', $this->getPath());
         parent::build($container);
     }
 }

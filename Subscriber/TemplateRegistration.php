@@ -6,7 +6,7 @@
  * Time: 15:34
  */
 
-namespace VerignAiPhilosSearch\Subscriber;
+namespace AiphilosSearch\Subscriber;
 
 
 use Enlight\Event\SubscriberInterface;

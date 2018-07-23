@@ -6,13 +6,13 @@
  * Time: 14:22
  */
 
-namespace VerignAiPhilosSearch\tests;
+namespace AiphilosSearch\tests;
 
 
 use Aiphilos\Api\ContentTypesEnum;
-use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Components\Schemes\ArticleSchemeInterface;
-use VerignAiPhilosSearch\Components\Schemes\ArticleScheme;
+use AiphilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
+use AiphilosSearch\Components\Schemes\ArticleSchemeInterface;
+use AiphilosSearch\Components\Schemes\ArticleScheme;
 
 /**
  * Class ArticleSchemeTest
@@ -20,7 +20,7 @@ use VerignAiPhilosSearch\Components\Schemes\ArticleScheme;
  * These tests are entirely trivial now but it's good to already have the
  * test class around for future changes
  *
- * @package VerignAiPhilosSearch\tests
+ * @package AiphilosSearch\tests
  */
 class ArticleSchemeTest extends AbstractTestCase
 {

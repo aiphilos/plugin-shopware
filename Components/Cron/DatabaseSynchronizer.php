@@ -6,7 +6,7 @@
  * Time: 09:17
  */
 
-namespace VerignAiPhilosSearch\Components\Cron;
+namespace AiphilosSearch\Components\Cron;
 
 
 use Doctrine\DBAL\Connection;
@@ -16,10 +16,10 @@ use Shopware\Components\Plugin\ConfigReader;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
-use VerignAiPhilosSearch\Components\Helpers\LocaleStringMapperInterface;
-use VerignAiPhilosSearch\Components\Initializers\CreateResultEnum;
-use VerignAiPhilosSearch\Components\Initializers\DatabaseInitializerInterface;
-use VerignAiPhilosSearch\Components\Repositories\AiPhilos\ItemRepositoryInterface;
+use AiphilosSearch\Components\Helpers\LocaleStringMapperInterface;
+use AiphilosSearch\Components\Initializers\CreateResultEnum;
+use AiphilosSearch\Components\Initializers\DatabaseInitializerInterface;
+use AiphilosSearch\Components\Repositories\AiPhilos\ItemRepositoryInterface;
 
 /**
  * Class DatabaseSynchronizer
@@ -33,7 +33,7 @@ use VerignAiPhilosSearch\Components\Repositories\AiPhilos\ItemRepositoryInterfac
  *
  * It also deletes articles which are present in the api DB but no longer exist in Shopware
  *
- * @package VerignAiPhilosSearch\Components\Cron
+ * @package AiphilosSearch\Components\Cron
  */
 class DatabaseSynchronizer implements DatabaseSynchronizerInterface
 {
@@ -81,6 +81,7 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
 
 
     public function sync() {
+        /** @var Shop[] $shops */
         $shops = $this->getShops();
 
         $results = "Processing shops:" . PHP_EOL . PHP_EOL;
@@ -168,7 +169,7 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
     }
 
     private function getConfigForShop(Shop $shop) {
-        return $this->configReader->getByPluginName('VerignAiPhilosSearch', $shop);
+        return $this->configReader->getByPluginName('AiphilosSearch', $shop);
     }
 
     private function mapLocale(Locale $locale) {

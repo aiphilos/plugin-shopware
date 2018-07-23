@@ -6,10 +6,10 @@
  * Time: 12:08
  */
 
-namespace VerignAiPhilosSearch\Components\Schemes\Mappers;
+namespace AiphilosSearch\Components\Schemes\Mappers;
 
 
-use VerignAiPhilosSearch\Components\Schemes\ArticleSchemeInterface;
+use AiphilosSearch\Components\Schemes\ArticleSchemeInterface;
 
 /**
  * Class ArticleSchemeMapper
@@ -24,7 +24,7 @@ use VerignAiPhilosSearch\Components\Schemes\ArticleSchemeInterface;
  * except for the key '_action' as that is reserved for bulk API calls
  * and should only be set by the repository methods.
  *
- * @package VerignAiPhilosSearch\Components\Schemes\Mappers
+ * @package AiphilosSearch\Components\Schemes\Mappers
  */
 class ArticleSchemeMapper implements SchemeMapperInterface
 {

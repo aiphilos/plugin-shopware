@@ -6,13 +6,13 @@
  * Time: 15:26
  */
 
-namespace VerignAiPhilosSearch\Subscriber;
+namespace AiphilosSearch\Subscriber;
 
 
 use Aiphilos\Api\Items\ClientInterface;
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Logger;
-use VerignAiPhilosSearch\Components\Helpers\Enums\PrimedSearchEventEnum;
+use AiphilosSearch\Components\Helpers\Enums\PrimedSearchEventEnum;
 
 /**
  * Class SearchRating
@@ -21,7 +21,7 @@ use VerignAiPhilosSearch\Components\Helpers\Enums\PrimedSearchEventEnum;
  * Makes sure the initial and final state is correct and only rate actually send the
  * rating in applicable cases
  *
- * @package VerignAiPhilosSearch\Subscriber
+ * @package AiphilosSearch\Subscriber
  */
 class SearchRating implements SubscriberInterface
 {

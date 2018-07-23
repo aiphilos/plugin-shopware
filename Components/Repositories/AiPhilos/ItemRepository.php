@@ -6,17 +6,17 @@
  * Time: 12:20
  */
 
-namespace VerignAiPhilosSearch\Components\Repositories\AiPhilos;
+namespace AiphilosSearch\Components\Repositories\AiPhilos;
 
 
 use Aiphilos\Api\Items\ClientInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Locale;
-use VerignAiPhilosSearch\Components\Helpers\LocaleStringMapperInterface;
-use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Components\Schemes\Mappers\SchemeMapperInterface;
-use VerignAiPhilosSearch\Components\Schemes\ArticleSchemeInterface;
-use VerignAiPhilosSearch\Components\Traits\ApiUserTrait;
+use AiphilosSearch\Components\Helpers\LocaleStringMapperInterface;
+use AiphilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
+use AiphilosSearch\Components\Schemes\Mappers\SchemeMapperInterface;
+use AiphilosSearch\Components\Schemes\ArticleSchemeInterface;
+use AiphilosSearch\Components\Traits\ApiUserTrait;
 
 /**
  * Class ArticleRepository
@@ -27,7 +27,7 @@ use VerignAiPhilosSearch\Components\Traits\ApiUserTrait;
  *
  * TODO@later make sure all methods return results instead of general api return data
  *
- * @package VerignAiPhilosSearch\Components\Repositories\AiPhilos
+ * @package AiphilosSearch\Components\Repositories\AiPhilos
  */
 class ItemRepository implements ItemRepositoryInterface
 {

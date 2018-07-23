@@ -6,7 +6,7 @@
  * Time: 10:55
  */
 
-namespace VerignAiPhilosSearch\Components\Schemes;
+namespace AiphilosSearch\Components\Schemes;
 
 use Aiphilos\Api\ContentTypesEnum;
 
@@ -17,7 +17,7 @@ use Aiphilos\Api\ContentTypesEnum;
  * that matches the data that can be sensibly extracted from the default Shopware
  * article structure.
  *
- * @package VerignAiPhilosSearch\Components\Schemes
+ * @package AiphilosSearch\Components\Schemes
  */
 class ArticleScheme implements ArticleSchemeInterface
 {

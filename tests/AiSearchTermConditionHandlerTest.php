@@ -6,11 +6,11 @@
  * Time: 16:40
  */
 
-namespace VerignAiPhilosSearch\tests;
+namespace AiphilosSearch\tests;
 
 use Shopware\Components\Logger;
-use VerignAiPhilosSearch\Components\ConditionHandler\AiSearchTermConditionHandler;
-use VerignAiPhilosSearch\Components\Helpers\LocaleStringMapper;
+use AiphilosSearch\Components\ConditionHandler\AiSearchTermConditionHandler;
+use AiphilosSearch\Components\Helpers\LocaleStringMapper;
 
 class AiSearchTermConditionHandlerTest extends AbstractTestCase
 {

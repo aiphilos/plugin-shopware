@@ -6,14 +6,14 @@
  * Time: 15:32
  */
 
-namespace VerignAiPhilosSearch\tests\Shopware;
+namespace AiphilosSearch\tests\Shopware;
 
-use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepository;
-use VerignAiPhilosSearch\tests\AbstractTestCase;
+use AiphilosSearch\Components\Repositories\Shopware\ArticleRepository;
+use AiphilosSearch\tests\AbstractTestCase;
 
 /**
  * Class ArticleRepositoryTest
- * @package VerignAiPhilosSearch\tests
+ * @package AiphilosSearch\tests
  */
 class ArticleRepositoryTest extends AbstractTestCase
 {

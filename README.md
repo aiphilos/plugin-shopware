@@ -1,5 +1,5 @@
-# VerignAiPhilosSearch
-## About VerignAiPhilosSearch
+# AiphilosSearch
+## About AiphilosSearch
 This plugin provides an implementation of the [aiPhilos](https://aiphilos.com) product search for the [Shopware](https://shopware.com/) eCommerce platform.
 
 It provides synchronization between the Shopware product database and the aiPhilos database. It supports multiple shops and languages (one DB per shop/language, aiPhilos itself only supports German so far).
@@ -121,5 +121,5 @@ This cronjob should run at least once a day but it might be advisable to run it 
 
 ### Troubleshooting
 
-This plugin uses Shopware's logging system in most if not all critical spots of its components. If you are encountering issues while operating it make sure to first check the log files under "Configuration > Logfile > System Log". There you can select the file starting with "verign_ai_philos_search" and the appropriate date.
+This plugin uses Shopware's logging system in most if not all critical spots of its components. If you are encountering issues while operating it make sure to first check the log files under "Configuration > Logfile > System Log". There you can select the file starting with "aiphilos_search" and the appropriate date.
 Make sure to click the magnification glass to see the most the detailed information provided in the context field.

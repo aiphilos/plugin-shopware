@@ -6,7 +6,7 @@
  * Time: 14:40
  */
 
-namespace VerignAiPhilosSearch\Components\Repositories\Shopware;
+namespace AiphilosSearch\Components\Repositories\Shopware;
 
 
 use Shopware\Components\Plugin\ConfigReader;
@@ -22,7 +22,7 @@ use Shopware\Components\Plugin\ConfigReader;
  * This implementation is implicitly coupled withe the BasicArticleScheme and any change
  * here should be reflected in that class so the API can make proper sense of the data.
  *
- * @package VerignAiPhilosSearch\Components\Repositories\Shopware
+ * @package AiphilosSearch\Components\Repositories\Shopware
  */
 class ArticleRepository implements ArticleRepositoryInterface
 {
@@ -139,7 +139,7 @@ class ArticleRepository implements ArticleRepositoryInterface
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, ConfigReader $configReader) {
         $this->db = $db;
 
-        $conf = $configReader->getByPluginName('VerignAiPhilosSearch');
+        $conf = $configReader->getByPluginName('AiphilosSearch');
 
         $attrCols = isset($conf['attributeColumns']) && ($val = trim($conf['attributeColumns'])) ? $val : false;
         $excludedCategoryIds = isset($conf['excludedCategoryIds']) ? $conf['excludedCategoryIds'] : false;

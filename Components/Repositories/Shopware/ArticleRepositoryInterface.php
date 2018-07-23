@@ -6,7 +6,7 @@
  * Time: 12:13
  */
 
-namespace VerignAiPhilosSearch\Components\Repositories\Shopware;
+namespace AiphilosSearch\Components\Repositories\Shopware;
 
 /**
  * Interface ArticleRepositoryInterface
@@ -17,7 +17,7 @@ namespace VerignAiPhilosSearch\Components\Repositories\Shopware;
  * The format of the return data is logically coupled to what corresponding implementation of the ArticleSchemeInterface
  * provides.
  *
- * @package VerignAiPhilosSearch\Components\Repositories\Shopware
+ * @package AiphilosSearch\Components\Repositories\Shopware
  */
 interface ArticleRepositoryInterface
 {

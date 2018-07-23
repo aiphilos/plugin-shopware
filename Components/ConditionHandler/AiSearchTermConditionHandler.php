@@ -6,7 +6,7 @@
  * Time: 12:21
  */
 
-namespace VerignAiPhilosSearch\Components\ConditionHandler;
+namespace AiphilosSearch\Components\ConditionHandler;
 
 
 use Aiphilos\Api\Items\ClientInterface;
@@ -18,10 +18,10 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Logger;
 use Shopware\Components\Plugin\ConfigReader;
-use VerignAiPhilosSearch\Components\Helpers\Enums\FallbackModeEnum;
-use VerignAiPhilosSearch\Components\Helpers\Enums\PrimedSearchEventEnum;
-use VerignAiPhilosSearch\Components\Helpers\LocaleStringMapperInterface;
-use VerignAiPhilosSearch\Components\Traits\ApiUserTrait;
+use AiphilosSearch\Components\Helpers\Enums\FallbackModeEnum;
+use AiphilosSearch\Components\Helpers\Enums\PrimedSearchEventEnum;
+use AiphilosSearch\Components\Helpers\LocaleStringMapperInterface;
+use AiphilosSearch\Components\Traits\ApiUserTrait;
 
 /**
  * TODO: Test caching with multiple shops and customer groups
@@ -32,7 +32,7 @@ use VerignAiPhilosSearch\Components\Traits\ApiUserTrait;
  *
  * Can fallback to the default search if configured by the user to do so.
  *
- * @package VerignAiPhilosSearch\Components\ConditionHandler
+ * @package AiphilosSearch\Components\ConditionHandler
  */
 class AiSearchTermConditionHandler implements ConditionHandlerInterface
 {
@@ -76,7 +76,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         Logger $logger,
         \Enlight_Controller_Front $front
     ) {
-        $this->pluginConfig = $configReader->getByPluginName('VerignAiPhilosSearch');
+        $this->pluginConfig = $configReader->getByPluginName('AiphilosSearch');
         $this->localeMapper = $localeMapper;
         $this->itemClient = $itemsService;
         $this->cache = $cache;
@@ -199,7 +199,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         $groupId = $context->getCurrentCustomerGroup()->getId();
         $hash = hash('sha256', mb_strtolower($term) . '/shop_id:' . $shopId . '/group_id:' . $groupId);
 
-        return 'verign_ai_philos_search_search_term_' . $hash;
+        return 'aiphilos_search_search_term_' . $hash;
     }
 
     private function saveInCache($term, $value, ShopContextInterface $context) {

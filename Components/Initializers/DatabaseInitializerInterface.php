@@ -6,7 +6,7 @@
  * Time: 11:17
  */
 
-namespace VerignAiPhilosSearch\Components\Initializers;
+namespace AiphilosSearch\Components\Initializers;
 
 /**
  * Interface DatabaseInitializerInterface
@@ -14,7 +14,7 @@ namespace VerignAiPhilosSearch\Components\Initializers;
  * This interface ist to be implemented by all classes that provide the ability to create
  * or update the schema that is used for the data in the API database
  *
- * @package VerignAiPhilosSearch\Components\Initializers
+ * @package AiphilosSearch\Components\Initializers
  */
 interface DatabaseInitializerInterface
 {

@@ -6,7 +6,7 @@
  * Time: 12:30
  */
 
-namespace VerignAiPhilosSearch\Components\ModelConfiguration;
+namespace AiphilosSearch\Components\ModelConfiguration;
 
 
 use Doctrine\ORM\Repository\RepositoryFactory;
@@ -21,7 +21,7 @@ use DoctrineExtensions\Query\Mysql\Field;
  * This of course means that whatever implementation already exists must function properly for
  * this plugin to work.
  *
- * @package VerignAiPhilosSearch\Components\ModelConfiguration
+ * @package AiphilosSearch\Components\ModelConfiguration
  */
 class Configuration extends \Shopware\Components\Model\Configuration
 {

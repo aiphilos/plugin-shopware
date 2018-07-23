@@ -6,7 +6,7 @@
  * Time: 17:15
  */
 
-namespace VerignAiPhilosSearch\Components\Helpers;
+namespace AiphilosSearch\Components\Helpers;
 
 /**
  * Class LocaleStringMapper
@@ -16,7 +16,7 @@ namespace VerignAiPhilosSearch\Components\Helpers;
  * on the input format as all usages in the default implementations of this plugin
  * always provide the correct format to begin with... unless somebody screwed up of course.
  *
- * @package VerignAiPhilosSearch\Components\Helpers
+ * @package AiphilosSearch\Components\Helpers
  */
 class LocaleStringMapper implements LocaleStringMapperInterface
 {

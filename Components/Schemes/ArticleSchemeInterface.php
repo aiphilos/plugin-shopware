@@ -6,7 +6,7 @@
  * Time: 16:09
  */
 
-namespace VerignAiPhilosSearch\Components\Schemes;
+namespace AiphilosSearch\Components\Schemes;
 
 
 
@@ -16,7 +16,7 @@ namespace VerignAiPhilosSearch\Components\Schemes;
  * This interface is to be implemented by all classes that provide a scheme for the data
  * that is sent to the API database.
  *
- * @package VerignAiPhilosSearch\Components\Schemes
+ * @package AiphilosSearch\Components\Schemes
  */
 interface ArticleSchemeInterface
 {

@@ -9,7 +9,7 @@
         convertErrorsToExceptions="true"
         convertWarningsToExceptions="true"
 >
-<testsuite name="VerignAiPhilosSearch Test Suite">
+<testsuite name="AiphilosSearch Test Suite">
     <directory>tests</directory>
 </testsuite>
     <filter>

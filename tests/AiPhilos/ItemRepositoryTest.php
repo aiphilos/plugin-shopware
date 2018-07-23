@@ -5,14 +5,14 @@
  * Date: 13.11.17
  * Time: 15:06
  */
-namespace VerignAiPhilosSearch\tests\AiPhilos;
+namespace AiphilosSearch\tests\AiPhilos;
 
-use VerignAiPhilosSearch\Components\Helpers\LocaleStringMapper;
-use VerignAiPhilosSearch\Components\Repositories\AiPhilos\ItemRepositoryInterface;
-use VerignAiPhilosSearch\Components\Repositories\AiPhilos\ItemRepository;
-use VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
-use VerignAiPhilosSearch\Components\Schemes\Mappers\ArticleSchemeMapper;
-use VerignAiPhilosSearch\tests\AbstractTestCase;
+use AiphilosSearch\Components\Helpers\LocaleStringMapper;
+use AiphilosSearch\Components\Repositories\AiPhilos\ItemRepositoryInterface;
+use AiphilosSearch\Components\Repositories\AiPhilos\ItemRepository;
+use AiphilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
+use AiphilosSearch\Components\Schemes\Mappers\ArticleSchemeMapper;
+use AiphilosSearch\tests\AbstractTestCase;
 
 class ItemRepositoryTest extends AbstractTestCase
 {
@@ -54,7 +54,7 @@ class ItemRepositoryTest extends AbstractTestCase
      * @depends testCanInstantiate
      */
     public function testSetPluginConfig(ItemRepository $repository) {
-        $pluginConfig = $this->getConfigReaderMock()->getByPluginName('VerignAiPhilosSearch');
+        $pluginConfig = $this->getConfigReaderMock()->getByPluginName('AiphilosSearch');
         $exception = null;
 
         try {

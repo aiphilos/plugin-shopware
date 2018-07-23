@@ -6,7 +6,7 @@
  * Time: 11:15
  */
 
-namespace VerignAiPhilosSearch\Components\Repositories\AiPhilos;
+namespace AiphilosSearch\Components\Repositories\AiPhilos;
 
 /**
  * Interface ArticleRepositoryInterface
@@ -18,7 +18,7 @@ namespace VerignAiPhilosSearch\Components\Repositories\AiPhilos;
  *
  * All setters should be implemented as fluent setters.
  *
- * @package VerignAiPhilosSearch\Components\Repositories\AiPhilos
+ * @package AiphilosSearch\Components\Repositories\AiPhilos
  */
 interface ItemRepositoryInterface
 {

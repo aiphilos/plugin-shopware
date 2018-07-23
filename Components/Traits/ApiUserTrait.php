@@ -6,7 +6,7 @@
  * Time: 16:02
  */
 
-namespace VerignAiPhilosSearch\Components\Traits;
+namespace AiphilosSearch\Components\Traits;
 
 
 use Aiphilos\Api\Items\ClientInterface;
@@ -17,7 +17,7 @@ use Aiphilos\Api\Items\ClientInterface;
  * This trait provides basic functionality that is shared between all API users.
  * Any class that wishes to use the API should use this trait to make their lives easier.
  *
- * @package VerignAiPhilosSearch\Components\Traits
+ * @package AiphilosSearch\Components\Traits
  */
 trait ApiUserTrait
 {
@@ -32,7 +32,7 @@ trait ApiUserTrait
     /** @var array */
     protected $pluginConfig;
 
-    private $languageCacheId = 'verign_ai_philos_search_languages';
+    private $languageCacheId = 'aiphilos_search_languages';
 
     public function setAuthentication() {
         $verignRefId = null; // TODO@later hardcode referal ID once we have it

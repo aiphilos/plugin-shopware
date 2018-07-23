@@ -5,19 +5,19 @@
 
     <services>
         <!--Logger-->
-        <service id="monolog.handler.rotating_file.verign_ai_philos_search" class="Monolog\Handler\RotatingFileHandler"
+        <service id="monolog.handler.rotating_file.aiphilos_search" class="Monolog\Handler\RotatingFileHandler"
                  public="false">
-            <argument>%kernel.logs_dir%/verign_ai_philos_search_%kernel.environment%.log</argument>
+            <argument>%kernel.logs_dir%/aiphilos_search_%kernel.environment%.log</argument>
             <argument>14</argument>
             <call method="pushProcessor">
                 <argument type="service" id="monolog.processor.uid"/>
             </call>
         </service>
 
-        <service id="verign_ai_philos_search.logger" class="Shopware\Components\Logger">
+        <service id="aiphilos_search.logger" class="Shopware\Components\Logger">
             <argument>plugin</argument>
             <call method="pushHandler">
-                <argument type="service" id="monolog.handler.rotating_file.verign_ai_philos_search"/>
+                <argument type="service" id="monolog.handler.rotating_file.aiphilos_search"/>
             </call>
         </service>
 
@@ -29,113 +29,113 @@
         <service class="Aiphilos\Api\Semantics\Client" id="aiphilos.api.semantics.client">
         </service>
 
-        <service class="VerignAiPhilosSearch\Components\Helpers\LocaleStringMapper"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper">
+        <service class="AiphilosSearch\Components\Helpers\LocaleStringMapper"
+                 id="aiphilos_search_bundle_ai_philos_search.helpers.locale_string_mapper">
         </service>
 
-        <service class="VerignAiPhilosSearch\Components\Repositories\Shopware\ArticleRepository"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.repositories.shopware.article_repository">
+        <service class="AiphilosSearch\Components\Repositories\Shopware\ArticleRepository"
+                 id="aiphilos_search_bundle_ai_philos_search.repositories.shopware.article_repository">
             <argument id="db" type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Components\Schemes\ArticleScheme"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme">
+        <service class="AiphilosSearch\Components\Schemes\ArticleScheme"
+                 id="aiphilos_search_bundle_ai_philos_search.schemes.article_scheme">
         </service>
 
-        <service class="VerignAiPhilosSearch\Components\Schemes\Mappers\ArticleSchemeMapper"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper">
+        <service class="AiphilosSearch\Components\Schemes\Mappers\ArticleSchemeMapper"
+                 id="aiphilos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper">
         </service>
 
-        <service class="VerignAiPhilosSearch\Components\Repositories\AiPhilos\ItemRepository"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository">
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
+        <service class="AiphilosSearch\Components\Repositories\AiPhilos\ItemRepository"
+                 id="aiphilos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository">
+            <argument id="aiphilos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
             <argument id="aiphilos.api.items.client" type="service"/>
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.repositories.shopware.article_repository"
+            <argument id="aiphilos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
+            <argument id="aiphilos_search_bundle_ai_philos_search.repositories.shopware.article_repository"
                       type="service"/>
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper"
+            <argument id="aiphilos_search_bundle_ai_philos_search.schemes_mappers.article_scheme_mapper"
                       type="service"/>
             <argument id="cache" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Components\Initializers\DatabaseInitializer"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.initializers.database_initializer">
+        <service class="AiphilosSearch\Components\Initializers\DatabaseInitializer"
+                 id="aiphilos_search_bundle_ai_philos_search.initializers.database_initializer">
             <argument id="aiphilos.api.items.client" type="service"/>
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
+            <argument id="aiphilos_search_bundle_ai_philos_search.schemes.article_scheme" type="service"/>
             <argument id="cache" type="service"/>
-            <argument id="verign_ai_philos_search.logger" type="service"/>
+            <argument id="aiphilos_search.logger" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Components\ProductNumberSearch\RatedProductNumberSearch"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.product_number_search.rated_product_number_search"
+        <service class="AiphilosSearch\Components\ProductNumberSearch\RatedProductNumberSearch"
+                 id="aiphilos_search_bundle_ai_philos_search.product_number_search.rated_product_number_search"
                  decorates="shopware_search.product_number_search"
         >
             <argument
-                    id="verign_ai_philos_search_bundle_ai_philos_search.product_number_search.rated_product_number_search.inner"
+                    id="aiphilos_search_bundle_ai_philos_search.product_number_search.rated_product_number_search.inner"
                     type="service"
             />
             <argument id="events" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Components\Cron\DatabaseSynchronizer"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.cron.database_synchronizer">
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.initializers.database_initializer"
+        <service class="AiphilosSearch\Components\Cron\DatabaseSynchronizer"
+                 id="aiphilos_search_bundle_ai_philos_search.cron.database_synchronizer">
+            <argument id="aiphilos_search_bundle_ai_philos_search.initializers.database_initializer"
                       type="service"/>
             <argument id="models" type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository"
+            <argument id="aiphilos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
+            <argument id="aiphilos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository"
                       type="service"/>
-            <argument id="verign_ai_philos_search.logger" type="service"/>
+            <argument id="aiphilos_search.logger" type="service"/>
         </service>
 
         <!--Subscribers-->
-        <service class="VerignAiPhilosSearch\Subscriber\Cron" id="verign_ai_philos_search.subscriber.cron">
+        <service class="AiphilosSearch\Subscriber\Cron" id="aiphilos_search.subscriber.cron">
             <tag name="shopware.event_subscriber"/>
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.cron.database_synchronizer" type="service"/>
-            <argument id="verign_ai_philos_search.logger" type="service"/>
+            <argument id="aiphilos_search_bundle_ai_philos_search.cron.database_synchronizer" type="service"/>
+            <argument id="aiphilos_search.logger" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Subscriber\SearchRating"
-                 id="verign_ai_philos_search.subscriber.search_rating">
+        <service class="AiphilosSearch\Subscriber\SearchRating"
+                 id="aiphilos_search.subscriber.search_rating">
             <tag name="shopware.event_subscriber"/>
             <argument id="aiphilos.api.items.client" type="service"/>
-            <argument id="verign_ai_philos_search.logger" type="service"/>
+            <argument id="aiphilos_search.logger" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Subscriber\TemplateRegistration" id="verign_ai_philos_search.subscriber.template_registration">
+        <service class="AiphilosSearch\Subscriber\TemplateRegistration" id="aiphilos_search.subscriber.template_registration">
             <tag name="shopware.event_subscriber"/>
             <argument id="template" type="service"/>
         </service>
 
         <!--Search related handlers-->
-        <service class="VerignAiPhilosSearch\Components\ConditionHandler\AiSearchTermConditionHandler"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler"
+        <service class="AiphilosSearch\Components\ConditionHandler\AiSearchTermConditionHandler"
+                 id="aiphilos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler"
                  decorates="shopware_searchdbal.search_condition_handler_dbal">
             <argument
-                    id="verign_ai_philos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler.inner"
+                    id="aiphilos_search_bundle_ai_philos_search.condition_handler.ai_search_term_condition_handler.inner"
                     type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
-            <argument id="verign_ai_philos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
+            <argument id="aiphilos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
             <argument id="aiphilos.api.items.client" type="service"/>
             <argument id="cache" type="service"/>
             <argument id="events" type="service"/>
-            <argument id="verign_ai_philos_search.logger" type="service"/>
+            <argument id="aiphilos_search.logger" type="service"/>
             <argument id="front" type="service"/>
         </service>
 
-        <service class="VerignAiPhilosSearch\Components\SortingHandler\AiSearchRankingSortingHandler"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.sorting_handler.ai_search_ranking_sorting_handler"
+        <service class="AiphilosSearch\Components\SortingHandler\AiSearchRankingSortingHandler"
+                 id="aiphilos_search_bundle_ai_philos_search.sorting_handler.ai_search_ranking_sorting_handler"
                  decorates="shopware_searchdbal.search_ranking_sorting_handler_dbal">
             <argument
-                    id="verign_ai_philos_search_bundle_ai_philos_search.sorting_handler.ai_search_ranking_sorting_handler.inner"
+                    id="aiphilos_search_bundle_ai_philos_search.sorting_handler.ai_search_ranking_sorting_handler.inner"
                     type="service"/>
         </service>
 
         <!-- Configurations -->
-        <service class="VerignAiPhilosSearch\Components\ModelConfiguration\Configuration"
-                 id="verign_ai_philos_search_bundle_ai_philos_search.model_configuration.configuration"
+        <service class="AiphilosSearch\Components\ModelConfiguration\Configuration"
+                 id="aiphilos_search_bundle_ai_philos_search.model_configuration.configuration"
                  decorates="shopware.model_config">
             <argument>%shopware.Model%</argument>
             <argument type="service" id="cache"/>
