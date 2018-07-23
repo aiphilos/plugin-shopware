@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">AiPhilos Suche</label>
     <label lang="en">AiPhilos Suche</label>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <copyright>(c) by aiPhilos GmbH</copyright>
     <license>GPLv3</license>
     <link>https://www.designverign.de</link>
