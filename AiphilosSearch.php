@@ -3,7 +3,7 @@
  * TODO log all the things
  * TODO@later Better delta updates by memorizing changed articles since last run
  */
-namespace VerignAiPhilosSearch;
+namespace AiphilosSearch;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -11,7 +11,7 @@ use Shopware\Components\Plugin;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Shopware-Plugin VerignAiPhilosSearch.
+ * Shopware-Plugin AiphilosSearch.
  */
 class VerignAiPhilosSearch extends Plugin
 {
