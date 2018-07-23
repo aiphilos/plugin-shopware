@@ -39,7 +39,7 @@ class Cron implements SubscriberInterface
 
     public static function getSubscribedEvents() {
         return [
-            'Shopware_CronJob_VerignAiPhilosSearchSyncDatabase' => 'onSyncDatabase'
+            'Shopware_CronJob_AiphilosSearchSyncDatabase' => 'onSyncDatabase'
         ];
     }
 
