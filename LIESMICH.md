@@ -23,7 +23,7 @@ Packen Sie den Inhalt dieses Ordnern in eine Zipdatei und laden Sie ihn über Sh
 
 Von dort aus lässt sich das Plugin wie alle anderen Plugins installieren, deinstallieren, aktivieren etc.
 
-### NHinweis für Shopware Versionen < 5.2.15
+### Hinweis für Shopware Versionen < 5.2.15
 
 Das Shopware 5.2 Pluginsystem ist erst ab der Version 5.2.15 fähig, Cronjobs per cronjob.xml automatisch zu installieren.
 Sie können diesen nachträglich manuell installieren indem Sie unter "Einstellungen > Grundeinstellungen > System > Cronjobs" auf die Schaltfläche Hinzufügen klicken, als Namen "Update aiPhilos databases" und als Aktion "Shopware_CronJob_VerignAiPhilosSearchSyncDatabase" angeben.
