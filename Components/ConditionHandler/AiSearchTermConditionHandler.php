@@ -83,7 +83,8 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         $this->coreService = $coreService;
         $this->eventManager = $eventManager;
         $this->logger = $logger;
-        $this->userForcedAi = $front->Request()->has('forceAi');
+        $request = $front->Request();
+        $this->userForcedAi = $request ? $request->has('forceAi') : false;
     }
 
 
