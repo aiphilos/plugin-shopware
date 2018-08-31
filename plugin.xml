@@ -7,11 +7,16 @@
     <license>GPLv3</license>
     <link>https://www.designverign.de</link>
     <author>designverign GmbH</author>
+    <version>1.0.1</version>
 
     <compatibility minVersion="5.2.0" />
 
     <changelog version="1.0.0">
         <changes lang="de">Erste Veröffentlichung</changes>
         <changes lang="en">Initial Release</changes>
+    </changelog>
+    <changelog version="1.0.1">
+        <changes lang="de">Bugfix für crash bei Cronjob-Ausführung von Kommadnozeile</changes>
+        <changes lang="en">Bugfix for crash during cronjob execution when started from commandline</changes>
     </changelog>
 </plugin>
