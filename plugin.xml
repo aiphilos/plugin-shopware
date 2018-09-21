@@ -19,4 +19,8 @@
         <changes lang="de">Bugfix für crash bei Cronjob-Ausführung von Kommadnozeile</changes>
         <changes lang="en">Bugfix for crash during cronjob execution when started from commandline</changes>
     </changelog>
+
+    <requiredPlugins>
+        <requiredPlugin pluginName="Cron"/>
+    </requiredPlugins>
 </plugin>
