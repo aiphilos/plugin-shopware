@@ -38,7 +38,7 @@
             <description lang="de">Geben Sie hier die Spaltennamen der Freitextfelder als Semikolon-getrennte Liste ein, welche mit den Artikeldaten an die aiPhilos Datenbank übertragen werden sollen. Dies ist nur für menschenlesbare Texte sinnvoll, wie z.B. zusätzliche Beschreibungen.</description>
             <description lang="en">Enter a semicolon separated list of column names of the attributes you would like to transmit to the aiPhilos database here. This only makes sense for human readable texts such as additional descriptions.</description>
         </element>
-        <element>
+        <element type="text" required="false" scope="shop">
             <name>excludedCategoryIds</name>
             <label lang="de">Ausgeschlossene Kategorie-IDs</label>
             <label lang="en">Excluded Category-IDs</label>
