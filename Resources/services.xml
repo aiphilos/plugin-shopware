@@ -31,6 +31,10 @@
 
         <service class="AiphilosSearch\Components\Helpers\LocaleStringMapper"
                  id="aiphilos_search_bundle_ai_philos_search.helpers.locale_string_mapper">
+            <argument id="cache" type="service"/>
+            <argument id="aiphilos_search.logger" type="service"/>
+            <argument id="aiphilos.api.items.client" type="service"/>
+            <argument id="shopware.plugin.cached_config_reader" type="service"/>
         </service>
 
         <service class="AiphilosSearch\Components\Repositories\Shopware\ArticleRepository"

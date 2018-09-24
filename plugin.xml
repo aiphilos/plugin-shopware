@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">AiPhilos Suche</label>
     <label lang="en">AiPhilos Suche</label>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <copyright>(c) by aiPhilos GmbH</copyright>
     <license>GPLv3</license>
     <link>https://www.designverign.de</link>
@@ -16,8 +16,14 @@
         <changes lang="en">Initial Release</changes>
     </changelog>
     <changelog version="1.0.1">
-        <changes lang="de">Bugfix für crash bei Cronjob-Ausführung von Kommadnozeile</changes>
+        <changes lang="de">Bugfix für Crash bei Cronjob-Ausführung von Kommandozeile</changes>
         <changes lang="en">Bugfix for crash during cronjob execution when started from commandline</changes>
+    </changelog>
+    <changelog version="1.1.0">
+        <changes lang="de">Verbesserung der Mehrsprachigkeit</changes>
+        <changes lang="en">Improve multi-language support.</changes>
+        <changes lang="de">Ausgeschlossene Kategorien sind jetzt Subshop fähig</changes>
+        <changes lang="en">Excluded categories are now sub-shop capable</changes>
     </changelog>
 
     <requiredPlugins>
