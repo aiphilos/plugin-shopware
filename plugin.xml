@@ -28,6 +28,8 @@
     <changelog version="1.1.1">
         <changes lang="de">Fehler beim ignorieren von Kategorien behoben</changes>
         <changes lang="en">Fixed error with ignored categories</changes>
+        <changes lang="de">Mehere Korrekturen für Subshopfähigkeit</changes>
+        <changes lang="en">Multiple fixes for sub-shop capability</changes>
     </changelog>
 
     <requiredPlugins>
