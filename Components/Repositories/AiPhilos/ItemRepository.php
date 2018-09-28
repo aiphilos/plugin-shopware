@@ -151,7 +151,7 @@ class ItemRepository implements ItemRepositoryInterface
     }
 
     public function createArticles(array $articleIds) {
-        $articles = $this->articleRepository->getArticleData($articleIds, [], $this->locale, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
+        $articles = $this->articleRepository->getArticleData($this->pluginConfig, $articleIds, [], $this->locale, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
 
         $mappedArticles = $this->schemeMapper->map($this->scheme, $articles);
 
@@ -180,7 +180,7 @@ class ItemRepository implements ItemRepositoryInterface
     }
 
     public function updateArticles(array $articleIds) {
-        $articles = $this->articleRepository->getArticleData($articleIds, [], $this->locale, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
+        $articles = $this->articleRepository->getArticleData($this->pluginConfig, $articleIds, [], $this->locale, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
 
         $mappedArticles = $this->schemeMapper->map($this->scheme, $articles);
 

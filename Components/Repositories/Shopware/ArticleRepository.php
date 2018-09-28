@@ -125,7 +125,7 @@ class ArticleRepository implements ArticleRepositoryInterface
     protected $categoryQuery =
         "SELECT id, parent, path, description FROM s_categories WHERE path LIKE '%|{{shopCatId}}|'
          AND active = TRUE
-         AND blog = FALSE 
+         AND blog = FALSE
          ORDER BY id DESC";
 
     protected $articlesCategoriesQuery = 'SELECT articleID, categoryID FROM s_articles_categories';
@@ -134,15 +134,34 @@ class ArticleRepository implements ArticleRepositoryInterface
     /**
      * ArticleRepository constructor.
      * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param ConfigReader $configReader
      */
-    public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, ConfigReader $configReader) {
+    public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db) {
         $this->db = $db;
+    }
 
-        $conf = $configReader->getByPluginName('AiphilosSearch');
-
-        $attrCols = isset($conf['attributeColumns']) && ($val = trim($conf['attributeColumns'])) ? $val : false;
-        $excludedCategoryIds = isset($conf['excludedCategoryIds']) ? $conf['excludedCategoryIds'] : false;
+    /**
+     * @param array $pluginConfig
+     * @param array $idsToInclude
+     * @param array $idsToExclude
+     * @param int|string $locale
+     * @param string $priceGroup
+     * @param int $salesMonths
+     * @param int $shopCategoryId
+     * @return array
+     */
+    public function getArticleData(
+        array $pluginConfig,
+        array $idsToInclude = [],
+        array $idsToExclude = [],
+        $locale = 0,
+        $priceGroup = 'EK',
+        $salesMonths = 3,
+        $shopCategoryId = 3
+    ) {
+        $this->excludedCategoryIds = [];
+        $this->attributeColumns = [];
+        $attrCols = isset($pluginConfig['attributeColumns']) && ($val = trim($pluginConfig['attributeColumns'])) ? $val : false;
+        $excludedCategoryIds = isset($pluginConfig['excludedCategoryIds']) ? $pluginConfig['excludedCategoryIds'] : false;
 
         if ($attrCols !== false) {
             $this->attributeColumns = array_map(function ($columnName) {
@@ -155,28 +174,11 @@ class ArticleRepository implements ArticleRepositoryInterface
         }
 
         if ($excludedCategoryIds !== false) {
-            $this->excludedCategoryIds = array_map('intval', explode(';', $excludedCategoryIds));
+            $excludedCategoryIds = explode(';', $excludedCategoryIds);
+            foreach ($excludedCategoryIds as $excludedCategoryId) {
+                $this->excludedCategoryIds[] = intval($excludedCategoryId);
+            }
         }
-
-    }
-
-    /**
-     * @param array $idsToInclude
-     * @param array $idsToExclude
-     * @param int|string $locale
-     * @param string $priceGroup
-     * @param int $salesMonths
-     * @param int $shopCategoryId
-     * @return array
-     */
-    public function getArticleData(
-        array $idsToInclude = [],
-        array $idsToExclude = [],
-        $locale = 0,
-        $priceGroup = 'EK',
-        $salesMonths = 3,
-        $shopCategoryId = 3
-    ) {
         $query = $this->getQuery($this->articleDataQuery);
         $localeId = is_int($locale) ? $locale : $this->getLocaleId($locale);
         $params = [
@@ -227,7 +229,7 @@ class ArticleRepository implements ArticleRepositoryInterface
         $retval = [];
         foreach ($preparedStatement as $row) {
             $articleId = intval($row['articleId']);
-            if (!isset($mappedCategoryTree[$articleId])) {
+            if (!isset($mappedCategoryTree[$articleId]) || empty($mappedCategoryTree[$articleId])) {
                 continue;
             }
             $id = intval($row['_id']);
@@ -353,21 +355,39 @@ class ArticleRepository implements ArticleRepositoryInterface
     }
 
     private function getArticleCategories() {
-        return $this->db->fetchAll($this->articlesCategoriesQuery, [], \PDO::FETCH_ASSOC);
+        $prep = $this->db->prepare($this->articlesCategoriesQuery);
+        $prep->execute();
+        $result = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        foreach ($result as $i => $item) {
+            if (in_array((int) $item['categoryID'], $this->excludedCategoryIds, true)) {
+                unset($result[$i]);
+            }
+        }
+        return $result;
     }
 
     private function getCategories($shopCategoryId) {
         $query = str_replace('{{shopCatId}}', intval($shopCategoryId), $this->categoryQuery);
-        $cats = $this->db->fetchAll($query, [], \PDO::FETCH_ASSOC);
+        $prep = $this->db->prepare($query);
+        $prep->execute();
+        $cats = $prep->fetchAll(\PDO::FETCH_ASSOC);
 
         $categoryStructureById = [];
-        foreach ($cats as $category) {
-            $id = Intval($category['id']);
+        foreach ($cats as $i => $category) {
+            $id = intval($category['id']);
             $name = $category['description'];
             $pathIds = array_reverse(explode('|', $category['path']));
+            $pIdsInt = [];
+            foreach ($pathIds as $pid) {
+                $pid = (int) $pid;
+                if (in_array($pid, $this->excludedCategoryIds, true)) {
+                    continue 2;
+                }
+                $pIdsInt[] = $pid;
+            }
             $categoryStructureById[$id] = [
                 'id' => $id,
-                'pathIds' => $pathIds,
+                'pathIds' => $pIdsInt,
                 'name' => $name
             ];
         }
@@ -375,14 +395,13 @@ class ArticleRepository implements ArticleRepositoryInterface
 
         $returnTree = [];
         foreach ($categoryStructureById as $id => $categoryStructure) {
+
             $returnTree[$id] = [];
             foreach ($categoryStructure['pathIds'] as $pathId) {
                 //Possible because path has trailing delimiters
                 if (!$pathId) {
                     continue;
                 }
-
-                $pathId = intval($pathId);
 
                 $parentStructure = $categoryStructureById[$pathId];
                 //Possible because the root category itself is not included as it generally has no informational value

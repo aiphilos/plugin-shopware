@@ -22,6 +22,7 @@ namespace AiphilosSearch\Components\Repositories\Shopware;
 interface ArticleRepositoryInterface
 {
     /**
+     * @param array $pluginConfig
      * @param array $idsToInclude
      * @param array $idsToExclude
      * @param int|string $locale
@@ -31,6 +32,7 @@ interface ArticleRepositoryInterface
      * @return array
      */
     public function getArticleData(
+        array $pluginConfig,
         array $idsToInclude = [],
         array $idsToExclude = [],
         $locale = 0,
