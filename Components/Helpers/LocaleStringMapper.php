@@ -80,7 +80,7 @@ class LocaleStringMapper implements LocaleStringMapperInterface
         switch (count($candidates)) {
             //If nothing matches, stick with the original
             case 0: return $formattedLocale;
-            case 1: return$candidates[0];
+            case 1: return $prefix . '-' . $candidates[0];
             default:
                 $minDist = -1;
                 $closestSuffix = '';
