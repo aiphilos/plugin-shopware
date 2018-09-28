@@ -118,6 +118,9 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        if (!$this->pluginConfig['useAiSearch']) {
+            $this->coreService->generateCondition($condition, $query, $context);
+        }
         /**@var SearchTermCondition $condition */
         $term = $condition->getTerm();
 
