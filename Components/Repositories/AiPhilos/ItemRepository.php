@@ -154,6 +154,7 @@ class ItemRepository implements ItemRepositoryInterface
         $articles = $this->articleRepository->getArticleData($this->pluginConfig, $articleIds, [], $this->locale, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
 
         $mappedArticles = $this->schemeMapper->map($this->scheme, $articles);
+        unset($articles);
 
         foreach ($mappedArticles as &$mappedArticle) {
             $mappedArticle['_action'] = 'POST';
@@ -183,6 +184,7 @@ class ItemRepository implements ItemRepositoryInterface
         $articles = $this->articleRepository->getArticleData($this->pluginConfig, $articleIds, [], $this->locale, $this->priceGroup, $this->salesMonths, $this->shopCategoryId);
 
         $mappedArticles = $this->schemeMapper->map($this->scheme, $articles);
+        unset($articles);
 
         foreach ($mappedArticles as &$mappedArticle) {
             $mappedArticle['_action'] = 'PUT';

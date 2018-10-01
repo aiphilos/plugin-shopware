@@ -204,20 +204,23 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
             }
         }
         //Try to immediately regain some memory in case of a big old bowl of articles
-        unset($existingArticle);
+        unset($existingArticles, $existingArticle);
 
         if (count($existingIds) > 0) {
             $this->aiRepository->updateArticles($existingIds);
         }
 
         $newIds = $this->getArticleIds($existingIds, $shopCategoryId);
+        unset($existingIds, $shopCategoryId);
 
         if (count($newIds) > 0) {
             $this->aiRepository->createArticles($newIds);
+            unset($newIds);
         }
 
         if (count($idsToDelete) > 0) {
             $this->aiRepository->deleteArticles($idsToDelete);
+            unset($idsToDelete);
         }
 
 

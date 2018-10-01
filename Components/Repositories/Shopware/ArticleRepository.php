@@ -414,6 +414,7 @@ class ArticleRepository implements ArticleRepositoryInterface
             unset($categoryStructure['pathIds']);
             $returnTree[$id][] = $categoryStructure;
         }
+        unset($categoryStructureById);
 
         return $returnTree;
     }

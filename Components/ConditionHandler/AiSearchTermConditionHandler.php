@@ -16,12 +16,14 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Logger;
 use Shopware\Components\Plugin\ConfigReader;
 use AiphilosSearch\Components\Helpers\Enums\FallbackModeEnum;
 use AiphilosSearch\Components\Helpers\Enums\PrimedSearchEventEnum;
 use AiphilosSearch\Components\Helpers\LocaleStringMapperInterface;
 use AiphilosSearch\Components\Traits\ApiUserTrait;
+use Shopware\Models\Shop\Shop;
 
 /**
  * TODO: Test caching with multiple shops and customer groups
@@ -76,7 +78,9 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         Logger $logger,
         \Enlight_Controller_Front $front
     ) {
-        $this->pluginConfig = $configReader->getByPluginName('AiphilosSearch');
+        //Necessary because otherwise the wrong config will be read
+        $shop = Shopware()->Container()->get('shop', Container::NULL_ON_INVALID_REFERENCE);
+        $this->pluginConfig = $configReader->getByPluginName('AiphilosSearch', $shop);
         $this->localeMapper = $localeMapper;
         $this->itemClient = $itemsService;
         $this->cache = $cache;
