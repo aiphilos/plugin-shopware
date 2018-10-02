@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">AiPhilos Suche</label>
     <label lang="en">AiPhilos Suche</label>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <copyright>(c) by aiPhilos GmbH</copyright>
     <license>GPLv3</license>
     <link>https://www.designverign.de</link>
@@ -36,6 +36,10 @@
         <changes lang="en">Bugfix for sub-shop capability</changes>
         <changes lang="de">Verbesserung beim Umgang mit großen Datenmengen</changes>
         <changes lang="en">Improvements when handling large amounts of data</changes>
+    </changelog>
+    <changelog version="1.1.3">
+        <changes lang="de">Live Suche wird nun um eine Sekunde verzögert</changes>
+        <changes lang="en">Live search is now delayed by one second</changes>
     </changelog>
 
     <requiredPlugins>
