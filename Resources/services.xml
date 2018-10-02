@@ -29,6 +29,11 @@
         <service class="Aiphilos\Api\Semantics\Client" id="aiphilos.api.semantics.client">
         </service>
 
+        <service class="AiphilosSearch\Subscriber\FrontendResources" id="aiphilos_search.subscriber.frontend_resources">
+            <tag name="shopware.event_subscriber"/>
+            <argument>%aiphilos_search.view_dir%</argument>
+        </service>
+
         <service class="AiphilosSearch\Components\Helpers\LocaleStringMapper"
                  id="aiphilos_search_bundle_ai_philos_search.helpers.locale_string_mapper">
             <argument id="cache" type="service"/>

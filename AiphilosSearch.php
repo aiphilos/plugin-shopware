@@ -23,6 +23,10 @@ class AiphilosSearch extends Plugin
     public function build(ContainerBuilder $container)
     {
         $container->setParameter('aiphilos_search.plugin_dir', $this->getPath());
+        $container->setParameter(
+            'aiphilos_search.view_dir',
+            $this->getPath() . '/Resources/views/'
+        );
         parent::build($container);
     }
 }
