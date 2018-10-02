@@ -80,6 +80,12 @@
             <description lang="en">The learning mode prevents the AI search from actually being used while the AI is still learning about your products. You can still force the AI Search by appending "&amp;forceAi" to the search query to compare results with the default search.</description>
             <description lang="de">Der Lernmodus verhindert, dass Suchanfragen tatsächlich an die KI Suche gehen, während diese über Ihren Produkstamm noch analysiert. Sie können die KI Suche trotzdem erzwingen, indem Sie "&amp;forceAi" an den Suchquery anhängen um die Ergebnisse mit der Standardsuche zu vergleichen.</description>
         </element>
+        <element type="number" scope="shop">
+            <name>searchDelay</name>
+            <label lang="en">Delay for live search in milliseconds</label>
+            <label lang="de">Verzögerung für Live Suche in Millisekunden</label>
+            <value>750</value>
+        </element>
     </elements>
 
 </config>

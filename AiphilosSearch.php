@@ -8,6 +8,9 @@ namespace AiphilosSearch;
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Shopware\Components\Plugin;
+use Shopware\Components\Plugin\Context\ActivateContext;
+use Shopware\Components\Plugin\Context\DeactivateContext;
+use Shopware\Components\Plugin\Context\UpdateContext;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**

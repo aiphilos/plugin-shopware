@@ -41,6 +41,10 @@
         <changes lang="de">Live Suche wird nun um eine Sekunde verzögert</changes>
         <changes lang="en">Live search is now delayed by one second</changes>
     </changelog>
+    <changelog version="1.1.4">
+        <changes lang="de">Verzögerung für Live Suche nun konfigurierbar (Vorgabewert: 750ms)</changes>
+        <changes lang="en">Live search delay can now be configured (Default: 750ms)</changes>
+    </changelog>
 
     <requiredPlugins>
         <requiredPlugin pluginName="Cron"/>
