@@ -273,14 +273,18 @@ class ArticleRepository implements ArticleRepositoryInterface
                 $retval[$id]['properties'][$propertyId]['values'][$propertyValueId] = $row['propertyValue'];
             }
 
+            $attributes = [];
             foreach ($row as $key => $value) {
                 if (
                     strpos($key, 'attribute_') === 0 &&
                     ($value = mb_substr(trim(strip_tags($value)), 0, 63999, 'UTF-8')) !== ''
                 ) {
-                    $retval[$id]['attributes'][] = $value;
+                    $attributes[] = $value;
                 }
             }
+
+            $attributes = array_unique($attributes, \SORT_STRING);
+            $retval[$id]['attributes'] = $attributes;
 
         }
 
@@ -295,7 +299,9 @@ class ArticleRepository implements ArticleRepositoryInterface
                 $denseProperties[] = $densePropertyValues;
             }
 
-            $item['properties'] = $denseProperties;
+            $item['properties'] = $this->flattenProperties($denseProperties);
+            $item['categories']  = $this->flattenCategories($item['categories']);
+            $item['options'] = $this->flattenOptions($item['options']);
         }
 
         return $retval;
@@ -429,5 +435,58 @@ class ArticleRepository implements ArticleRepositoryInterface
         $id = $prep->fetchColumn(0);
 
         return intval($id);
+    }
+
+    /**
+     * Workaround method for unindexed fields
+     * @param $categories
+     * @return array
+     */
+    private function flattenCategories($categories)
+    {
+        $flatCategories = [];
+        foreach ($categories as $categoryHierarchy) {
+            $hierarchy = [];
+
+            foreach ($categoryHierarchy as $categoryInfo) {
+                $hierarchy[] = $categoryInfo['name'];
+            }
+            $flatCategories[] = implode(', ', $hierarchy);
+        }
+
+        return $flatCategories;
+    }
+
+    /**
+     * Workaround method for unindexed fields
+     * @param $properties
+     * @return array
+     */
+    private function flattenProperties($properties)
+    {
+        $flatProperties = [];
+        foreach ($properties as $property) {
+            $name = $property['name'];
+            foreach ($property['values'] as $value) {
+                $flatProperties[] = $name . ': ' . $value;
+            }
+        }
+
+        return $flatProperties;
+    }
+
+    /**
+     * Workaround method for unindexed fields
+     * @param $options
+     * @return array
+     */
+    private function flattenOptions($options)
+    {
+        $flatOptions = [];
+        foreach ($options as $optionName => $optionValue) {
+            $flatOptions[] = $optionName . ': ' . $optionValue;
+        }
+
+        return $flatOptions;
     }
 }
