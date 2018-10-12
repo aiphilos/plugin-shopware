@@ -90,6 +90,8 @@
             <argument id="aiphilos_search_bundle_ai_philos_search.helpers.locale_string_mapper" type="service"/>
             <argument id="aiphilos_search_bundle_ai_philos_search.repositories_ai_philos.article_repository"
                       type="service"/>
+            <argument id="aiphilos_search_bundle_ai_philos_search.repositories.shopware.article_repository"
+                      type="service"/>
             <argument id="aiphilos_search.logger" type="service"/>
         </service>
 

@@ -9,11 +9,10 @@
 namespace AiphilosSearch\Components\Cron;
 
 
-use Doctrine\DBAL\Connection;
+use AiphilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
 use Shopware\Components\Logger;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\ConfigReader;
-use Shopware\Models\Article\Detail;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use AiphilosSearch\Components\Helpers\LocaleStringMapperInterface;
@@ -51,8 +50,12 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
 
     /** @var ItemRepositoryInterface */
     private $aiRepository;
+
     /** @var Logger  */
     private $logger;
+
+    /** @var ArticleRepositoryInterface */
+    private $shopwareRepository;
 
     /**
      * DatabaseSynchronizer constructor.
@@ -61,6 +64,7 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
      * @param ConfigReader $configReader
      * @param LocaleStringMapperInterface $localeMapper
      * @param ItemRepositoryInterface $aiRepository
+     * @param ArticleRepositoryInterface $shopwareRepository
      * @param Logger $logger
      */
     public function __construct(
@@ -69,6 +73,7 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
         ConfigReader $configReader,
         LocaleStringMapperInterface $localeMapper,
         ItemRepositoryInterface $aiRepository,
+        ArticleRepositoryInterface $shopwareRepository,
         Logger $logger
     ) {
         $this->databaseInitializer = $databaseInitializer;
@@ -76,6 +81,7 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
         $this->configReader = $configReader;
         $this->localeMapper = $localeMapper;
         $this->aiRepository = $aiRepository;
+        $this->shopwareRepository = $shopwareRepository;
         $this->logger = $logger;
     }
 
@@ -176,6 +182,11 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
         return $this->localeMapper->mapLocaleString($locale->getLocale());
     }
 
+    /**
+     *
+     * @param Shop $shop
+     * @param array $config
+     */
     private function updateDB(Shop $shop, array $config) {
         $shopCategoryId = $shop->getCategory()->getId();
         $this->aiRepository->setPriceGroup($shop->getCustomerGroup()->getKey());
@@ -190,27 +201,27 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
             $existingArticles = [];
         }
 
-        $allShopwareIdsForShop = $this->getArticleIds([], $shopCategoryId);
+        $allShopwareIdsForShop = $this->getArticleIds($shopCategoryId, $config);
         $idsToDelete = [];
         $existingIds = [];
         foreach ($existingArticles as $existingArticle) {
             $id = intval($existingArticle['_id']);
             if ($id > 0) {
-                if (array_search($id, $allShopwareIdsForShop, true) === false) {
-                    $idsToDelete[] = $id;
-                } else {
+                if (isset($allShopwareIdsForShop[$id])) {
                     $existingIds[] = $id;
+                } else {
+                    $idsToDelete[] = $id;
                 }
             }
         }
         //Try to immediately regain some memory in case of a big old bowl of articles
-        unset($existingArticles, $existingArticle);
+        unset($allShopwareIdsForShop, $existingArticles, $existingArticle);
 
         if (count($existingIds) > 0) {
             $this->aiRepository->updateArticles($existingIds);
         }
 
-        $newIds = $this->getArticleIds($existingIds, $shopCategoryId);
+        $newIds = $this->getArticleIds($shopCategoryId, $config, $existingIds);
         unset($existingIds, $shopCategoryId);
 
         if (count($newIds) > 0) {
@@ -226,26 +237,23 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
 
     }
 
-    private function getArticleIds(array $excludedIds = [], $shopCategoryId) {
-        $qb = $this->modelManager->getRepository(Detail::class)
-            ->createQueryBuilder('d')
-            ->select('d.id')
-            ->distinct(true)
-            ->join('d.article', 'a')
-            ->join('a.categories', 'c')
-            ->where('a.active = true')
-            ->andWhere('d.active = true')
-            ->andWhere("c.path LIKE '%|".intval($shopCategoryId)."|'");
+    private function getArticleIds($shopCategoryId, array $config, array $excludedIds = []) {
+        $articles = $this->shopwareRepository->getArticleData(
+            $config,
+            [],
+            $excludedIds,
+            [],
+            'EK',
+            1,
+            $shopCategoryId
+        );
 
-        if (count($excludedIds) > 0) {
-            $qb->andWhere('d.id NOT IN ( :excludedIds )')
-                ->setParameter('excludedIds', $excludedIds, Connection::PARAM_INT_ARRAY);
+        $ids = [];
+        foreach ($articles as $article) {
+            $id = (int) $article['_id'];
+            $ids[$id] = $id;
         }
-
-        $ids = $qb->getQuery()
-            ->getArrayResult();
-
-        $ids = array_map('current', $ids);
+        unset($articles);
 
         return $ids;
     }
