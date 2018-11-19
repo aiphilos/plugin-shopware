@@ -18,23 +18,24 @@ Please see [License File](LICENSE.md) for more information.
 
 First make sure you are running at least Shopware Version 5.2.0.
 
-Zip the contents of this folder and upload it to your Shopware installation via plugin manager.
+If "vendor" directory in project directory is missing or empty, it is necessary to install dependencies via "composer install".
+Create a folder named "AiphilosSearch", copy the contents of the project-folder (including vendor directory) into it and then zip the whole folder.
+Upload created zip file to your Shopware installation via plugin manager.
 
 From there, the plugin can be installed, activated and uninstalled like any other plugin.
 
 ### Note for Shopware versions < 5.2.15
 
-The Shopware 5.2 plugin system was unable to install cronjobs from the included cronjob.xml. You can fix this manually by going to "Configuration > Basic settings > System > Cronjobs" in the Shopware backend. There you can create a new cron job by clicking the "Add entry" button, name it "Update aiPhilos databases" or something similar and enter "Shopware_CronJob_VerignAiPhilosSearchSyncDatabase" as the action. Set it to run at least once a day but don't activate it before you haven't properly configured the plugin (see below).
+The Shopware 5.2 plugin system was unable to install cronjobs from the included cronjob.xml. You can fix this manually by going to "Configuration > Basic settings > System > Cronjobs" in the Shopware backend. There you can create a new cron job by clicking the "Add entry" button, name it "Update aiPhilos databases" or something similar and enter "Shopware_CronJob_AiphilosSearchSyncDatabase" as the action. Set it to run at least once a day but don't activate it before you haven't properly configured the plugin (see below).
 
 ## Configuration
 
 ### Shopware configuration
 
 To not use up your search requests with aiPhilos it is highly recommended that you set the minimum search term length higher than Shopware's default 3 characters to a minimum of 5.
-This is especially important because of the AJAX live search that starts searching as soon as the user starts typing which will use up your search queries too quickly and not produce good results with just three characters.
+This is especially important because of the AJAX live search that starts searching as soon as the user starts typing, which will use up your included search queries too quickly, while not producing good results with just three characters.
 
 You can find this option under "Configuration > Basic Settings > Frontend > Search" under the confusing name "Maximum search term length" (it actually correctly means the minimum).
-
 
 ### Plugin configuration
 Open the plugin configuration in Shopware's plugin manager.
@@ -54,7 +55,7 @@ Shared between all subshops.
 The password provided by aiPhilos for your username.
 Shared between all subshops.
 
-* aiPhilos Database Name
+* aiPhilos Database name
 
 The name of the aiPhilos database used by the given subshop. 
 This must be a unique name comprised of only upper and lower case letters from the English alphabet numbers and underscores. No shops must share the same database. 
@@ -65,7 +66,7 @@ The database does not need to exist before being entered here, non-existent data
 To accurately judge search queries for popular and bestselling items aiPhilos needs to be provided a measurement for that, this plugin uses sales over a given period of time.
 Enter the number of months that should be considered for this measurement here.
 
-* Attribute Columns
+* Attribute columns
 
 You can optionally also provide a semicolon separated list of article attributes (free text fields) that should also be send to the aiPhilos database. To add columns, enter them here exactly as they appear under column name in Shopware's free text field management for the table "s_articles_attributes".
 Let's say you want to add the columns "Comment" stored as the column "attr1" and "Additional Description" stored as column "additional_description".

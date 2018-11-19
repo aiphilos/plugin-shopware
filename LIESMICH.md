@@ -2,10 +2,9 @@
 ## Über AiphilosSearch
 Dieses Plugin bietet eine Implementierung der [aiPhilos](https://aiphilos.com) Produktsuche für die [Shopware](https://shopware.com/) eCommerce platform.
 
-Es bietet die Synchonisierung zwischen der Shopware Produktdatenbank und der aiPhilos Datenbank. Es unterstützt mehrere Subshops sowie Sprachen (Eine DB Pro Shop/Sprache, momentan unterstützt aiPhilos nur die Deutsche Sprache).
+Es bietet die Synchonisierung zwischen der Shopware Produktdatenbank und der aiPhilos Datenbank. Es unterstützt mehrere Subshops sowie Sprachen (Eine DB pro Shop/Sprache, momentan unterstützt aiPhilos nur die Deutsche Sprache).
 
-
-Sucheregebnisse werden über die aiPhilos API ermittelt jedoch wird die Shopware Standardsuche noch verwendet und benötigt.
+Suchergebnisse werden über die aiPhilos API ermittelt, jedoch wird die Shopware Standardsuche weiterhin verwendet und benötigt.
 
 Kompatibilität mit anderen Plugins welche die Suche erweitern oder ersetzen ist nicht gewährleistet.
 
@@ -19,14 +18,16 @@ Weitere Informationen befinden sich in der [Lizenzdatei](LICENSE.md).
 
 Stellen Sie sicher das Sie mindestens Shopware Version 5.2.0 verwenden.
 
-Packen Sie den Inhalt dieses Ordnern in eine Zipdatei und laden Sie ihn über Shopwares Plugin Manager in Ihren Shop hoch.
+Wenn der "vendor" Ordner fehlt oder leer ist, müssen die Abhängigkeiten per "composer install" installiert werden.
+Erstellen Sie einen Ordner namens "AiphilosSearch", kopieren Sie den Inhalt dieses Projektordners (inklusive Vendor Ordner) hinein und zippen Sie den erstellten Ordner im Anschluss.
+Laden Sie die erstelle ZIP-Datei über Shopwares Plugin Manager in Ihren Shop hoch.
 
 Von dort aus lässt sich das Plugin wie alle anderen Plugins installieren, deinstallieren, aktivieren etc.
 
 ### Hinweis für Shopware Versionen < 5.2.15
 
 Das Shopware 5.2 Pluginsystem ist erst ab der Version 5.2.15 fähig, Cronjobs per cronjob.xml automatisch zu installieren.
-Sie können diesen nachträglich manuell installieren indem Sie unter "Einstellungen > Grundeinstellungen > System > Cronjobs" auf die Schaltfläche Hinzufügen klicken, als Namen "Update aiPhilos databases" und als Aktion "Shopware_CronJob_VerignAiPhilosSearchSyncDatabase" angeben.
+Sie können diesen nachträglich manuell installieren indem Sie unter "Einstellungen > Grundeinstellungen > System > Cronjobs" auf die Schaltfläche Hinzufügen klicken, als Namen "Update aiPhilos databases" und als Aktion "Shopware_CronJob_AiphilosSearchSyncDatabase" angeben.
 Stellen Sie den Cronjob so ein, dass er mindestens einmal täglich läuft, aktivieren Sie ihn jedoch noch nicht, bevor Sie nicht das Plugin korrekt konfiguriert haben (siehe unten).
 
 ## Konfiguration
@@ -34,7 +35,7 @@ Stellen Sie den Cronjob so ein, dass er mindestens einmal täglich läuft, aktiv
 ### Shopware Konfiguration
 
 Damit Sie nicht Ihr Kontigent an Suchaufrufen grundlos verbrauchen, ist es absolut ratsam die minimale Suchwortlänge in Shopware von 3 Zeichen auf mindestens 5 zu erhöhen.
-Dies ist besonders wichtig, da die AJAX Live Suche ansonsten schon bei zu kurzen Benutzereingaben Suchen abfeuert und somit Ihre Anfragen verbraucht mit Eingaben, die zu kurz sind um sinnvoll ausgewertet werden zu können.
+Dies ist besonders wichtig, da die AJAX Live Suche ansonsten schon bei zu kurzen Benutzereingaben Suchen abfeuert und somit Ihre inkludierten Suchanfragen mit Eingaben, die zu kurz sind um sinnvoll ausgewertet werden zu können, verbraucht.
 
 Sie können diese Einstellungen unter "Einstellungen > Grundeinstellungen > Storefront > Suche" unter dem Punkt "Minimale Suchwortlänge" finden.
 
@@ -49,7 +50,7 @@ Diese Einstellung bestimmt, ob die KI Suche in diesem Subshop aktiv ist oder nic
 * aiPhilos Benutzername
 
 Der von aiPhilos bereitgestellte Benutzername.
-Wird von allen Subshiops verwendet.
+Wird von allen Subshops verwendet.
 
 * aiPhilos Passwort
 
@@ -78,7 +79,7 @@ Verwenden Sie nur Spalten die menschenlesbare Texte in der Sprache ihres Subshop
 
 Mit dieser Option können Sie die Artikel aus gewissen Kategorien vom Upload in die aiPhilos Datenbank anhand einer semikolon-getrennten Liste von Kategorie-IDs ausschließen.
 
-Dies ist nützlich wenn beispielsweise drittanbieter Plugins eigene Kategorien verwenden um ihre Funktionalität anzubieten und diese Kategorien keine sinnvollen Artikel enthalten.
+Dies ist nützlich wenn beispielsweise Drittanbieter-Plugins eigene Kategorien verwenden um ihre Funktionalität anzubieten und diese Kategorien keine sinnvollen Artikel enthalten.
 
 Sie können die Kategorie-ID in Shopwares Kategorieverwaltungsoberfläche finden, indem sie auf die gewünschte Kategorie klicken und dort die Zahl neben "System-ID" hier eintragen.
 
@@ -109,7 +110,7 @@ Fällt nur auf die Standardsuche zurück, falls keine Ergebnisse geliefert wurde
 
 * Lernmodus
 
-Der Lernmodus ist besonders nützlich um die aiPhilos Suche in einen bereits laufenden Shop zu integrieren. Wenn er aktiv ist werden Suchanfragen nicht an aiPhilos gesendet und stattdessen immer die Standardsuche verwendet. Der Rest des Plugins bleibt für den betroffenen Subshop aktiv, so dass die Artikeldaten synchronisiert werden und aiPhilos Ihren Datenstamm erlernen kann. Sie können trotzdem einen Einblick in das Ergebniss bekommen, welches aiPhilos zurückliefern würde, indem sie manuell "&forceAi" an Ihre Suchanfragen anhängen.
+Der Lernmodus ist besonders nützlich um die aiPhilos Suche in einen bereits laufenden Shop zu integrieren. Wenn er aktiv ist werden Suchanfragen nicht an aiPhilos gesendet und stattdessen immer die Standardsuche verwendet. Der Rest des Plugins bleibt für den betroffenen Subshop aktiv, so dass die Artikeldaten synchronisiert werden und aiPhilos Ihren Datenstamm erlernen kann. Sie können trotzdem einen Einblick in das Ergebnis bekommen, welches aiPhilos zurückliefern würde, indem sie manuell "&forceAi" an Ihre Suchanfragen anhängen.
 
 Nehmen wir an Ihr Shop ist unter "www.myshop.local" gehostet und sie wollen nach "apple" Suchen, so würde das Aufrufen folgender URL die Suche mit aiPhilos erzwingen "www.myshop.local/search?sSearch=apple&forceAi"
 
