@@ -42,7 +42,7 @@ class ArticleRepository implements ArticleRepositoryInterface
           d.ordernumber AS ordernumber,
           IF(t.name IS NULL OR t.name = \'\', a.name, t.name) AS `name`,
           IF(t.description IS NULL OR t.description = \'\', a.description, t.description) AS description,
-          IF(t.description_long IS NULL OR r.description_long = \'\' , a.description_long, t.description_long) AS description_long,
+          IF(t.description_long IS NULL OR t.description_long = \'\' , a.description_long, t.description_long) AS description_long,
           IF(t.keywords IS NULL OR t.keywords = \'\', a.keywords, t.keywords) AS keywords,
           p.price AS price,
           d.ean AS ean,
@@ -226,6 +226,27 @@ class ArticleRepository implements ArticleRepositoryInterface
 
         $mappedCategoryTree = $this->getArticleCategoriesByArticleId($shopCategoryId);
 
+        $translatedPropertyNames = [];
+        $translatedPropertyValues = [];
+        $tpRaw = $this->db->fetchAll(
+            "SELECT objectdata, objectkey, objecttype
+                  FROM s_core_translations
+                  WHERE objectlanguage = ?
+                  AND (
+                    objecttype = 'propertyoption'
+                    OR objecttype = 'propertyvalue'
+                  )", [(string) $localeId], \PDO::FETCH_ASSOC);
+        foreach ($tpRaw as $translation) {
+            $tData = unserialize($translation['objectdata'], ['allowed_classes' => false]);
+            $tId = (string) $translation['objectkey'];
+            if ($translation['objecttype'] === 'propertyoption') {
+                $translatedPropertyNames[$tId] = $tData['optionName'];
+            } else {
+                $translatedPropertyValues[$tId] = $tData['optionValue'];
+            }
+        }
+
+
         $retval = [];
         foreach ($preparedStatement as $row) {
             $articleId = intval($row['articleId']);
@@ -263,14 +284,21 @@ class ArticleRepository implements ArticleRepositoryInterface
             $propertyId = intval($row['propertyId']);
             $propertyValueId = intval($row['propertyValueId']);
             if ($propertyId > 0 && $propertyValueId > 0) {
+                $propertyName = !empty($translatedPropertyNames[(string) $propertyId]) ?
+                    $translatedPropertyNames[(string) $propertyId] :
+                    $row['propertyName'];
+                $propertyValue = !empty($translatedPropertyValues[(string) $propertyValueId]) ?
+                    $translatedPropertyValues[(string) $propertyValueId] :
+                    $row['propertyValue'];
+
                 if (!$retval[$id]['properties'][$propertyId]) {
                     $retval[$id]['properties'][$propertyId] = [
-                        'name' => $row['propertyName'],
+                        'name' => $propertyName,
                         'values' => [],
                     ];
                 }
 
-                $retval[$id]['properties'][$propertyId]['values'][$propertyValueId] = $row['propertyValue'];
+                $retval[$id]['properties'][$propertyId]['values'][$propertyValueId] = $propertyValue;
             }
 
             $attributes = [];
@@ -323,7 +351,7 @@ class ArticleRepository implements ArticleRepositoryInterface
                 $attrSelects[] = (
                 array_search($column, $fields) === false ?
                     'attr.' . $column . ' AS attribute_' . $column :
-                    'IF(t.' . $column . ' IS NULL OR t.' . $column . ' = \'\', attr.' . $column . ', t.'. $column .') AS attribute_' . $column
+                    'IFNULL(t.' . $column . ' IS NULL OR t.' . $column . ' = \'\', attr.' . $column . ', t.'. $column .') AS attribute_' . $column
                 );
             }
             $attrSelectColumns = ",\n" . implode(",\n", $attrSelects);
