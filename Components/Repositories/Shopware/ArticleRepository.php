@@ -40,10 +40,10 @@ class ArticleRepository implements ArticleRepositoryInterface
           a.id AS articleId,
           d.id AS _id,
           d.ordernumber AS ordernumber,
-          IFNULL(t.name, a.name) AS `name`,
-          IFNULL(t.description, a.description) AS description,
-          IFNULL(t.description_long, a.description_long) AS description_long,
-          IFNULL(t.keywords, a.keywords) AS keywords,
+          IF(t.name IS NULL OR t.name = \'\', a.name, t.name) AS `name`,
+          IF(t.description IS NULL OR t.description = \'\', a.description, t.description) AS description,
+          IF(t.description_long IS NULL OR r.description_long = \'\' , a.description_long, t.description_long) AS description_long,
+          IF(t.keywords IS NULL OR t.keywords = \'\', a.keywords, t.keywords) AS keywords,
           p.price AS price,
           d.ean AS ean,
           s.name AS manufacturer,
@@ -323,7 +323,7 @@ class ArticleRepository implements ArticleRepositoryInterface
                 $attrSelects[] = (
                 array_search($column, $fields) === false ?
                     'attr.' . $column . ' AS attribute_' . $column :
-                    'IFNULL(t.' . $column . ', attr.' . $column . ') AS attribute_' . $column
+                    'IF(t.' . $column . ' IS NULL OR t.' . $column . ' = \'\', attr.' . $column . ', t.'. $column .') AS attribute_' . $column
                 );
             }
             $attrSelectColumns = ",\n" . implode(",\n", $attrSelects);
