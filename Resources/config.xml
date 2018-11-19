@@ -23,6 +23,8 @@
             <name>apiDbName</name>
             <label lang="de">aiPhilos Datenbankname</label>
             <label lang="en">aiPhilos Database Name</label>
+            <description lang="de">Vergeben Sie hier einen Namen für die Datenbank. Diese kann bereits existieren, wenn nicht, wird eine neue mit dem gewählten Namen angelegt. Typische Namen sind beispielsweise "production" für die Produktions- und "test" für eine Testdatenbank.</description>
+            <description lang="en">Enter the database name. This can be an existing database. If none exists, one will be created using this name. Common names are e.g. "production" for a production database or "test" for a test database.</description>
         </element>
         <element type="number" required="true" scope="shop">
             <name>salesMonths</name>
