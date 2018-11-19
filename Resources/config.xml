@@ -22,7 +22,7 @@
         <element type="text" required="true" scope="shop">
             <name>apiDbName</name>
             <label lang="de">aiPhilos Datenbankname</label>
-            <label lang="en">aiPhilos Database Name</label>
+            <label lang="en">aiPhilos Database name</label>
             <description lang="de">Vergeben Sie hier einen Namen für die Datenbank. Diese kann bereits existieren, wenn nicht, wird eine neue mit dem gewählten Namen angelegt. Typische Namen sind beispielsweise "production" für die Produktions- und "test" für eine Testdatenbank.</description>
             <description lang="en">Enter the database name. This can be an existing database. If none exists, one will be created using this name. Common names are e.g. "production" for a production database or "test" for a test database.</description>
         </element>
@@ -30,13 +30,13 @@
             <name>salesMonths</name>
             <label lang="de">Anzahl der Monate für Bestseller</label>
             <label lang="en">Number of months for bestsellers</label>
-            <description lang="de">Die Verkaufsfrequenz der Artikel wird mit an die aiPhilos Datenbank übergeben, hier können sie festlegen, über wie viele Monate diese berechnet werden soll.</description>
+            <description lang="de">Die Verkaufsfrequenz der Artikel wird mit an die aiPhilos Datenbank übergeben, hier können Sie festlegen, über wie viele Monate diese berechnet werden soll.</description>
             <description lang="en">The sales frequency of an article will be transmitted to the aiPhilos database. Here you can select the number of months for which said frequency will be calculated.</description>
         </element>
         <element type="text" scope="shop">
             <name>attributeColumns</name>
             <label lang="de">Freitextfeld-Spalten</label>
-            <label lang="en">Attribute Columns</label>
+            <label lang="en">Attribute columns</label>
             <description lang="de">Geben Sie hier die Spaltennamen der Freitextfelder als Semikolon-getrennte Liste ein, welche mit den Artikeldaten an die aiPhilos Datenbank übertragen werden sollen. Dies ist nur für menschenlesbare Texte sinnvoll, wie z.B. zusätzliche Beschreibungen.</description>
             <description lang="en">Enter a semicolon separated list of column names of the attributes you would like to transmit to the aiPhilos database here. This only makes sense for human readable texts such as additional descriptions.</description>
         </element>
@@ -61,7 +61,7 @@
                 <option>
                     <value>always</value>
                     <label lang="de">Fehler und keine Ergebnisse (Standardeinstellung)</label>
-                    <label lang="en">Errors and no results (Default)</label>
+                    <label lang="en">Errors and no results (default)</label>
                 </option>
                 <option>
                     <value>on_error</value>
@@ -77,15 +77,15 @@
         </element>
         <element type="boolean" scope="shop">
             <name>learnMode</name>
-            <label lang="en">Learning Mode</label>
             <label lang="de">Lernmodus</label>
+            <label lang="en">Learning mode</label>
+            <description lang="de">Der Lernmodus verhindert, dass Suchanfragen tatsächlich an die KI Suche gehen, während diese Ihren Produktstamm noch analysiert. Sie können die KI Suche trotzdem erzwingen, indem Sie "&amp;forceAi" an den Suchquery anhängen, um die Ergebnisse mit der Standardsuche zu vergleichen.</description>
             <description lang="en">The learning mode prevents the AI search from actually being used while the AI is still learning about your products. You can still force the AI Search by appending "&amp;forceAi" to the search query to compare results with the default search.</description>
-            <description lang="de">Der Lernmodus verhindert, dass Suchanfragen tatsächlich an die KI Suche gehen, während diese über Ihren Produkstamm noch analysiert. Sie können die KI Suche trotzdem erzwingen, indem Sie "&amp;forceAi" an den Suchquery anhängen um die Ergebnisse mit der Standardsuche zu vergleichen.</description>
         </element>
         <element type="number" scope="shop">
             <name>searchDelay</name>
-            <label lang="en">Delay for live search in milliseconds</label>
             <label lang="de">Verzögerung für Live Suche in Millisekunden</label>
+            <label lang="en">Delay for live search in milliseconds</label>
             <value>750</value>
         </element>
     </elements>
