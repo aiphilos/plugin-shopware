@@ -1,13 +1,28 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: sl
- * Date: 09.10.17
- * Time: 16:02
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 namespace AiphilosSearch\Components\Traits;
-
 
 use Aiphilos\Api\Items\ClientInterface;
 
@@ -16,13 +31,9 @@ use Aiphilos\Api\Items\ClientInterface;
  *
  * This trait provides basic functionality that is shared between all API users.
  * Any class that wishes to use the API should use this trait to make their lives easier.
- *
- * @package AiphilosSearch\Components\Traits
  */
 trait ApiUserTrait
 {
-    private static $languages;
-
     /** @var \Zend_Cache_Core */
     protected $cache;
 
@@ -31,10 +42,12 @@ trait ApiUserTrait
 
     /** @var array */
     protected $pluginConfig;
+    private static $languages;
 
     private $languageCacheId = 'aiphilos_search_languages';
 
-    public function setAuthentication() {
+    public function setAuthentication()
+    {
         $verignRefId = null; // TODO@later hardcode referal ID once we have it
         $apiName = trim($this->pluginConfig['apiName']);
         $apiPassword = trim($this->pluginConfig['apiPassword']);
@@ -50,8 +63,8 @@ trait ApiUserTrait
         $this->itemClient->setAuthCredentials($apiName, $apiPassword, $verignRefId);
     }
 
-
-    public function setDbName() {
+    public function setDbName()
+    {
         $dbName = trim($this->pluginConfig['apiDbName']);
 
         if ($dbName === '') {
@@ -69,10 +82,13 @@ trait ApiUserTrait
 
     /**
      * @param string $language
-     * @return bool
+     *
      * @throws \Zend_Cache_Exception
+     *
+     * @return bool
      */
-    public function validateLanguage($language) {
+    public function validateLanguage($language)
+    {
         if (self::$languages === null) {
             $hasCached = $this->cache->test($this->languageCacheId);
             if ($hasCached) {
@@ -81,7 +97,6 @@ trait ApiUserTrait
                 self::$languages = $this->itemClient->getLanguages();
                 $this->cache->save(self::$languages, $this->languageCacheId, [], 86400);
             }
-
         }
 
         return in_array($language, self::$languages, true);

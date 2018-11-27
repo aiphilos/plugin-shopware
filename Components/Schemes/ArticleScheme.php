@@ -1,9 +1,25 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: sl
- * Date: 05.10.17
- * Time: 10:55
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 namespace AiphilosSearch\Components\Schemes;
@@ -16,8 +32,6 @@ use Aiphilos\Api\ContentTypesEnum;
  * This implementation of the ArticleSchemeInterface provides a scheme
  * that matches the data that can be sensibly extracted from the default Shopware
  * article structure.
- *
- * @package AiphilosSearch\Components\Schemes
  */
 class ArticleScheme implements ArticleSchemeInterface
 {
@@ -39,21 +53,19 @@ class ArticleScheme implements ArticleSchemeInterface
         'categories' => ContentTypesEnum::PRODUCT_CATEGORY,
     ];
 
-
     /**
      * @return array
      */
-    public function getScheme() {
+    public function getScheme()
+    {
         return $this->scheme;
     }
 
     /**
      * @return string
      */
-    public function getProductNumberKey() {
+    public function getProductNumberKey()
+    {
         return 'ordernumber';
     }
-
-
-
 }

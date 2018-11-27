@@ -1,9 +1,25 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: sl
- * Date: 18.09.17
- * Time: 17:15
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 namespace AiphilosSearch\Components\Helpers;
@@ -21,14 +37,12 @@ use Shopware\Components\Plugin\ConfigReader;
  * and checks against the API if that language exists.
  * if so, the mapped string is returned, if not, the closest match is returned.
  * If there are no matches at all (same prefix) the mapped string is returned as well.
- *
- * @package AiphilosSearch\Components\Helpers
  */
 class LocaleStringMapper implements LocaleStringMapperInterface
 {
     use ApiUserTrait;
 
-    /** @var string  */
+    /** @var string */
     const CACHE_ID = 'aiphilos_search_language_mapper';
 
     /** @var Logger */
@@ -39,10 +53,11 @@ class LocaleStringMapper implements LocaleStringMapperInterface
 
     /**
      * LocaleStringMapper constructor.
+     *
      * @param \Zend_Cache_Core $cache
-     * @param Logger $logger
-     * @param ClientInterface $itemClient
-     * @param ConfigReader $configReader
+     * @param Logger           $logger
+     * @param ClientInterface  $itemClient
+     * @param ConfigReader     $configReader
      */
     public function __construct(\Zend_Cache_Core $cache, Logger $logger, ClientInterface $itemClient, ConfigReader $configReader)
     {
@@ -52,14 +67,15 @@ class LocaleStringMapper implements LocaleStringMapperInterface
         $this->pluginConfig = $configReader->getByPluginName('AiphilosSearch');
     }
 
-
     /**
      * @param string $localeString
+     *
      * @return mixed|string
      */
-    public function mapLocaleString($localeString) {
+    public function mapLocaleString($localeString)
+    {
         $localeString = substr($localeString, 0, 5);
-        $formattedLocale = str_replace('_','-', strtolower($localeString));
+        $formattedLocale = str_replace('_', '-', strtolower($localeString));
         $languages = $this->getLanguages();
 
         if (in_array($formattedLocale, $languages, true)) {
@@ -76,7 +92,6 @@ class LocaleStringMapper implements LocaleStringMapperInterface
             }
         }
 
-
         switch (count($candidates)) {
             //If nothing matches, stick with the original
             case 0: return $formattedLocale;
@@ -91,11 +106,13 @@ class LocaleStringMapper implements LocaleStringMapperInterface
                         $closestSuffix = $suffix;
                     }
                 }
+
                 return $prefix . '-' . $closestSuffix;
         }
     }
 
-    private function getLanguages() {
+    private function getLanguages()
+    {
         if (self::$instanceCache === []) {
             if (!$this->cache->test(self::CACHE_ID)) {
                 try {
@@ -104,7 +121,7 @@ class LocaleStringMapper implements LocaleStringMapperInterface
                     $this->cache->save(self::$instanceCache, self::CACHE_ID, [], 3600);
                 } catch (\Exception $e) {
                     $this->logger->err('Failed to cache languages', [
-                        'message' => $e->getMessage()
+                        'message' => $e->getMessage(),
                     ]);
 
                     return [];

@@ -1,20 +1,37 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: sl
- * Date: 15.11.17
- * Time: 16:40
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 namespace AiphilosSearch\tests;
 
-use Shopware\Components\Logger;
 use AiphilosSearch\Components\ConditionHandler\AiSearchTermConditionHandler;
 use AiphilosSearch\Components\Helpers\LocaleStringMapper;
+use Shopware\Components\Logger;
 
 class AiSearchTermConditionHandlerTest extends AbstractTestCase
 {
-    public function testCanInstantiate() {
+    public function testCanInstantiate()
+    {
         $scheme = $this->getSchemeMock();
         $exception = null;
         $handler = null;
@@ -46,9 +63,10 @@ class AiSearchTermConditionHandlerTest extends AbstractTestCase
      * @param AiSearchTermConditionHandler $handler
      * @depends testCanInstantiate
      */
-    public function testSupportsCondition(AiSearchTermConditionHandler $handler) {
+    public function testSupportsCondition(AiSearchTermConditionHandler $handler)
+    {
         $exception = null;
-        $result =  null;
+        $result = null;
         $condition = $this->getConditionMock();
 
         try {
@@ -65,7 +83,8 @@ class AiSearchTermConditionHandlerTest extends AbstractTestCase
      * @param AiSearchTermConditionHandler $handler
      * @depends testCanInstantiate
      */
-    public function testGenerateCondition(AiSearchTermConditionHandler $handler) {
+    public function testGenerateCondition(AiSearchTermConditionHandler $handler)
+    {
         $exception = null;
         $result = null;
         $context = $this->getShopContextMock();
@@ -74,12 +93,11 @@ class AiSearchTermConditionHandlerTest extends AbstractTestCase
         $params = null;
 
         try {
-            $handler->generateCondition($condition, $queryBuilder, $context );
+            $handler->generateCondition($condition, $queryBuilder, $context);
         } catch (\Exception $e) {
             $exception = $e;
         }
 
         $this->assertNull($exception);
-
     }
 }

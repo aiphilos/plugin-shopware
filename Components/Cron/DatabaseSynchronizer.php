@@ -1,24 +1,39 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: sl
- * Date: 16.11.17
- * Time: 09:17
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 namespace AiphilosSearch\Components\Cron;
 
-
+use AiphilosSearch\Components\Helpers\LocaleStringMapperInterface;
+use AiphilosSearch\Components\Initializers\CreateResultEnum;
+use AiphilosSearch\Components\Initializers\DatabaseInitializerInterface;
+use AiphilosSearch\Components\Repositories\AiPhilos\ItemRepositoryInterface;
 use AiphilosSearch\Components\Repositories\Shopware\ArticleRepositoryInterface;
 use Shopware\Components\Logger;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\ConfigReader;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
-use AiphilosSearch\Components\Helpers\LocaleStringMapperInterface;
-use AiphilosSearch\Components\Initializers\CreateResultEnum;
-use AiphilosSearch\Components\Initializers\DatabaseInitializerInterface;
-use AiphilosSearch\Components\Repositories\AiPhilos\ItemRepositoryInterface;
 
 /**
  * Class DatabaseSynchronizer
@@ -31,8 +46,6 @@ use AiphilosSearch\Components\Repositories\AiPhilos\ItemRepositoryInterface;
  * without checking if they have changed at all since the last sync.
  *
  * It also deletes articles which are present in the api DB but no longer exist in Shopware
- *
- * @package AiphilosSearch\Components\Cron
  */
 class DatabaseSynchronizer implements DatabaseSynchronizerInterface
 {
@@ -51,7 +64,7 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
     /** @var ItemRepositoryInterface */
     private $aiRepository;
 
-    /** @var Logger  */
+    /** @var Logger */
     private $logger;
 
     /** @var ArticleRepositoryInterface */
@@ -59,13 +72,14 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
 
     /**
      * DatabaseSynchronizer constructor.
+     *
      * @param DatabaseInitializerInterface $databaseInitializer
-     * @param ModelManager $modelManager
-     * @param ConfigReader $configReader
-     * @param LocaleStringMapperInterface $localeMapper
-     * @param ItemRepositoryInterface $aiRepository
-     * @param ArticleRepositoryInterface $shopwareRepository
-     * @param Logger $logger
+     * @param ModelManager                 $modelManager
+     * @param ConfigReader                 $configReader
+     * @param LocaleStringMapperInterface  $localeMapper
+     * @param ItemRepositoryInterface      $aiRepository
+     * @param ArticleRepositoryInterface   $shopwareRepository
+     * @param Logger                       $logger
      */
     public function __construct(
         DatabaseInitializerInterface $databaseInitializer,
@@ -85,14 +99,14 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
         $this->logger = $logger;
     }
 
-
-    public function sync() {
+    public function sync()
+    {
         /** @var Shop[] $shops */
         $shops = $this->getShops();
 
-        $results = "Processing shops:" . PHP_EOL . PHP_EOL;
+        $results = 'Processing shops:' . PHP_EOL . PHP_EOL;
         foreach ($shops as $shop) {
-            $results .= 'Now processing "' . $shop->getName() .'"' . PHP_EOL;
+            $results .= 'Now processing "' . $shop->getName() . '"' . PHP_EOL;
             $config = $this->getConfigForShop($shop);
             if (!$config) {
                 $results .= 'Skipped: Could not fetch plugin configuration.' . PHP_EOL;
@@ -122,14 +136,14 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
                     'code' => $e->getCode(),
                     'message' => $e->getMessage(),
                     'file' => $e->getFile(),
-                    'line' => $e->getLine()
+                    'line' => $e->getLine(),
                 ]);
                 $results .= 'Error: An exception occurred; ' . PHP_EOL . $e->getMessage() . PHP_EOL . PHP_EOL;
                 continue;
             }
 
             $err = false;
-            $msg = "";
+            $msg = '';
             switch ($createResult) {
                 case CreateResultEnum::LANGUAGE_NOT_SUPPORTED:
                     $msg = 'Language "' . $language . '" not supported by API.';
@@ -165,35 +179,38 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
             $results .= $msg . PHP_EOL . PHP_EOL . 'Done' . PHP_EOL . PHP_EOL;
         }
         $this->logger->info('Finished database synchronization, check context for individual results', [
-            'results' => $results
+            'results' => $results,
         ]);
+
         return $results;
     }
 
-    private function getShops() {
+    private function getShops()
+    {
         return $this->modelManager->getRepository(Shop::class)->findBy(['active' => true]);
     }
 
-    private function getConfigForShop(Shop $shop) {
+    private function getConfigForShop(Shop $shop)
+    {
         return $this->configReader->getByPluginName('AiphilosSearch', $shop);
     }
 
-    private function mapLocale(Locale $locale) {
+    private function mapLocale(Locale $locale)
+    {
         return $this->localeMapper->mapLocaleString($locale->getLocale());
     }
 
     /**
-     *
-     * @param Shop $shop
+     * @param Shop  $shop
      * @param array $config
      */
-    private function updateDB(Shop $shop, array $config) {
+    private function updateDB(Shop $shop, array $config)
+    {
         $shopCategoryId = $shop->getCategory()->getId();
         $this->aiRepository->setPriceGroup($shop->getCustomerGroup()->getKey());
         $this->aiRepository->setLocale($shop->getLocale()->getLocale());
         $this->aiRepository->setPluginConfig($config);
         $this->aiRepository->setShopCategoryId($shopCategoryId);
-
 
         try {
             $existingArticles = $this->aiRepository->getArticles();
@@ -233,11 +250,10 @@ class DatabaseSynchronizer implements DatabaseSynchronizerInterface
             $this->aiRepository->deleteArticles($idsToDelete);
             unset($idsToDelete);
         }
-
-
     }
 
-    private function getArticleIds($shopCategoryId, array $config, array $excludedIds = []) {
+    private function getArticleIds($shopCategoryId, array $config, array $excludedIds = [])
+    {
         $articles = $this->shopwareRepository->getArticleData(
             $config,
             [],

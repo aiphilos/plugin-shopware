@@ -1,15 +1,28 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: sl
- * Date: 05.10.17
- * Time: 14:40
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 namespace AiphilosSearch\Components\Repositories\Shopware;
-
-
-use Shopware\Components\Plugin\ConfigReader;
 
 /**
  * Class ArticleRepository
@@ -21,20 +34,9 @@ use Shopware\Components\Plugin\ConfigReader;
  *
  * This implementation is implicitly coupled withe the BasicArticleScheme and any change
  * here should be reflected in that class so the API can make proper sense of the data.
- *
- * @package AiphilosSearch\Components\Repositories\Shopware
  */
 class ArticleRepository implements ArticleRepositoryInterface
 {
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
-    private $db;
-
-    /** @var array */
-    private $attributeColumns = [];
-
-    /** @var int[] */
-    private $excludedCategoryIds = [];
-
     protected $articleDataQuery = '
         SELECT DISTINCTROW
           a.id AS articleId,
@@ -129,24 +131,34 @@ class ArticleRepository implements ArticleRepositoryInterface
          ORDER BY id DESC";
 
     protected $articlesCategoriesQuery = 'SELECT articleID, categoryID FROM s_articles_categories';
+    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    private $db;
 
+    /** @var array */
+    private $attributeColumns = [];
+
+    /** @var int[] */
+    private $excludedCategoryIds = [];
 
     /**
      * ArticleRepository constructor.
+     *
      * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
      */
-    public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db) {
+    public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db)
+    {
         $this->db = $db;
     }
 
     /**
-     * @param array $pluginConfig
-     * @param array $idsToInclude
-     * @param array $idsToExclude
+     * @param array      $pluginConfig
+     * @param array      $idsToInclude
+     * @param array      $idsToExclude
      * @param int|string $locale
-     * @param string $priceGroup
-     * @param int $salesMonths
-     * @param int $shopCategoryId
+     * @param string     $priceGroup
+     * @param int        $salesMonths
+     * @param int        $shopCategoryId
+     *
      * @return array
      */
     public function getArticleData(
@@ -184,7 +196,7 @@ class ArticleRepository implements ArticleRepositoryInterface
         $params = [
             ':priceGroup' => $priceGroup,
             ':numMonths' => $salesMonths,
-            ':localeId' => $localeId
+            ':localeId' => $localeId,
         ];
 
         if (count($idsToInclude) > 0) {
@@ -196,7 +208,7 @@ class ArticleRepository implements ArticleRepositoryInterface
                 $key = ':_include_id_' . $i;
                 $params[$key] = $id;
                 $keys[] = $key;
-                $i++;
+                ++$i;
             }
 
             $query .= implode(', ', $keys) . ' ) ';
@@ -211,7 +223,7 @@ class ArticleRepository implements ArticleRepositoryInterface
                 $key = ':_exclude_id_' . $i;
                 $params[$key] = $id;
                 $keys[] = $key;
-                $i++;
+                ++$i;
             }
 
             $query .= implode(', ', $keys) . ' ) ';
@@ -222,7 +234,6 @@ class ArticleRepository implements ArticleRepositoryInterface
         $preparedStatement = $this->db->prepare($query);
         $preparedStatement->setFetchMode(\PDO::FETCH_ASSOC);
         $preparedStatement->execute($params);
-
 
         $mappedCategoryTree = $this->getArticleCategoriesByArticleId($shopCategoryId);
 
@@ -245,7 +256,6 @@ class ArticleRepository implements ArticleRepositoryInterface
                 $translatedPropertyValues[$tId] = $tData['optionValue'];
             }
         }
-
 
         $retval = [];
         foreach ($preparedStatement as $row) {
@@ -313,7 +323,6 @@ class ArticleRepository implements ArticleRepositoryInterface
 
             $attributes = array_unique($attributes, \SORT_STRING);
             $retval[$id]['attributes'] = $attributes;
-
         }
 
         foreach ($retval as &$item) {
@@ -328,14 +337,15 @@ class ArticleRepository implements ArticleRepositoryInterface
             }
 
             $item['properties'] = $this->flattenProperties($denseProperties);
-            $item['categories']  = $this->flattenCategories($item['categories']);
+            $item['categories'] = $this->flattenCategories($item['categories']);
             $item['options'] = $this->flattenOptions($item['options']);
         }
 
         return $retval;
     }
 
-    private function getQuery($query) {
+    private function getQuery($query)
+    {
         $attrSelectColumns = '';
 
         $statement = $this->db->executeQuery('SHOW COLUMNS FROM s_articles_translations');
@@ -351,7 +361,7 @@ class ArticleRepository implements ArticleRepositoryInterface
                 $attrSelects[] = (
                 array_search($column, $fields) === false ?
                     'attr.' . $column . ' AS attribute_' . $column :
-                    'IFNULL(t.' . $column . ' IS NULL OR t.' . $column . ' = \'\', attr.' . $column . ', t.'. $column .') AS attribute_' . $column
+                    'IFNULL(t.' . $column . ' IS NULL OR t.' . $column . ' = \'\', attr.' . $column . ', t.' . $column . ') AS attribute_' . $column
                 );
             }
             $attrSelectColumns = ",\n" . implode(",\n", $attrSelects);
@@ -362,9 +372,10 @@ class ArticleRepository implements ArticleRepositoryInterface
         return $query;
     }
 
-    private function getArticleCategoriesByArticleId($shopCategoryId) {
+    private function getArticleCategoriesByArticleId($shopCategoryId)
+    {
         $articleCategories = $this->getArticleCategories();
-        $categories  = $this->getCategories($shopCategoryId);
+        $categories = $this->getCategories($shopCategoryId);
 
         //Remove excluded categories, this should have an recursive effect
         foreach ($this->excludedCategoryIds as $categoryId) {
@@ -388,7 +399,8 @@ class ArticleRepository implements ArticleRepositoryInterface
         return $mappedTree;
     }
 
-    private function getArticleCategories() {
+    private function getArticleCategories()
+    {
         $prep = $this->db->prepare($this->articlesCategoriesQuery);
         $prep->execute();
         $result = $prep->fetchAll(\PDO::FETCH_ASSOC);
@@ -397,10 +409,12 @@ class ArticleRepository implements ArticleRepositoryInterface
                 unset($result[$i]);
             }
         }
+
         return $result;
     }
 
-    private function getCategories($shopCategoryId) {
+    private function getCategories($shopCategoryId)
+    {
         $query = str_replace('{{shopCatId}}', intval($shopCategoryId), $this->categoryQuery);
         $prep = $this->db->prepare($query);
         $prep->execute();
@@ -422,14 +436,13 @@ class ArticleRepository implements ArticleRepositoryInterface
             $categoryStructureById[$id] = [
                 'id' => $id,
                 'pathIds' => $pIdsInt,
-                'name' => $name
+                'name' => $name,
             ];
         }
         unset($cats);
 
         $returnTree = [];
         foreach ($categoryStructureById as $id => $categoryStructure) {
-
             $returnTree[$id] = [];
             foreach ($categoryStructure['pathIds'] as $pathId) {
                 //Possible because path has trailing delimiters
@@ -455,9 +468,11 @@ class ArticleRepository implements ArticleRepositoryInterface
 
     /**
      * @param string $locale
+     *
      * @return int
      */
-    private function getLocaleId($locale) {
+    private function getLocaleId($locale)
+    {
         $prep = $this->db->prepare('SELECT id FROM s_core_locales WHERE locale = :locale');
         $prep->execute(['locale' => $locale]);
         $id = $prep->fetchColumn(0);
@@ -467,7 +482,9 @@ class ArticleRepository implements ArticleRepositoryInterface
 
     /**
      * Workaround method for unindexed fields
+     *
      * @param $categories
+     *
      * @return array
      */
     private function flattenCategories($categories)
@@ -487,7 +504,9 @@ class ArticleRepository implements ArticleRepositoryInterface
 
     /**
      * Workaround method for unindexed fields
+     *
      * @param $properties
+     *
      * @return array
      */
     private function flattenProperties($properties)
@@ -505,7 +524,9 @@ class ArticleRepository implements ArticleRepositoryInterface
 
     /**
      * Workaround method for unindexed fields
+     *
      * @param $options
+     *
      * @return array
      */
     private function flattenOptions($options)
