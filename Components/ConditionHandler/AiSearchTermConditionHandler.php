@@ -40,7 +40,6 @@ use Shopware\Components\Logger;
 use Shopware\Components\Plugin\ConfigReader;
 
 /**
- * TODO: Test caching with multiple shops and customer groups
  * Class AiSearchTermConditionHandler
  *
  * This ConditionHandler checks whether or not the AI search should be used for this shop and language
@@ -164,7 +163,11 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
                 }
 
                 $this->setDbName();
-                $result = $this->itemClient->searchItems($term, $language, ['size' => 1000]);
+                $result = $this->itemClient->searchItems($term, $language, [
+                    'size' => 1000,
+                    'mode' => 'auto',
+                    'filter' => '_id',
+                ]);
             } catch (\DomainException $e) {
                 $this->logger->error('API search returned an error', [
                     'search_term' => $term,
