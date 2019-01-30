@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">AiPhilos Suche</label>
     <label lang="en">AiPhilos Suche</label>
-    <version>1.1.7</version>
+    <version>1.1.8</version>
     <copyright>(c) by aiPhilos GmbH</copyright>
     <license>GPLv3</license>
     <link>https://www.designverign.de</link>
@@ -60,6 +60,10 @@
         <changes lang="en">Improved handling of incomplete article translations</changes>
         <changes lang="de">Übersetzungen für Filtereigenschaften werden nun korrekt in aiPhilos Datenbank gespeichert</changes>
         <changes lang="en">Translations for filter properties are now correctly stored in aiPhilos database</changes>
+    </changelog>
+    <changelog version="1.1.8">
+        <changes lang="de">Optimierte Suchanfrage an API (kann Performance verbessern)</changes>
+        <changes lang="en">Optimized API search call (might improve performance)</changes>
     </changelog>
 
     <requiredPlugins>
