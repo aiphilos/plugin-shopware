@@ -361,7 +361,7 @@ class ArticleRepository implements ArticleRepositoryInterface
                 $attrSelects[] = (
                 array_search($column, $fields) === false ?
                     'attr.' . $column . ' AS attribute_' . $column :
-                    'IFNULL(t.' . $column . ' IS NULL OR t.' . $column . ' = \'\', attr.' . $column . ', t.' . $column . ') AS attribute_' . $column
+                    'IF(t.' . $column . ' IS NULL OR t.' . $column . ' = \'\', attr.' . $column . ', t.' . $column . ') AS attribute_' . $column
                 );
             }
             $attrSelectColumns = ",\n" . implode(",\n", $attrSelects);
