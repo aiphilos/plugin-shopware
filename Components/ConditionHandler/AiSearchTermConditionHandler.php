@@ -163,11 +163,7 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
                 }
 
                 $this->setDbName();
-                $result = $this->itemClient->searchItems($term, $language, [
-                    'size' => 1000,
-                    'mode' => 'auto',
-                    'filter' => '_id',
-                ]);
+                $result = $this->getAllResults($term, $language);
             } catch (\DomainException $e) {
                 $this->logger->error('API search returned an error', [
                     'search_term' => $term,
@@ -272,5 +268,37 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
         }
 
         $query->andWhere('true = false');
+    }
+
+    /**
+     * @param $term
+     * @param $language
+     * @return array|false
+     */
+    private function getAllResults($term, $language)
+    {
+        $size = $count = 50000;
+        $data = $this->itemClient->searchItems($term, $language, [
+            'size' => $size,
+            'mode' => 'auto',
+            'filter' => '_id',
+        ]);
+        $total = $data['total'];
+
+        $results = $data['results'];
+
+        while ($total > $count) {
+            $data = $this->itemClient->searchItems($term, $language, [
+                'size' => $size,
+                'from' => $count + 1,
+                'mode' => 'auto',
+                'filter' => '_id',
+            ]);
+
+            $count += $data['count'];
+            $results = array_merge($results, $data['results']);
+        }
+
+        return $results;
     }
 }

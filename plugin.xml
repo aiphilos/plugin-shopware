@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">AiPhilos Suche</label>
     <label lang="en">AiPhilos Suche</label>
-    <version>1.1.8</version>
+    <version>1.1.9</version>
     <copyright>(c) by aiPhilos GmbH</copyright>
     <license>GPLv3</license>
     <link>https://www.designverign.de</link>
@@ -64,6 +64,14 @@
     <changelog version="1.1.8">
         <changes lang="de">Optimierte Suchanfrage an API (kann Performance verbessern)</changes>
         <changes lang="en">Optimized API search call (might improve performance)</changes>
+    </changelog>
+    <changelog version="1.1.9">
+        <changes lang="de">Bugfix bei der Verwendung von Freitextfeldern</changes>
+        <changes lang="en">Bug fix for attribute usage</changes>
+        <changes lang="de">Entfernen von Limits beim Einholen von Suchergebnissen (Nun über 1000 Suchergebnisse möglich)</changes>
+        <changes lang="en">Removed limits when fetching search results (Now more than 1000 results are possible)</changes>
+        <changes lang="de">Verbesserungen beim Abgleich mit aiPhilos Datenbank</changes>
+        <changes lang="en">Improved synchronization with aiPhilos database</changes>
     </changelog>
 
     <requiredPlugins>

@@ -169,14 +169,14 @@ class ItemRepository implements ItemRepositoryInterface
 
     public function getArticles()
     {
-        $size = $count = 1000;
+        $size = $count = 50000;
         $data = $this->itemClient->getItems(['size' => $size]);
         $total = $data['total'];
 
         $results = $data['results'];
 
         while ($total > $count) {
-            $data = $this->itemClient->getItems(['from' => $count, 'size' => $size]);
+            $data = $this->itemClient->getItems(['from' => $count + 1, 'size' => $size]);
 
             $count += $data['count'];
             $results = array_merge($results, $data['results']);
