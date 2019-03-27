@@ -299,6 +299,8 @@ class AiSearchTermConditionHandler implements ConditionHandlerInterface
             $results = array_merge($results, $data['results']);
         }
 
+        $data['results'] = $results;
+
         return $data;
     }
 }
